@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emre Türksoy — Game Developer</title>
+<meta name="description" content="Emre Türksoy — Solo game developer, CS student at Hacettepe University.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink: #0f172a;
+  --ink2: #334155;
+  --ink3: #64748b;
+  --ink4: #94a3b8;
+  
+  --paper: #f4f7f9; 
+  --paper2: #eef2f6;
+  --paper3: #e2e8f0;
+  --turq: #0d9488;
+  --turq2: #0f766e;
+  --turq-soft: #ccfbf1;
+  --turq-shadow: rgba(13, 148, 136, 0.15);
+  
+  --serif: 'Lora', Georgia, serif;
+  --sans: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --pad: clamp(20px, 5vw, 72px);
+  --max: 1200px;
+}
+html{scroll-behavior:smooth;font-size:15px;overflow-x:hidden;}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.6;overflow-x:hidden; transition: background 0.1s linear;}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--turq);border-radius:3px}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:20px var(--pad);
+  background:linear-gradient(to bottom, var(--paper) 40%, transparent);
+  pointer-events:none;
+}
+nav > * { pointer-events:auto; }
+/* nav ve hamburger post-view'da body class ile gizlenir */
+body.in-post nav,
+body.in-post .hamburger { display:none !important; }
+
+.nav-right{display:flex;align-items:center;gap:24px;}
+.lang-toggle{
+  display:flex;align-items:center;gap:4px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+}
+.lang-btn{
+  padding:4px 8px;border:none;background:none;cursor:pointer;
+  color:var(--ink3);font-family:inherit;font-size:inherit;
+  letter-spacing:inherit;transition:all .2s;border-radius:4px;
+}
+.lang-btn.active{background:var(--turq-soft);color:var(--turq);font-weight:600}
+.lang-btn:not(.active):hover{color:var(--ink)}
+
+/* ── HAMBURGER & SIDEBAR ── */
+.hamburger{
+  position:fixed;top:18px;left:20px;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  gap:5px;width:38px;height:38px;cursor:pointer;
+  background:var(--paper);border:1px solid var(--paper3);border-radius:8px;
+  padding:8px;
+  z-index:170;
+  transition:background .2s, border-color .2s, left .32s cubic-bezier(0.2,0.8,0.2,1);
+}
+.hamburger:hover{background:var(--turq-soft);border-color:var(--turq);}
+.hamburger span{
+  display:block;width:16px;height:1.5px;
+  background:var(--ink);border-radius:2px;
+  transition:transform .3s cubic-bezier(0.34,1.56,0.64,1), opacity .2s ease;
+  transform-origin:center;
+}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+.sidebar-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0);
+  z-index:150;pointer-events:none;
+  transition:background .3s ease;
+}
+.sidebar-overlay.open{background:rgba(0,0,0,0.22);pointer-events:auto;}
+
+.sidebar{
+  position:fixed;top:0;left:0;height:100%;width:260px;
+  background:var(--paper);border-right:1px solid var(--paper3);
+  z-index:160;display:flex;flex-direction:column;
+  padding:76px 20px 32px;
+  transform:translateX(-100%);transition:transform .32s cubic-bezier(0.2,0.8,0.2,1);
+  box-shadow:6px 0 24px rgba(0,0,0,0.06);
+  box-sizing:border-box;
+}
+.sidebar.open{transform:translateX(0);}
+.sidebar-logo{
+  font-family:var(--serif);font-size:1.2rem;font-style:italic;
+  color:var(--ink);margin-bottom:24px;
+  border-bottom:1px solid var(--paper3);padding-bottom:14px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sidebar-nav{display:flex;flex-direction:column;gap:1px;flex:1;}
+.sidebar-nav a{
+  font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink3);text-decoration:none;
+  padding:10px 12px;border-radius:6px;
+  transition:background .15s,color .15s,padding-left .15s;
+  display:flex;align-items:center;gap:10px;
+  white-space:nowrap;
+}
+.sidebar-nav a:hover{background:var(--turq-soft);color:var(--turq);padding-left:18px;}
+.sidebar-nav .s-num{color:var(--turq);font-size:9px;min-width:16px;flex-shrink:0;}
+
+.sidebar-footer{
+  font-family:var(--mono);font-size:10px;color:var(--ink4);
+  letter-spacing:.04em;
+  display:flex;gap:12px;flex-wrap:wrap;
+  padding:14px 12px 0;
+  border-top:1px solid var(--paper3);
+  margin-top:auto;
+}
+.sidebar-footer a{color:var(--ink4);text-decoration:none;transition:color .2s;white-space:nowrap;}
+.sidebar-footer a:hover{color:var(--turq);}
+
+
+
+/* ── LAYOUT ── */
+.ed-container{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+.main-content.hidden{display:none;}
+
+/* ── HERO ── */
+#hero{
+  min-height:90svh;display:flex;flex-direction:column;justify-content:center;
+  padding-top:120px;padding-bottom:80px;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1fr;gap:40px;
+}
+@media(min-width:900px){
+  .hero-grid{grid-template-columns:6fr 4fr;align-items:end;gap:80px;}
+}
+.hero-title{
+  font-family:var(--serif);font-size:clamp(60px,12vw,160px);
+  line-height:0.9;color:var(--ink);letter-spacing:-.04em;
+  margin-left:-5px;
+}
+.hero-title em{font-style:italic;color:var(--turq);display:block;padding-left:12%}
+
+.hero-side{max-width:400px;padding-bottom:1vw;}
+.hero-desc{
+  font-family:var(--serif);font-size:1.1rem;color:var(--ink2);
+  line-height:1.7;margin-bottom:32px;
+}
+.hero-actions{display:flex;gap:16px;align-items:center;}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:14px 32px;font-size:13px;font-weight:500;
+  text-decoration:none;border-radius:50px;
+  transition:background 0.3s, color 0.3s, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor:pointer;will-change:transform;
+}
+.btn:active{transform:scale(0.95) !important;}
+.btn-primary{background:var(--ink);color:var(--paper);border:1px solid var(--ink);}
+.btn-primary:hover{background:var(--turq);border-color:var(--turq);}
+
+.btn-sec{
+  font-size:13px;font-weight:500;color:var(--ink);text-decoration:none;
+  position:relative;padding-bottom:2px;
+}
+.btn-sec::after{
+  content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;
+  background:var(--ink3);transition:background .2s, height .2s;
+}
+.btn-sec:hover::after{background:var(--turq);height:2px;}
+
+/* ── EDITORIAL SECTIONS ── */
+.ed-section{padding:120px 0;}
+.ed-header{
+  display:flex;flex-direction:column;gap:16px;margin-bottom:64px;
+}
+@media(min-width:768px){
+  .ed-header{flex-direction:row;align-items:baseline;justify-content:space-between;}
+}
+.ed-label{
+  font-family:var(--mono);font-size:11px;color:var(--turq);
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.ed-title{
+  font-family:var(--serif);font-size:clamp(36px,5vw,64px);
+  font-weight:400;letter-spacing:-.02em;line-height:1.1;
+}
+.ed-title em{color:var(--turq);font-style:italic;}
+
+/* ── GAMIFIED ABOUT ENCOUNTER ── */
+.encounter-box {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  background: var(--ink);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px var(--turq-shadow);
+  border: 1px solid rgba(13,148,136,0.5);
+  display: flex;
+  flex-direction: column;
+}
+/* CRT scanlines */
+.crt-overlay {
+  position: absolute;
+  top:0; left:0; width:100%; height:100%;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+  pointer-events: none;
+  z-index: 10;
+}
+/* Top status bar */
+.enc-status-bar{
+  position:relative;z-index:6;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px;
+  background:rgba(0,0,0,0.35);
+  border-bottom:1px solid rgba(13,148,136,0.25);
+  font-family:var(--mono);font-size:10px;color:rgba(13,148,136,0.7);
+  letter-spacing:.07em;
+}
+.enc-status-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--turq);
+  display:inline-block;margin-right:6px;
+  box-shadow:0 0 6px var(--turq);
+  animation:statusPulse 2s ease-in-out infinite;
+}
+@keyframes statusPulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+.enc-screen {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+}
+/* Left orb panel */
+.enc-orb-panel{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 24px;
+  border-right:1px solid rgba(13,148,136,0.2);
+  gap:16px;min-width:110px;
+}
+@media(max-width:580px){
+  .enc-screen{flex-direction:column;}
+  .enc-orb-panel{flex-direction:row;border-right:none;border-bottom:1px solid rgba(13,148,136,0.2);padding:20px;min-width:unset;justify-content:flex-start;}
+}
+.enc-orb-container {
+  display: flex;
+  justify-content: center;
+  perspective: 500px;
+}
+.enc-orb {
+  width: 56px; height: 56px;
+  background: radial-gradient(circle at 35% 35%, hsl(180,70%,65%), var(--turq) 55%, var(--turq2));
+  border-radius: 50%;
+  box-shadow: 0 0 24px var(--turq), 0 0 48px rgba(13,148,136,0.3), inset 0 0 16px rgba(255,255,255,0.2);
+  transition: transform 0.12s ease-out;
+  animation: floatOrb 3.5s ease-in-out infinite;
+}
+@keyframes floatOrb {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+.enc-orb-label{
+  font-family:var(--mono);font-size:9px;color:rgba(13,148,136,0.6);
+  letter-spacing:.08em;text-align:center;
+}
+/* Right dialogue panel */
+.enc-dialogue-panel{
+  flex:1;display:flex;flex-direction:column;
+  padding:28px 28px 24px;
+  color:var(--turq-soft);font-family:var(--mono);
+}
+.enc-prompt-label{
+  font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(13,148,136,0.55);margin-bottom:14px;
+  display:flex;align-items:center;gap:6px;
+}
+.enc-prompt-label::before{content:'▶';font-size:7px;}
+.enc-dialogue {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: rgba(204,251,241,0.9);
+  margin-bottom: 24px;
+  min-height: 80px;
+}
+.blinking-cursor {
+  display: inline-block;
+  width: 8px; height: 0.95rem;
+  background: var(--turq);
+  margin-left: 3px;
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.enc-menu {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.enc-btn {
+  background: transparent;
+  border: 1px solid rgba(13,148,136,0.45);
+  color: rgba(13,148,136,0.85);
+  padding: 9px 18px;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s, transform .1s;
+}
+.enc-btn:hover {
+  background: rgba(13,148,136,0.15);
+  color: var(--turq);
+  border-color: var(--turq);
+}
+.enc-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── PROJECTS (HOVER REVEAL RIGHT) ── */
+.proj-wrapper{
+  position:relative;
+  min-height:400px;
+}
+.proj-list{
+  border-top:1px solid var(--paper3);
+  position:relative;
+  z-index:2;
+}
+@media(min-width:900px){
+  .proj-list{width:60%;}
+}
+.proj-row{
+  display:grid;grid-template-columns:1fr;gap:16px;
+  padding:32px 0;border-bottom:1px solid var(--paper3);
+  text-decoration:none;color:var(--ink);
+  transition:padding-left 0.4s cubic-bezier(0.2,0.8,0.2,1), opacity 0.3s;
+  cursor:pointer;
+}
+@media(min-width:768px){
+  .proj-row{grid-template-columns:3fr 2fr;align-items:center;}
+}
+.proj-row:hover{
+  padding-left:24px;
+}
+.proj-list:hover .proj-row:not(:hover){
+  opacity:0.3;
+}
+.pr-title{
+  font-family:var(--serif);font-size:2.5rem;font-weight:400;letter-spacing:-.02em;
+  transition:color .3s;
+}
+.proj-row:hover .pr-title{color:var(--turq);}
+.pr-tags{font-size:13px;color:var(--ink3);}
+.pr-meta{font-family:var(--mono);font-size:12px;color:var(--ink4);text-align:left;}
+@media(min-width:768px){
+  .pr-meta{text-align:right;}
+}
+
+/* Right-side Fixed Hover Block */
+#hover-image-container{
+  position:absolute;
+  right:0;
+  width:35%;
+  height:300px;
+  pointer-events:none;z-index:1;
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.4s cubic-bezier(0.2,0.8,0.2,1);
+  overflow:hidden;border-radius:12px;
+  box-shadow:0 30px 60px var(--turq-shadow);
+  display:none;
+  background:var(--turq);
+}
+@media(min-width:900px){
+  #hover-image-container{display:block;}
+}
+#hover-image-container.active{
+  opacity:1;transform:translateY(0) scale(1.02);
+}
+#hover-content{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  padding:32px;text-align:center;
+  font-family:var(--serif);font-size:2.5rem;font-style:italic;
+  color:var(--paper);
+}
+
+/* ── BLOG (3D VERTICAL STACK) ── */
+.blog-layout{
+  display:flex;flex-direction:column;gap:40px;
+}
+@media(min-width:900px){
+  .blog-layout{flex-direction:row;align-items:center;justify-content:space-between;}
+}
+.blog-text-side{max-width:350px;}
+.blog-stack-wrapper{
+  flex:1;
+  display:flex;justify-content:center;
+}
+.blog-stack{
+  position:relative;
+  width:100%;max-width:500px;
+  height:480px; 
+  perspective:1200px;
+}
+.b-card{
+  position:absolute;
+  top:50%;left:0;width:100%;
+  transition:all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select:none;
+  overflow:hidden;
+  border-radius:12px;
+}
+.b-card-inner{
+  background:var(--paper);
+  border:1px solid var(--paper3);
+  padding:40px 32px;
+  border-radius:12px;
+  display:flex;flex-direction:column;
+  cursor:pointer;
+  transition:transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s, box-shadow 0.3s;
+  height:100%;
+}
+.b-card-inner:hover{border-color:var(--turq);}
+.b-card-inner:active{transform:scale(0.96);}
+
+.b-cat{font-family:var(--mono);font-size:10px;color:var(--turq);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;}
+.b-title{font-family:var(--serif);font-size:1.6rem;line-height:1.2;margin-bottom:16px;color:var(--ink);}
+.b-exc{font-size:1rem;color:var(--ink2);line-height:1.6;margin-bottom:24px;flex-grow:1;}
+.b-date{font-family:var(--mono);font-size:11px;color:var(--ink4);}
+
+.stack-controls{
+  display:flex;gap:12px;margin-top:24px;
+}
+.s-btn{
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--paper3);background:none;
+  cursor:pointer;color:var(--ink);transition:all .2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+}
+.s-btn:hover{background:var(--turq);color:var(--paper);border-color:var(--turq);transform:translateY(-2px);}
+.s-btn:active{transform:scale(0.9);}
+
+/* ── RESUME / CV SECTION (LATEX INSPIRED) ── */
+.cv-container{
+  background:var(--paper);
+  border:1px solid var(--paper3);
+  padding:60px 5vw;
+  border-radius:12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+.cv-container a { color: var(--turq); text-decoration: none; transition: color 0.2s; }
+.cv-container a:hover { text-decoration: underline; }
+
+.cv-header-top{
+  text-align:center;
+  margin-bottom:48px;
+}
+.cv-name-large{
+  font-family:var(--serif);font-size:clamp(2rem, 5vw, 3rem);
+  font-weight:600;color:var(--ink);margin-bottom:16px;
+  letter-spacing:-.02em;
+}
+.cv-links{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
+  font-family:var(--mono);font-size:12px;color:var(--ink3);
+}
+.cv-links span{color:var(--ink4);}
+
+.cv-sec{margin-bottom:36px;}
+.cv-sec-title{
+  font-size:14px;font-weight:600;text-transform:uppercase;
+  color:var(--ink);border-bottom:1px solid var(--ink);
+  padding-bottom:6px;margin-bottom:16px;letter-spacing:.05em;
+}
+.cv-item{margin-bottom:20px;}
+.cv-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;gap:16px;flex-wrap:wrap;}
+.cv-strong{font-weight:600;color:var(--ink);font-size:15px;}
+.cv-italic{font-style:italic;color:var(--ink2);font-size:14.5px;}
+.cv-right{text-align:right;font-size:14px;color:var(--ink2);}
+.cv-ul{
+  list-style:none;padding-left:16px;margin-top:6px;
+}
+.cv-ul li{
+  position:relative;font-size:14.5px;color:var(--ink2);
+  line-height:1.6;margin-bottom:4px;
+}
+.cv-ul li::before{
+  content:'•';position:absolute;left:-14px;color:var(--turq);font-size:12px;
+}
+
+/* ── VIEWS (Blog Posts & All Posts) ── */
+.blog-post-view{
+  display:none;background:var(--paper);min-height:100vh;
+}
+.blog-post-view.active{display:block;}
+.post-back{
+  display:none;
+  align-items:center;justify-content:space-between;
+  font-size:14px;font-weight:500;color:var(--ink2);text-decoration:none;
+  padding:14px 40px;
+  position:fixed;top:0;left:0;right:0;
+  background:var(--paper);
+  border-bottom:1px solid var(--paper3);
+  z-index:200;
+  letter-spacing:.02em;
+}
+.post-back:hover{color:var(--turq);}
+.blog-post-view.active .post-back{display:flex;}
+.post-back-lang{
+  display:flex;align-items:center;gap:4px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  pointer-events:auto;
+}
+.post-content{max-width:680px;margin:0 auto;padding:80px var(--pad) 120px;}
+.post-meta{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.pcat{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--turq);background:var(--turq-soft);padding:4px 10px;border-radius:4px;}
+.pdate{font-size:12px;color:var(--ink4);}
+.post-title{
+  font-family:var(--serif);font-size:clamp(2rem, 4vw, 3rem);
+  line-height:1.1;color:var(--ink);letter-spacing:-.02em;margin-bottom:40px;
+}
+.post-body p{font-family:var(--serif);font-size:1.05rem;color:var(--ink2);line-height:1.8;margin-bottom:1.5rem;}
+.post-body h2{font-family:var(--serif);font-size:1.4rem;font-weight:500;color:var(--ink);margin:3rem 0 1rem;letter-spacing:-.01em;}
+.post-body ul{padding-left:1.5rem;margin-bottom:1.5rem;}
+.post-body ul li{font-family:var(--serif);font-size:1.05rem;color:var(--ink2);margin-bottom:.5rem;line-height:1.7;}
+.post-body pre{
+  background:var(--paper2);border:1px solid var(--paper3);border-left:3px solid var(--turq);
+  padding:20px;overflow-x:auto;margin:2rem 0;
+  font-family:var(--mono);font-size:13px;color:var(--ink2);line-height:1.6;border-radius:4px;
+}
+
+.all-posts-list{
+  display:flex;flex-direction:column;gap:16px;
+}
+.ap-row{
+  display:flex;flex-direction:column;gap:8px;
+  padding:24px;background:var(--paper2);border:1px solid var(--paper3);
+  border-radius:8px;text-decoration:none;transition:all 0.3s;
+}
+.ap-row:hover{background:var(--turq-soft);border-color:var(--turq);transform:translateY(-2px);}
+.ap-title{font-family:var(--serif);font-size:1.4rem;color:var(--ink);}
+.ap-meta{font-size:12px;color:var(--ink3);}
+
+/* ── FOOTER ── */
+footer{
+  padding:64px var(--pad);
+  border-top:1px solid var(--paper3);
+  display:flex;flex-direction:column;gap:16px;
+  align-items:center;text-align:center;
+}
+.f-title{font-family:var(--serif);font-size:1.5rem;font-style:italic;color:var(--ink);}
+.f-links{display:flex;gap:24px;}
+.f-links a{color:var(--ink3);text-decoration:none;font-size:13px;transition:color .2s;}
+.f-links a:hover{color:var(--turq);}
+</style>
+  <!-- Umami Analytics — website-id'yi kendi Umami panelinizden alın -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="UMAMI_WEBSITE_ID"></script>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">Emre Türksoy.</div>
+  <div class="sidebar-nav">
+    <a href="#hero" onclick="closeSidebar()"><span class="s-num">00</span><span data-i18n-sb="sb_home">Home</span></a>
+    <a href="#encounter" onclick="closeSidebar()"><span class="s-num">01</span><span data-i18n-sb="sb_enc">The Protagonist</span></a>
+    <a href="#projects" onclick="closeSidebar()"><span class="s-num">02</span><span data-i18n-sb="sb_works">Works</span></a>
+    <a href="#blog" onclick="closeSidebar()"><span class="s-num">03</span><span data-i18n-sb="sb_writing">Writing</span></a>
+    <a href="#cv" onclick="closeSidebar()"><span class="s-num">04</span><span data-i18n-sb="sb_resume">Resume</span></a>
+  </div>
+  <div class="sidebar-footer">
+    <a href="https://github.com/emretrksy" target="_blank">GitHub</a>
+    <a href="https://rectewodwhey.itch.io/" target="_blank">itch.io</a>
+    <a href="mailto:emrett04@gmail.com">Email</a>
+  </div>
+</aside>
+
+<button class="hamburger" id="hamburgerBtn" aria-label="Menu" onclick="toggleSidebar()">
+  <span></span><span></span><span></span>
+</button>
+
+<nav>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+      <button class="lang-btn" onclick="setLang('tr')" id="btn-tr">TR</button>
+    </div>
+  </div>
+</nav>
+
+<div class="main-content" id="mainContent">
+  <div class="ed-container">
+
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-grid">
+        <h1 class="hero-title">Emre<br><em>Türksoy.</em></h1>
+        <div class="hero-side">
+          <p class="hero-desc" data-i18n="hero_desc">I am a solo game developer building interconnected worlds, driven by code, art, and mechanics. Currently crafting a Metroidvania in Ankara.</p>
+          <div class="hero-actions">
+            <a href="#projects" class="btn btn-primary magnetic" data-i18n="btn_works">Explore Works</a>
+            <a href="#cv" class="btn-sec" data-i18n="btn_cv">View Resume</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENCOUNTER (GAMIFIED ABOUT) -->
+    <section id="encounter" class="ed-section">
+      <div class="ed-header">
+        <h2 class="ed-title" data-i18n="enc_title">The <em>Protagonist</em></h2>
+        <div class="ed-label" data-i18n="lbl_encounter">01 // Encounter</div>
+      </div>
+
+      <div class="encounter-box">
+        <div class="crt-overlay"></div>
+        <div class="enc-status-bar">
+          <span><span class="enc-status-dot"></span><span id="enc-status-text">ENCOUNTER ACTIVE</span></span>
+          <span id="enc-depth-text">DEPTH: 0</span>
+        </div>
+        <div class="enc-screen">
+          <div class="enc-orb-panel">
+            <div class="enc-orb-container">
+              <div class="enc-orb"></div>
+            </div>
+            <div class="enc-orb-label" id="enc-orb-label">EMRE<br>LVL 21</div>
+          </div>
+          <div class="enc-dialogue-panel">
+            <div class="enc-prompt-label" id="enc-speaker">PROTAGONIST</div>
+            <div class="enc-dialogue">
+              <span id="dialogue-text"></span><span class="blinking-cursor"></span>
+            </div>
+            <div class="enc-menu" id="enc-menu"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="ed-section">
+      <div class="ed-header">
+        <h2 class="ed-title" data-i18n="proj_title">Selected <em>Works</em></h2>
+        <div class="ed-label" data-i18n="lbl_archive">02 // Archive</div>
+      </div>
+      
+      <div class="proj-wrapper">
+        <div id="hover-image-container">
+          <div id="hover-content"></div>
+        </div>
+        
+        <div class="proj-list">
+          <a href="https://emrett04.itch.io" target="_blank" class="proj-row">
+            <div class="pr-title">Evo</div>
+            <div class="pr-tags" data-i18n="pt_evo">Godot · Metroidvania · WIP</div>
+            <div class="pr-meta" data-i18n="pm_evo">2025 - Present</div>
+          </a>
+          
+          <a href="https://emrett04.itch.io" target="_blank" class="proj-row">
+            <div class="pr-title">Myco</div>
+            <div class="pr-tags" data-i18n="pt_myco">GameMaker · Action Platformer</div>
+            <div class="pr-meta" data-i18n="pm_myco">2025 · 2nd Place Jam</div>
+          </a>
+
+          <a href="#" class="proj-row">
+            <div class="pr-title" data-i18n="ptitle_kjam">Karadeniz Jam</div>
+            <div class="pr-tags" data-i18n="pt_kjam">Solo · Jam Winner</div>
+            <div class="pr-meta" data-i18n="pm_kjam">2026 · 1st Place</div>
+          </a>
+
+          <a href="#" class="proj-row">
+            <div class="pr-title">LAMquarium</div>
+            <div class="pr-tags" data-i18n="pt_lam">Godot · Incremental Clicker</div>
+            <div class="pr-meta">2025</div>
+          </a>
+          
+          <a href="https://emrett04.itch.io" target="_blank" class="proj-row">
+            <div class="pr-title">Tank 2025</div>
+            <div class="pr-tags" data-i18n="pt_tank">Java · OOP Engine-free</div>
+            <div class="pr-meta">2025</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOG (3D STACK) -->
+    <section id="blog" class="ed-section">
+      <div class="ed-header">
+        <h2 class="ed-title" data-i18n="blog_title">Devlogs & <em>Thoughts</em></h2>
+        <div class="ed-label" data-i18n="lbl_writing">03 // Writing</div>
+      </div>
+
+      <div class="blog-layout">
+        <div class="blog-text-side">
+          <p style="color:var(--ink2);font-family:var(--serif);font-size:1.1rem;line-height:1.7;margin-bottom:24px;" data-i18n="blog_desc">I document my development process, architectural decisions, and game jam post-mortems. Scroll to flip through the cards.</p>
+          <div class="stack-controls">
+            <button class="s-btn" onclick="prevCard()">↑</button>
+            <button class="s-btn" onclick="nextCard()">↓</button>
+          </div>
+        </div>
+        
+        <div class="blog-stack-wrapper">
+          <div class="blog-stack" id="blogStack">
+            
+            <div class="b-card">
+              <div class="b-card-inner" onclick="window.location.hash='post-fsm'">
+                <div class="b-cat" data-i18n="bcat_tut">Tutorial</div>
+                <div class="b-title" data-i18n="btitle_fsm">Building an FSM in Godot</div>
+                <div class="b-exc" data-i18n="bexc_fsm">How I architect Finite State Machines to handle player states cleanly — avoiding spaghetti code and nested if-else chains.</div>
+                <div class="b-date">May 2026</div>
+              </div>
+            </div>
+
+            <div class="b-card">
+              <div class="b-card-inner" onclick="window.location.hash='post-evo'">
+                <div class="b-cat" data-i18n="bcat_dev">Devlog</div>
+                <div class="b-title" data-i18n="btitle_evo">Evo #1: Going Solo</div>
+                <div class="b-exc" data-i18n="bexc_evo">Scope, motivation, tech stack decisions, and the very first prototype that almost killed the Metroidvania project.</div>
+                <div class="b-date">April 2026</div>
+              </div>
+            </div>
+
+            <div class="b-card">
+              <div class="b-card-inner" onclick="window.location.hash='post-jam'">
+                <div class="b-cat" data-i18n="bcat_dev">Devlog</div>
+                <div class="b-title" data-i18n="btitle_jam">Winning HUJAM</div>
+                <div class="b-exc" data-i18n="bexc_jam">A post-mortem on our 48-hour sprint. The plan, the inevitable panic, the tech debt, and what I would do differently next time.</div>
+                <div class="b-date">November 2025</div>
+              </div>
+            </div>
+
+            <div class="b-card">
+              <div class="b-card-inner" onclick="window.location.hash='all-posts'" style="align-items:center;justify-content:center;text-align:center;">
+                <div class="b-title" style="margin:0;font-style:italic;" data-i18n="btn_viewall">View All Entries →</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CV (LATEX STYLE) -->
+    <section id="cv" class="ed-section">
+      <div class="ed-header">
+        <h2 class="ed-title" data-i18n="cv_title">Curriculum <em>Vitae</em></h2>
+        <div class="ed-label" data-i18n="lbl_resume">04 // Resume</div>
+      </div>
+
+      <div class="cv-container">
+        <div class="cv-header-top">
+          <div class="cv-name-large">Emre Türksoy</div>
+          <div class="cv-links">
+            <span>Ankara, Turkey</span> <span>|</span>
+            <a href="mailto:emrett04@gmail.com">emrett04@gmail.com</a> <span>|</span>
+            <span>+90 546 954 17 18</span>
+          </div>
+          <div class="cv-links" style="margin-top:8px;">
+            <a href="https://www.linkedin.com/in/emre-t%C3%BCrksoy-a9900a296/" target="_blank">LinkedIn</a> <span>|</span>
+            <a href="https://github.com/emretrksy" target="_blank">GitHub</a> <span>|</span>
+            <a href="https://rectewodwhey.itch.io/" target="_blank">Itch.io</a>
+          </div>
+        </div>
+
+        <div class="cv-sec">
+          <div class="cv-sec-title" data-i18n="cv_h_edu">Education</div>
+          <div class="cv-item">
+            <div class="cv-row">
+              <span class="cv-strong">Hacettepe University</span>
+              <span class="cv-right">Ankara, Turkey</span>
+            </div>
+            <div class="cv-row">
+              <span class="cv-italic" data-i18n="cv_edu_deg">B.S. in Computer Engineering</span>
+              <span class="cv-right" data-i18n="cv_edu_date">Expected June 2028</span>
+            </div>
+            <ul class="cv-ul">
+              <li data-i18n="cv_edu_li"><strong>GPA: 3.21 / 4.00</strong> &nbsp; <strong>Relevant Coursework:</strong> Data Structures (C++), OOP (Java), Algorithms, Probability & Statistics, Logic Design, Discrete Mathematics.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cv-sec">
+          <div class="cv-sec-title" data-i18n="cv_h_exp">Experience & Achievements</div>
+          
+          <div class="cv-item">
+            <div class="cv-row">
+              <span class="cv-strong">Karadeniz Game Jam</span>
+              <span class="cv-strong cv-right" data-i18n="cv_kjam_date">May 2026</span>
+            </div>
+            <div class="cv-italic" data-i18n="cv_kjam_aw">1st Place — 80,000 TRY Award</div>
+            <ul class="cv-ul">
+              <li data-i18n="cv_kjam_li">Developed, designed and shipped a fully playable game within the jam's constraints, securing 1st place.</li>
+            </ul>
+          </div>
+
+          <div class="cv-item">
+            <div class="cv-row">
+              <span class="cv-strong">HUJAM '25 — Game Jam</span>
+              <span class="cv-strong cv-right" data-i18n="cv_hujam_date">November 2025</span>
+            </div>
+            <div class="cv-italic" data-i18n="cv_hujam_aw">2nd Place — 20,000 TRY Award</div>
+            <ul class="cv-ul">
+              <li data-i18n="cv_hujam_li">Developed <a href="https://rectewodwhey.itch.io/myco" target="_blank">Myco</a> as the sole programmer on the team, engineering all core mechanics and integrating art/audio assets within a 48-hour deadline.</li>
+            </ul>
+          </div>
+
+          <div class="cv-item">
+            <div class="cv-row">
+              <span class="cv-strong">Deneyap Technology Workshops | <span style="font-weight:400;font-style:italic;">T3 Foundation</span></span>
+              <span class="cv-strong cv-right">July 2019 – August 2022</span>
+            </div>
+            <div class="cv-italic" data-i18n="cv_deneyap_aw">Graduate of "Stars of the Future" Program</div>
+            <ul class="cv-ul">
+              <li data-i18n="cv_deneyap_li">Completed a 36-month curriculum across 11 fields including Robotics, AI, Cyber Security, and IoT; delivered a comprehensive graduation project.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cv-sec">
+          <div class="cv-sec-title" data-i18n="cv_h_proj">Projects</div>
+          
+          <div class="cv-item">
+            <div class="cv-row">
+              <span class="cv-strong">Evo | <a href="https://www.youtube.com/watch?v=06FviQLDLHk" target="_blank" style="font-weight:400;">Demo</a></span>
+              <span class="cv-right" data-i18n="cv_evo_date">April 2025 – Present</span>
+            </div>
+            <ul class="cv-ul">
+              <li data-i18n="cv_evo_li1">Developing a comprehensive 2D Metroidvania title as a solo developer, overseeing both technical architecture and full artistic direction (visual assets and audio engineering).</li>
+              <li data-i18n="cv_evo_li2">Architected all gameplay systems end-to-end, including dual FSMs for player and enemy logic, 2D physics interactions, and modular asset pipelines.</li>
+            </ul>
+          </div>
+
+          <div class="cv-item">
+            <div class="cv-row">
+              <span class="cv-strong">LAMquarium</span>
+              <span class="cv-right" data-i18n="cv_lam_date">October 2025 – Present</span>
+            </div>
+            <ul class="cv-ul">
+              <li data-i18n="cv_lam_li">Generalist developer on an ongoing project; built a modular character customization system and incremental clicker mechanics.</li>
+            </ul>
+          </div>
+
+          <div class="cv-item">
+            <div class="cv-row">
+              <span class="cv-strong"><a href="https://github.com/emretrksy/Tank-Game-2025" target="_blank">Tank 2025</a></span>
+              <span class="cv-right" data-i18n="cv_tank_date">Spring 2025</span>
+            </div>
+            <ul class="cv-ul">
+              <li data-i18n="cv_tank_li">Built a 2D tank combat game from scratch for an OOP course; implemented custom collision detection and AI pathfinding without an engine.</li>
+            </ul>
+          </div>
+
+          <div class="cv-item">
+            <div class="cv-row">
+              <span class="cv-strong">Independent Published Games | <a href="https://rectewodwhey.itch.io/" target="_blank" style="font-weight:400;">Itch.io Profile</a></span>
+              <span class="cv-right" data-i18n="cv_indie_date">2021 – Present</span>
+            </div>
+            <ul class="cv-ul">
+              <li data-i18n="cv_myco_li"><strong><a href="https://rectewodwhey.itch.io/myco" target="_blank">Myco</a>:</strong> Award-winning action-platformer; programmed movement abilities, dash/shield mechanics, and enemy behaviors.</li>
+              <li data-i18n="cv_jet_li"><strong><a href="https://rectewodwhey.itch.io/jetpackmonsters" target="_blank">Jetpack Monsters</a>:</strong> Local 2-player brawler with hand-drawn art, completed in a 1-week sprint.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cv-sec">
+          <div class="cv-sec-title" data-i18n="cv_h_skills">Technical Skills</div>
+          <ul class="cv-ul" style="list-style:none;padding-left:0;">
+            <li style="margin-bottom:6px;" data-i18n="cv_sk_1"><strong>Languages:</strong> C++, C#, Java, Python, GML</li>
+            <li style="margin-bottom:6px;" data-i18n="cv_sk_2"><strong>Game Dev & Art:</strong> Unity, Godot, GameMaker Studio 2, Shader Programming (GLSL/HLSL), 2D Physics, OOP</li>
+            <li style="margin-bottom:6px;" data-i18n="cv_sk_3"><strong>Tools:</strong> Git, VS Code, Aseprite, FL Studio, JavaFX, JetBrains Suite</li>
+            <li data-i18n="cv_sk_4"><strong>Soft Skills & Languages:</strong> English (B2+), Problem Solving, Creative Direction, Team Collaboration</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="f-title">Emre Türksoy.</div>
+    <div class="f-links">
+      <a href="mailto:emrett04@gmail.com">Email</a>
+      <a href="https://github.com/emretrksy" target="_blank">GitHub</a>
+      <a href="https://rectewodwhey.itch.io/" target="_blank">itch.io</a>
+    </div>
+  </footer>
+</div><!-- /mainContent -->
+
+<!-- ── ALL POSTS VIEW ── -->
+<div class="blog-post-view" id="all-posts">
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
+  <div class="post-content">
+    <h1 class="post-title" data-i18n="all_title" style="margin-bottom:48px;">All Writings</h1>
+    <div class="all-posts-list">
+      <a href="#post-fsm" class="ap-row">
+        <div class="ap-meta"><span data-i18n="bcat_tut" style="color:var(--turq);font-weight:600;text-transform:uppercase;">Tutorial</span> • May 2026</div>
+        <div class="ap-title" data-i18n="btitle_fsm">Building an FSM in Godot</div>
+      </a>
+      <a href="#post-evo" class="ap-row">
+        <div class="ap-meta"><span data-i18n="bcat_dev" style="color:var(--turq);font-weight:600;text-transform:uppercase;">Devlog</span> • April 2026</div>
+        <div class="ap-title" data-i18n="btitle_evo">Evo #1: Going Solo</div>
+      </a>
+      <a href="#post-jam" class="ap-row">
+        <div class="ap-meta"><span data-i18n="bcat_dev" style="color:var(--turq);font-weight:600;text-transform:uppercase;">Devlog</span> • November 2025</div>
+        <div class="ap-title" data-i18n="btitle_jam">Winning HUJAM</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── SINGLE POST VIEWS ── -->
+<div class="blog-post-view" id="post-fsm">
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
+  <div class="post-content">
+    <div class="post-meta"><span class="pcat" data-i18n="bcat_tut">Tutorial</span><span class="pdate">May 2026</span></div>
+    <h1 class="post-title" data-i18n="btitle_fsm">Building an FSM in Godot</h1>
+    <div class="post-body">
+      <p data-i18n="fsm_p1">When I started working on Evo, one of the first architectural decisions I had to make was how to handle character states. Should the player be able to dash while wall-sliding? Can enemies attack while being knocked back? If you don't have a clear system for this, you end up with a massive pile of boolean flags and nested <code>if</code> statements.</p>
+      <p data-i18n="fsm_p2">The answer I landed on: a clean Finite State Machine (FSM). Here's how I built it in Godot.</p>
+      <h2 data-i18n="fsm_h1">What's a Finite State Machine?</h2>
+      <p data-i18n="fsm_p3">An FSM is a model where your character can be in exactly one <em>state</em> at a time — Idle, Running, Jumping, Dashing, etc. — and transitions between states are explicitly defined. It forces you to think about what's actually possible.</p>
+      <h2 data-i18n="fsm_h2">The Base State Class</h2>
+      <pre>class_name State extends Node
+
+var character: CharacterBody2D
+
+func enter() -> void:
+    pass
+
+func exit() -> void:
+    pass
+
+func update(delta: float) -> State:
+    return null  # null = stay in current state</pre>
+      <p data-i18n="fsm_p4">Every state inherits from this. The <code>update()</code> function returns either <code>null</code> (stay in this state) or a reference to the next state to transition into.</p>
+      <h2 data-i18n="fsm_h3">The State Machine</h2>
+      <pre>class_name StateMachine extends Node
+
+@export var initial_state: State
+var current_state: State
+
+func _ready():
+    current_state = initial_state
+    current_state.enter()
+
+func _physics_process(delta):
+    var next = current_state.update(delta)
+    if next != null:
+        transition_to(next)
+
+func transition_to(new_state: State):
+    current_state.exit()
+    current_state = new_state
+    current_state.enter()</pre>
+      <p data-i18n="fsm_p5">That's the entire machine. Each state is its own script — <code>StateIdle.gd</code>, <code>StateRun.gd</code>, etc. — attached as children of the <code>StateMachine</code> node. Godot's scene tree becomes your architecture.</p>
+    </div>
+  </div>
+</div>
+
+<div class="blog-post-view" id="post-evo">
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
+  <div class="post-content">
+    <div class="post-meta"><span class="pcat" data-i18n="bcat_dev">Devlog</span><span class="pdate">April 2026</span></div>
+    <h1 class="post-title" data-i18n="btitle_evo">Evo #1: Going Solo</h1>
+    <div class="post-body">
+      <p data-i18n="evo_p1">Everyone will tell you making a Metroidvania solo is a bad idea. They're probably right. I'm doing it anyway.</p>
+      <p data-i18n="evo_p2">Evo started in April 2025 as an experiment — could I build a game that felt as interconnected and responsive as the classics (Hollow Knight, Ori, Symphony of the Night) without a team? A year in, I have a partial answer: yes, but it takes a very specific approach.</p>
+      <h2 data-i18n="evo_h1">The Scope Problem</h2>
+      <p data-i18n="evo_p3">Metroidvanias are defined by their interconnected world, ability gating, and exploration. Every corridor you add implies a reason to return to it. The scope can spiral infinitely. My solution: design in "rings." The first ring is one self-contained zone with 3 abilities and a boss. Get that working perfectly before expanding outward.</p>
+      <h2 data-i18n="evo_h2">Tech Stack</h2>
+      <p data-i18n="evo_p4">I'm building in Godot 4.3. The choice was easy — it's free, open source, the scene system maps beautifully to my FSM architecture, and GDScript is fast enough for iteration. I write shaders in GLSL directly, and I use Aseprite for all art.</p>
+    </div>
+  </div>
+</div>
+
+<div class="blog-post-view" id="post-jam">
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
+  <div class="post-content">
+    <div class="post-meta"><span class="pcat" data-i18n="bcat_dev">Devlog</span><span class="pdate">November 2025</span></div>
+    <h1 class="post-title" data-i18n="btitle_jam">Winning HUJAM</h1>
+    <div class="post-body">
+      <p data-i18n="jam_p1">HUJAM '25. 48 hours. One programmer (me), two artists, one composer. We made Myco — an action-platformer about a mushroom soldier — and won 2nd place, taking home 20,000 TRY.</p>
+      <h2 data-i18n="jam_h1">Hour 0–4: Scope, and Scoping Down</h2>
+      <p data-i18n="jam_p2">The theme dropped at midnight. We had 30 minutes to decide on a concept. We went with Myco because it had a clear movement kit: run, jump, dash, shield. Four actions. Everything else would be built around making those four feel great.</p>
+      <h2 data-i18n="jam_h2">Hour 4–24: Just Ship the Mechanics</h2>
+      <p data-i18n="jam_p3">My job for the first 20 hours: make the player feel good to control. The enemy AI could wait. Movement first, everything else second. This is the only way to jam.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentLang = 'en';
+
+// ── Dialogue Tree System ──
+const dialogueTree = {
+  en: {
+    root: {
+      speaker: "PROTAGONIST",
+      text: "* A wild [Game Developer] appears!\n* What do you want to know?",
+      choices: [
+        { label: "Inspect Inventory", next: "inventory" },
+        { label: "Current Quest", next: "quest" },
+        { label: "Origin Story", next: "origin" },
+      ]
+    },
+    inventory: {
+      speaker: "SYSTEM",
+      text: "* Opening inventory...\n\n[Godot 4]  ×  Expert\n[C# / C++]  ×  Proficient\n[GameMaker]  ×  Veteran\n[Aseprite]  ×  Equipped\n[Coffee]  ×  Half-empty",
+      choices: [
+        { label: "Tell me more about Godot", next: "inv_godot" },
+        { label: "What about GameMaker?", next: "inv_gm" },
+        { label: "← Back", next: "root" },
+      ]
+    },
+    inv_godot: {
+      speaker: "PROTAGONIST",
+      text: "* [Godot 4] is my main weapon. Free, open-source, and the scene system maps perfectly to FSM architecture.\n* Currently wielding it to build [Evo], a 2D Metroidvania.",
+      choices: [
+        { label: "What is Evo?", next: "quest" },
+        { label: "← Back", next: "inventory" },
+      ]
+    },
+    inv_gm: {
+      speaker: "PROTAGONIST",
+      text: "* [GameMaker Studio 2] — used it to build [Myco] at HUJAM '25 in 48 hours.\n* The result? 2nd place and 20,000 TRY. Not bad for a mushroom soldier.",
+      choices: [
+        { label: "Tell me about the jam", next: "jam" },
+        { label: "← Back", next: "inventory" },
+      ]
+    },
+    quest: {
+      speaker: "QUEST LOG",
+      text: "* [MAIN QUEST] Survive the solo development of [Evo].\n  — A 2D Metroidvania. Difficulty: Nightmare.\n  — Status: In Progress (Ring 1 of ?)\n\n* [SIDE QUEST] Pass Computer Engineering at Hacettepe.\n  — Status: Active",
+      choices: [
+        { label: "What is Ring 1?", next: "quest_ring" },
+        { label: "← Back", next: "root" },
+      ]
+    },
+    quest_ring: {
+      speaker: "PROTAGONIST",
+      text: "* Metroidvanias can spiral out of scope infinitely.\n* My solution: build in [rings]. Ring 1 is one self-contained zone — 3 abilities, 1 boss. Get it [perfect] before expanding outward.",
+      choices: [
+        { label: "Smart. Tell me the origin.", next: "origin" },
+        { label: "← Back to quests", next: "quest" },
+      ]
+    },
+    origin: {
+      speaker: "LORE",
+      text: "* [Born] in Ankara. Rolled [CON +3].\n* [Age 13] First encounter with GameMaker. Nat 20.\n* [2022] Deneyap Tech Workshops — 36 months across 11 fields.\n* [2023] Enrolled: Computer Engineering, Hacettepe.\n* [Now] Solo dev. Coffee-fueled. Building worlds.",
+      choices: [
+        { label: "Impressive. Any wins?", next: "jam" },
+        { label: "← Back", next: "root" },
+      ]
+    },
+    jam: {
+      speaker: "ACHIEVEMENT UNLOCKED",
+      text: "* [HUJAM '25] — 48 hours, 1 programmer, 2 artists, 1 composer.\n  Result: [2nd Place] · 20,000 TRY\n\n* [Karadeniz Jam '26] — Solo entry.\n  Result: [1st Place] · 80,000 TRY\n\n* Current win rate: [2/2]. Undefeated.",
+      choices: [
+        { label: "What's next?", next: "next" },
+        { label: "← Back", next: "root" },
+      ]
+    },
+    next: {
+      speaker: "PROTAGONIST",
+      text: "* Finish [Ring 1] of Evo.\n* Graduate without dying.\n* Ship something people actually play.\n\n* Side note: if you need a developer who ships things under pressure — [you know where to find me].",
+      choices: [
+        { label: "Start over", next: "root" },
+      ]
+    },
+  },
+  tr: {
+    root: {
+      speaker: "PROTAGONIST",
+      text: "* Vahşi bir [Oyun Geliştiricisi] belirdi!\n* Ne öğrenmek istersin?",
+      choices: [
+        { label: "Envanteri İncele", next: "inventory" },
+        { label: "Mevcut Görev", next: "quest" },
+        { label: "Köken Hikayesi", next: "origin" },
+      ]
+    },
+    inventory: {
+      speaker: "SİSTEM",
+      text: "* Envanter açılıyor...\n\n[Godot 4]  ×  Uzman\n[C# / C++]  ×  Deneyimli\n[GameMaker]  ×  Veteran\n[Aseprite]  ×  Donanımlı\n[Kahve]  ×  Yarım içilmiş",
+      choices: [
+        { label: "Godot hakkında bilgi ver", next: "inv_godot" },
+        { label: "GameMaker ne olacak?", next: "inv_gm" },
+        { label: "← Geri", next: "root" },
+      ]
+    },
+    inv_godot: {
+      speaker: "PROTAGONIST",
+      text: "* [Godot 4] ana silahım. Ücretsiz, açık kaynak ve sahne sistemi FSM mimarime mükemmel uyuyor.\n* Şu an [Evo] adlı 2D Metroidvania için kullanıyorum.",
+      choices: [
+        { label: "Evo nedir?", next: "quest" },
+        { label: "← Geri", next: "inventory" },
+      ]
+    },
+    inv_gm: {
+      speaker: "PROTAGONIST",
+      text: "* [GameMaker Studio 2] — HUJAM '25'te 48 saatte [Myco]'yu bununla yaptım.\n* Sonuç? 2.lik ve 20.000 TL. Mantar asker için fena değil.",
+      choices: [
+        { label: "Jam'i anlat", next: "jam" },
+        { label: "← Geri", next: "inventory" },
+      ]
+    },
+    quest: {
+      speaker: "GÖREV GÜNLÜĞÜ",
+      text: "* [ANA GÖREV] [Evo]'nun solo gelişiminden sağ çık.\n  — 2D Metroidvania. Zorluk: Kabus.\n  — Durum: Devam Ediyor (Halka 1 / ?)\n\n* [YAN GÖREV] Hacettepe'de Bilgisayar Mühendisliği'ni bitir.\n  — Durum: Aktif",
+      choices: [
+        { label: "Halka 1 nedir?", next: "quest_ring" },
+        { label: "← Geri", next: "root" },
+      ]
+    },
+    quest_ring: {
+      speaker: "PROTAGONIST",
+      text: "* Metroidvania'ların kapsamı kolayca kontrolden çıkabilir.\n* Çözümüm: [halkalar] halinde tasarlamak. Halka 1 — 3 yetenek, 1 patron, kendi içinde tam. Dışarı genişlemeden önce [mükemmelleştir].",
+      choices: [
+        { label: "Mantıklı. Köken hikayesini anlat.", next: "origin" },
+        { label: "← Görevlere dön", next: "quest" },
+      ]
+    },
+    origin: {
+      speaker: "HİKAYE",
+      text: "* [Doğdu] Ankara. Zar: [CON +3].\n* [13 yaş] GameMaker'la ilk karşılaşma. 20 attı.\n* [2022] Deneyap Teknoloji Atölyeleri — 11 alanda 36 ay.\n* [2023] Kayıt: Bilgisayar Müh., Hacettepe.\n* [Şimdi] Solo geliştirici. Kafeinli. Dünyalar inşa ediyor.",
+      choices: [
+        { label: "Etkileyici. Kazandın mı?", next: "jam" },
+        { label: "← Geri", next: "root" },
+      ]
+    },
+    jam: {
+      speaker: "BAŞARI AÇILDI",
+      text: "* [HUJAM '25] — 48 saat, 1 programcı, 2 sanatçı, 1 besteci.\n  Sonuç: [2.lik] · 20.000 TL\n\n* [Karadeniz Jam '26] — Solo katılım.\n  Sonuç: [1.lik] · 80.000 TL\n\n* Güncel galibiyet oranı: [2/2]. Yenilmemiş.",
+      choices: [
+        { label: "Sonraki hedef?", next: "next" },
+        { label: "← Geri", next: "root" },
+      ]
+    },
+    next: {
+      speaker: "PROTAGONIST",
+      text: "* [Halka 1]'i bitir.\n* Mezun ol, ölmeden.\n* İnsanların gerçekten oynadığı bir şey yayınla.\n\n* Not: Baskı altında iş bitiren bir geliştirici arıyorsan — [nerede bulacağını biliyorsun].",
+      choices: [
+        { label: "Baştan başla", next: "root" },
+      ]
+    },
+  }
+};
+let currentEncKey = 'root';
+let encDepth = 0;
+const encStatusLabels = {
+  en: { PROTAGONIST:'PROTAGONIST', 'SİSTEM':'SYSTEM', 'SISTEM':'SYSTEM', 'GÖREV GÜNLÜĞÜ':'QUEST LOG', 'BAŞARI AÇILDI':'ACHIEVEMENT UNLOCKED', 'HİKAYE':'LORE', 'LORE':'LORE', 'QUEST LOG':'QUEST LOG', 'ACHIEVEMENT UNLOCKED':'ACHIEVEMENT UNLOCKED', 'SYSTEM':'SYSTEM' },
+};
+
+const dict = {
+  en: {
+    hero_desc: "I am a solo game developer building interconnected worlds, driven by code, art, and mechanics. Currently crafting a Metroidvania in Ankara.",
+    btn_works: "Explore Works", btn_cv: "View Resume",
+    
+    enc_title: "The <em>Protagonist</em>", lbl_encounter: "01 // Encounter",
+    enc_btn_stack: "Inspect Inventory", enc_btn_quest: "Current Quest", enc_btn_origin: "Origin Story",
+    
+    proj_title: "Selected <em>Works</em>", lbl_archive: "02 // Archive", lbl_writing: "03 // Writing", lbl_resume: "04 // Resume",
+    pt_evo: "Godot · Metroidvania · WIP", pm_evo: "2025 - Present",
+    pt_myco: "GameMaker · Action Platformer", pm_myco: "2025 · 2nd Place Jam",
+    ptitle_kjam: "Karadeniz Jam", pt_kjam: "Solo · Jam Winner", pm_kjam: "2026 · 1st Place",
+    pt_lam: "Godot · Incremental Clicker", pt_tank: "Java · OOP Engine-free",
+    blog_title: "Devlogs & <em>Thoughts</em>", blog_desc: "I document my development process, architectural decisions, and game jam post-mortems. Scroll to flip through the cards.",
+    bcat_tut: "Tutorial", bcat_dev: "Devlog",
+    btitle_fsm: "Building an FSM in Godot", bexc_fsm: "How I architect Finite State Machines to handle player states cleanly — avoiding spaghetti code and nested if-else chains.",
+    btitle_evo: "Evo #1: Going Solo", bexc_evo: "Scope, motivation, tech stack decisions, and the very first prototype that almost killed the Metroidvania project.",
+    btitle_jam: "Winning HUJAM", bexc_jam: "A post-mortem on our 48-hour sprint. The plan, the inevitable panic, the tech debt, and what I would do differently next time.",
+    btn_viewall: "View All Entries →", all_title: "All Writings",
+    cv_title: "Curriculum <em>Vitae</em>",
+    cv_h_edu: "Education", cv_edu_deg: "B.S. in Computer Engineering", cv_edu_date: "Expected June 2028",
+    cv_edu_li: "<strong>GPA: 3.21 / 4.00</strong> &nbsp; <strong>Relevant Coursework:</strong> Data Structures (C++), OOP (Java), Algorithms, Probability & Statistics, Logic Design, Discrete Mathematics.",
+    cv_h_exp: "Experience & Achievements",
+    cv_kjam_date: "May 2026", cv_kjam_aw: "1st Place — 80,000 TRY Award", cv_kjam_li: "Developed, designed and shipped a fully playable game within the jam's constraints, securing 1st place.",
+    cv_hujam_date: "November 2025", cv_hujam_aw: "2nd Place — 20,000 TRY Award", cv_hujam_li: "Developed <a href='https://rectewodwhey.itch.io/myco' target='_blank'>Myco</a> as the sole programmer on the team, engineering all core mechanics and integrating art/audio assets within a 48-hour deadline.",
+    cv_deneyap_aw: "Graduate of \"Stars of the Future\" Program", cv_deneyap_li: "Completed a 36-month curriculum across 11 fields including Robotics, AI, Cyber Security, and IoT; delivered a comprehensive graduation project.",
+    cv_h_proj: "Projects",
+    cv_evo_date: "April 2025 – Present", cv_evo_li1: "Developing a comprehensive 2D Metroidvania title as a solo developer, overseeing both technical architecture and full artistic direction (visual assets and audio engineering).", cv_evo_li2: "Architected all gameplay systems end-to-end, including dual FSMs for player and enemy logic, 2D physics interactions, and modular asset pipelines.",
+    cv_lam_date: "October 2025 – Present", cv_lam_li: "Generalist developer on an ongoing project; built a modular character customization system and incremental clicker mechanics.",
+    cv_tank_date: "Spring 2025", cv_tank_li: "Built a 2D tank combat game from scratch for an OOP course; implemented custom collision detection and AI pathfinding without an engine.",
+    cv_indie_date: "2021 – Present", cv_myco_li: "<strong><a href='https://rectewodwhey.itch.io/myco' target='_blank'>Myco</a>:</strong> Award-winning action-platformer; programmed movement abilities, dash/shield mechanics, and enemy behaviors.", cv_jet_li: "<strong><a href='https://rectewodwhey.itch.io/jetpackmonsters' target='_blank'>Jetpack Monsters</a>:</strong> Local 2-player brawler with hand-drawn art, completed in a 1-week sprint.",
+    cv_h_skills: "Technical Skills",
+    cv_sk_1: "<strong>Languages:</strong> C++, C#, Java, Python, GML", cv_sk_2: "<strong>Game Dev & Art:</strong> Unity, Godot, GameMaker Studio 2, Shader Programming (GLSL/HLSL), 2D Physics, OOP", cv_sk_3: "<strong>Tools:</strong> Git, VS Code, Aseprite, FL Studio, JavaFX, JetBrains Suite", cv_sk_4: "<strong>Soft Skills & Languages:</strong> English (B2+), Problem Solving, Creative Direction, Team Collaboration",
+    back_blog: "← Back",
+    fsm_p1:"When I started working on Evo, one of the first architectural decisions I had to make was how to handle character states. Should the player be able to dash while wall-sliding? Can enemies attack while being knocked back? If you don't have a clear system for this, you end up with a massive pile of boolean flags and nested <code>if</code> statements.",
+    fsm_p2:"The answer I landed on: a clean Finite State Machine (FSM). Here's how I built it in Godot.",
+    fsm_h1:"What's a Finite State Machine?",
+    fsm_p3:"An FSM is a model where your character can be in exactly one <em>state</em> at a time — Idle, Running, Jumping, Dashing, etc. — and transitions between states are explicitly defined. It forces you to think about what's actually possible.",
+    fsm_h2:"The Base State Class",fsm_h3:"The State Machine",
+    fsm_p4:"Every state inherits from this. The <code>update()</code> function returns either <code>null</code> (stay in this state) or a reference to the next state to transition into.",
+    fsm_p5:"That's the entire machine. Each state is its own script — <code>StateIdle.gd</code>, <code>StateRun.gd</code>, etc. — attached as children of the <code>StateMachine</code> node. Godot's scene tree becomes your architecture.",
+    evo_p1:"Everyone will tell you making a Metroidvania solo is a bad idea. They're probably right. I'm doing it anyway.",
+    evo_p2:"Evo started in April 2025 as an experiment — could I build a game that felt as interconnected and responsive as the classics (Hollow Knight, Ori, Symphony of the Night) without a team? A year in, I have a partial answer: yes, but it takes a very specific approach.",
+    evo_h1:"The Scope Problem",
+    evo_p3:"Metroidvanias are defined by their interconnected world, ability gating, and exploration. Every corridor you add implies a reason to return to it. The scope can spiral infinitely. My solution: design in \"rings.\" The first ring is one self-contained zone with 3 abilities and a boss. Get that working perfectly before expanding outward.",
+    evo_h2:"Tech Stack",
+    evo_p4:"I'm building in Godot 4.3. The choice was easy — it's free, open source, the scene system maps beautifully to my FSM architecture, and GDScript is fast enough for iteration. I write shaders in GLSL directly, and I use Aseprite for all art.",
+    jam_p1:"HUJAM '25. 48 hours. One programmer (me), two artists, one composer. We made Myco — an action-platformer about a mushroom soldier — and won 2nd place, taking home 20,000 TRY.",
+    jam_h1:"Hour 0–4: Scope, and Scoping Down",
+    jam_p2:"The theme dropped at midnight. We had 30 minutes to decide on a concept. We went with Myco because it had a clear movement kit: run, jump, dash, shield. Four actions. Everything else would be built around making those four feel great.",
+    jam_h2:"Hour 4–24: Just Ship the Mechanics",
+    jam_p3:"My job for the first 20 hours: make the player feel good to control. The enemy AI could wait. Movement first, everything else second. This is the only way to jam.",
+  },
+  tr: {
+    hero_desc: "Kod, sanat ve mekaniklerle birbirine bağlı dünyalar inşa eden solo bir oyun geliştiricisiyim. Şu sıralar Ankara'da bir Metroidvania üzerinde çalışıyorum.",
+    btn_works: "Projeleri Keşfet", btn_cv: "Özgeçmişi İncele",
+    
+    enc_title: "Ana <em>Karakter</em>", lbl_encounter: "01 // Karşılaşma",
+    enc_btn_stack: "Envanteri İncele", enc_btn_quest: "Mevcut Görev", enc_btn_origin: "Köken Hikayesi",
+    
+    proj_title: "Seçili <em>Projeler</em>", lbl_archive: "02 // Arşiv", lbl_writing: "03 // Yazılar", lbl_resume: "04 // Özgeçmiş",
+    pt_evo: "Godot · Metroidvania · Geliştiriliyor", pm_evo: "2025 - Günümüz",
+    pt_myco: "GameMaker · Aksiyon Platform", pm_myco: "2025 · Jam 2.lik",
+    ptitle_kjam: "Karadeniz Jam", pt_kjam: "Solo · Jam Şampiyonu", pm_kjam: "2026 · 1.lik",
+    pt_lam: "Godot · Clicker", pt_tank: "Java · OOP Motor Yok",
+    blog_title: "Günlükler & <em>Fikirler</em>", blog_desc: "Geliştirme sürecimi, mimari kararları ve game jam deneyimlerimi belgeliyorum. Kartları çevirmek için kaydırın.",
+    bcat_tut: "Eğitim", bcat_dev: "Günlük",
+    btitle_fsm: "Godot'ta FSM Tasarlamak", bexc_fsm: "Spagetti koddan kaçınarak, oyuncu durumlarını temiz bir şekilde yönetmek için Sonlu Durum Makinelerini nasıl kuruyorum.",
+    btitle_evo: "Evo #1: Solo Yola Çıkmak", bexc_evo: "Kapsam, motivasyon, motor kararları ve Metroidvania projesini neredeyse bitiren ilk prototip.",
+    btitle_jam: "HUJAM'ı Kazanmak", bexc_jam: "48 saatlik maratonun analizi. Planımız, kaçınılmaz panik anları, teknik borçlar ve bir dahaki sefere neyi farklı yapacağım.",
+    btn_viewall: "Tüm Yazıları Gör →", all_title: "Tüm Yazılar",
+    cv_title: "Özgeçmiş",
+    cv_h_edu: "Eğitim", cv_edu_deg: "Bilgisayar Mühendisliği Lisans", cv_edu_date: "Beklenen: Haziran 2028",
+    cv_edu_li: "<strong>GPA: 3.21 / 4.00</strong> &nbsp; <strong>İlgili Dersler:</strong> Veri Yapıları (C++), Nesne Yönelimli Programlama (Java), Algoritmalar, Olasılık ve İstatistik, Lojik Tasarım, Ayrık Matematik.",
+    cv_h_exp: "Deneyim ve Başarılar",
+    cv_kjam_date: "Mayıs 2026", cv_kjam_aw: "1.lik — 80.000 TL Ödül", cv_kjam_li: "Jam kısıtlamaları içerisinde tam oynanabilir bir oyun tasarlayıp yayınlayarak 1.lik ödülünü kazandım.",
+    cv_hujam_date: "Kasım 2025", cv_hujam_aw: "2.lik — 20.000 TL Ödül", cv_hujam_li: "Takımın tek programcısı olarak <a href='https://rectewodwhey.itch.io/myco' target='_blank'>Myco</a>'yu geliştirdim, 48 saatlik sıkı bir teslim süresi içinde tüm temel mekanikleri kodladım ve sanat/ses varlıklarını entegre ettim.",
+    cv_deneyap_aw: "\"Geleceğin Yıldızları\" Programı Mezunu", cv_deneyap_li: "Robotik, YZ, Siber Güvenlik ve IoT gibi 11 farklı alanı kapsayan 36 aylık yoğun müfredatı ve kapsamlı mezuniyet projesini tamamladım.",
+    cv_h_proj: "Projeler",
+    cv_evo_date: "Nisan 2025 – Günümüz", cv_evo_li1: "Solo bir geliştirici olarak kapsamlı bir 2D Metroidvania oyunu geliştiriyor; teknik mimariden ve tüm sanatsal/ses yönlendirmesinden sorumluyum.", cv_evo_li2: "Oyuncu ve düşman mantığı için çift FSM, 2D fizik etkileşimleri ve modüler varlık hatları dahil olmak üzere tüm oyun sistemlerini uçtan uca mimarileştirdim.",
+    cv_lam_date: "Ekim 2025 – Günümüz", cv_lam_li: "Devam eden projede genel geliştirici; modüler karakter özelleştirme sistemi ve artan tıklama mekanikleri (clicker) geliştirdim.",
+    cv_tank_date: "Bahar 2025", cv_tank_li: "Bir OOP dersi için sıfırdan oyun motoru kullanmadan 2D tank savaş oyunu geliştirdim; özel çarpışma algılama ve YZ yol bulma algoritmaları uyguladım.",
+    cv_indie_date: "2021 – Günümüz", cv_myco_li: "<strong><a href='https://rectewodwhey.itch.io/myco' target='_blank'>Myco</a>:</strong> Ödüllü aksiyon-platform oyunu; hareket yetenekleri, dash/kalkan mekanikleri ve düşman davranışlarını programladım.", cv_jet_li: "<strong><a href='https://rectewodwhey.itch.io/jetpackmonsters' target='_blank'>Jetpack Monsters</a>:</strong> Elle çizilmiş sanat tarzıyla 1 haftalık sprintte tamamlanan yerel 2 oyunculu dövüş oyunu.",
+    cv_h_skills: "Teknik Beceriler",
+    cv_sk_1: "<strong>Diller:</strong> C++, C#, Java, Python, GML", cv_sk_2: "<strong>Oyun Geliştirme & Sanat:</strong> Unity, Godot, GameMaker Studio 2, Shader Programlama (GLSL/HLSL), 2D Fizik, OOP", cv_sk_3: "<strong>Araçlar:</strong> Git, VS Code, Aseprite, FL Studio, JavaFX, JetBrains Suite", cv_sk_4: "<strong>Soft Beceriler & Diller:</strong> İngilizce (B2+), Problem Çözme, Yaratıcı Yönetim, Takım Çalışması",
+    back_blog: "← Geri",
+    fsm_p1:"Evo üzerinde çalışmaya başladığımda ilk mimari kararlardan biri karakter durumlarını nasıl yöneteceğimdi. Oyuncu duvar kayarken dash yapabilmeli mi? Düşmanlar geri itilirken saldırabilmeli mi? Net bir sistem yoksa sonunda devasa bir boolean yığını ve iç içe <code>if</code> ifadeleri ortaya çıkıyor.",
+    fsm_p2:"Vardığım cevap: temiz bir Sonlu Durum Makinesi (FSM). Godot'ta nasıl oluşturduğumu anlatıyorum.",
+    fsm_h1:"Sonlu Durum Makinesi Nedir?",
+    fsm_p3:"FSM, karakterin aynı anda tam olarak bir <em>durumda</em> olabileceği bir modeldir — Boşta, Koşuyor, Zıplıyor, Dash vb. — ve durumlar arası geçişler açıkça tanımlanır. Gerçekte nelerin mümkün olduğunu düşünmek zorunda kalırsınız.",
+    fsm_h2:"Temel State Sınıfı",fsm_h3:"Durum Makinesi",
+    fsm_p4:"Her durum bu sınıftan türer. <code>update()</code> fonksiyonu ya <code>null</code> (bu durumda kal) ya da geçiş yapılacak sonraki durumun referansını döndürür.",
+    fsm_p5:"Tüm makine bu kadar. Her durum kendi betiği — <code>StateIdle.gd</code>, <code>StateRun.gd</code> vb. — <code>StateMachine</code> düğümünün alt öğesi olarak eklenir. Godot'un sahne ağacı mimariniz haline gelir.",
+    evo_p1:"Herkes solo Metroidvania yapmanın kötü bir fikir olduğunu söyler. Muhtemelen haklılar. Yine de yapıyorum.",
+    evo_p2:"Evo, Nisan 2025'te bir deney olarak başladı — takım olmadan klasikler (Hollow Knight, Ori, Symphony of the Night) kadar bağlantılı ve duyarlı bir oyun yapabilir miyim? Bir yıl sonra kısmi bir cevabım var: evet, ama çok özgül bir yaklaşım gerektiriyor.",
+    evo_h1:"Kapsam Sorunu",
+    evo_p3:"Metroidvania'lar birbirine bağlı dünya, yetenek kapıları ve keşifle tanımlanır. Her eklediğiniz koridor, bir geri dönme nedeni ima eder. Kapsam sonsuza dek genişleyebilir. Çözümüm: \"halkalar\" halinde tasarlamak. İlk halka, 3 yetenek ve bir patronla kendi içinde tamamlanmış tek bir bölge. Dışarı genişlemeden önce bunu mükemmel hale getirmek.",
+    evo_h2:"Teknoloji Yığını",
+    evo_p4:"Godot 4.3 ile geliştiriyorum. Seçim kolaydı — ücretsiz, açık kaynaklı, sahne sistemi FSM mimarimle güzel örtüşüyor ve GDScript iterasyon için yeterince hızlı. Shader'ları doğrudan GLSL'de yazıyor, tüm sanat için Aseprite kullanıyorum.",
+    jam_p1:"HUJAM '25. 48 saat. Bir programcı (ben), iki sanatçı, bir besteci. Bir mantar asker hakkında aksiyon-platform oyunu Myco'yu yaptık ve 20.000 TL alarak 2. olduk.",
+    jam_h1:"Saat 0–4: Kapsam ve Daraltma",
+    jam_p2:"Tema gece yarısı açıklandı. Konsept belirlemek için 30 dakikamız vardı. Myco'yu seçtik çünkü net bir hareket seti vardı: koş, zıpla, dash, kalkan. Dört hareket. Diğer her şey bu dördünü harika hissettirmek üzerine inşa edilecekti.",
+    jam_h2:"Saat 4–24: Mekaniği Çıkar",
+    jam_p3:"İlk 20 saatteki görevim: oyuncunun kendini kontrol etmesini iyi hissettirmek. Düşman YZ bekleyebilirdi. Önce hareket, sonra diğer her şey. Jam yapmanın tek yolu bu.",
+  }
+};
+
+function setLang(lang){
+  currentLang = lang;
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  document.getElementById('btn-tr').classList.toggle('active', lang==='tr');
+  // post-back lang butonlarını senkronize et
+  document.querySelectorAll('#pb-btn-en').forEach(b => b.classList.toggle('active', lang==='en'));
+  document.querySelectorAll('#pb-btn-tr').forEach(b => b.classList.toggle('active', lang==='tr'));
+  // update sidebar nav labels
+  updateSidebarLang(lang);
+  // update status bar
+  const stEl = document.getElementById('enc-status-text');
+  if(stEl) stEl.textContent = lang==='tr' ? 'KARŞILAŞMA AKTİF' : 'ENCOUNTER ACTIVE';
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(dict[lang] && dict[lang][key]) el.innerHTML = dict[lang][key];
+  });
+  
+  // Re-render current dialogue node in new language
+  if(!isTyping && document.getElementById('dialogue-text')) {
+    clearTimeout(typeTimeout);
+    navigateDialogue(currentEncKey);
+  }
+}
+
+/* ── Smooth Color Cycling (Hue Rotation) ── */
+let currentHue = 175; // Starts at Teal/Turquoise
+function animateColors() {
+    currentHue = (currentHue + 0.007) % 360; 
+    document.documentElement.style.setProperty('--turq', `hsl(${currentHue}, 80%, 40%)`);
+    document.documentElement.style.setProperty('--turq2', `hsl(${currentHue}, 80%, 30%)`);
+    document.documentElement.style.setProperty('--turq-soft', `hsl(${currentHue}, 80%, 92%)`);
+    document.documentElement.style.setProperty('--turq-shadow', `hsla(${currentHue}, 80%, 30%, 0.15)`);
+    
+    document.documentElement.style.setProperty('--paper', `hsl(${currentHue}, 30%, 97%)`); 
+    document.documentElement.style.setProperty('--paper2', `hsl(${currentHue}, 30%, 93%)`);
+    document.documentElement.style.setProperty('--paper3', `hsl(${currentHue}, 30%, 88%)`);
+    
+    requestAnimationFrame(animateColors);
+}
+animateColors();
+
+/* ── Encounter Dialogue Tree System ── */
+let isTyping = false;
+let typeTimeout;
+
+function renderEncText(raw) {
+  // convert \n to <br>, [word] to colored span
+  return raw
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\n/g,'<br>')
+    .replace(/\[(.*?)\]/g,'<span style="color:var(--turq);font-weight:600;">$1</span>');
+}
+
+function showChoices(choices) {
+  const menu = document.getElementById('enc-menu');
+  menu.innerHTML = '';
+  choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'enc-btn';
+    btn.textContent = c.label;
+    btn.onclick = () => navigateDialogue(c.next);
+    menu.appendChild(btn);
+  });
+}
+
+function navigateDialogue(key) {
+  if(isTyping) {
+    // skip typing on click
+    clearTimeout(typeTimeout);
+    isTyping = false;
+  }
+  currentEncKey = key;
+  const node = dialogueTree[currentLang][key];
+  if(!node) return;
+
+  // update depth display
+  if(key === 'root') encDepth = 0; else encDepth++;
+  document.getElementById('enc-depth-text').textContent = 'DEPTH: ' + encDepth;
+
+  // update speaker
+  const speakerEl = document.getElementById('enc-speaker');
+  if(speakerEl) speakerEl.textContent = node.speaker;
+
+  // clear choices during typing
+  document.getElementById('enc-menu').innerHTML = '';
+
+  // type text
+  const el = document.getElementById('dialogue-text');
+  el.innerHTML = '';
+  const rendered = renderEncText(node.text);
+  // parse to plain chars with tags preserved
+  let i = 0;
+  const parts = [];
+  let tmp = '';
+  let inTag = false;
+  for(let ch of rendered) {
+    if(ch === '<') { if(tmp) parts.push({t:'text',v:tmp}); tmp='<'; inTag=true; }
+    else if(ch === '>') { tmp+='>'; parts.push({t:'tag',v:tmp}); tmp=''; inTag=false; }
+    else { tmp += ch; }
+  }
+  if(tmp) parts.push({t:'text',v:tmp});
+
+  isTyping = true;
+  let pi = 0; let ci = 0;
+  function typeNext() {
+    if(pi >= parts.length) { isTyping = false; showChoices(node.choices); return; }
+    const part = parts[pi];
+    if(part.t === 'tag') { el.innerHTML += part.v; pi++; typeTimeout = setTimeout(typeNext, 0); }
+    else {
+      if(ci < part.v.length) {
+        el.innerHTML += part.v[ci]; ci++;
+        typeTimeout = setTimeout(typeNext, Math.random()*18+8);
+      } else { pi++; ci=0; typeTimeout = setTimeout(typeNext, 0); }
+    }
+  }
+  typeNext();
+}
+
+function playDialogue(key) { navigateDialogue(key); }
+
+// Hover effect for the orb inside the encounter box
+document.addEventListener('DOMContentLoaded', () => {
+   setTimeout(() => navigateDialogue('root'), 500);
+  // post-back lang butonlarını başlat
+  document.querySelectorAll('#pb-btn-en').forEach(b => b.classList.add('active'));
+
+   const encBox = document.querySelector('.encounter-box');
+   const orb = document.querySelector('.enc-orb');
+   if(encBox && orb) {
+       encBox.addEventListener('mousemove', (e) => {
+           const rect = encBox.getBoundingClientRect();
+           const x = e.clientX - rect.left - rect.width/2;
+           const y = e.clientY - rect.top - rect.height/2;
+           orb.style.transform = `translate(${x * 0.07}px, ${y * 0.07}px) scale(1.08)`;
+       });
+       encBox.addEventListener('mouseleave', () => {
+           orb.style.transform = '';
+       });
+   }
+});
+
+/* ── Hover Reveal Right Side ── */
+const projList = document.querySelector('.proj-list');
+const projRows = document.querySelectorAll('.proj-row');
+const hoverCont = document.getElementById('hover-image-container');
+
+projRows.forEach(row => {
+  row.addEventListener('mouseenter', (e) => {
+    const title = row.querySelector('.pr-title').innerText;
+    document.getElementById('hover-content').innerText = title;
+    hoverCont.classList.add('active');
+    
+    const listRect = projList.getBoundingClientRect();
+    const rowRect = row.getBoundingClientRect();
+    const offsetTop = rowRect.top - listRect.top;
+    hoverCont.style.top = offsetTop + 'px';
+  });
+});
+projList.addEventListener('mouseleave', () => {
+  hoverCont.classList.remove('active');
+});
+
+/* ── 3D Vertical Stack (Blog Carousel) ── */
+let currentCard = 0;
+const cards = document.querySelectorAll('.b-card');
+const totalCards = cards.length;
+
+function updateCards() {
+  cards.forEach((card, index) => {
+    const diff = index - currentCard;
+    const absDiff = Math.abs(diff);
+
+    // opacity: aktif=1, ±1=0.45, geri kalan=0
+    let opacity;
+    if (absDiff === 0) opacity = 1;
+    else if (absDiff === 1) opacity = 0.45;
+    else opacity = 0;
+
+    const scale = 1 - absDiff * 0.05;
+    const zIndex = totalCards - absDiff;
+
+    card.style.transform = `translateY(calc(-50% + ${diff * 90}px)) scale(${scale})`;
+    card.style.opacity = opacity;
+    card.style.zIndex = zIndex;
+    card.style.pointerEvents = diff === 0 ? 'auto' : 'none';
+    card.style.clipPath = diff === 0 ? 'none' : 'inset(0 round 12px)';
+
+    const inner = card.querySelector('.b-card-inner');
+    inner.style.boxShadow = diff === 0 ? '0 30px 60px var(--turq-shadow)' : 'none';
+  });
+}
+
+function nextCard() {
+  if (currentCard < totalCards - 1) currentCard++;
+  updateCards();
+}
+function prevCard() {
+  if (currentCard > 0) currentCard--;
+  updateCards();
+}
+
+const stackArea = document.getElementById('blogStack');
+stackArea.addEventListener('wheel', (e) => {
+  e.preventDefault(); 
+  if (e.deltaY > 0) {
+    nextCard();
+  } else {
+    prevCard();
+  }
+});
+updateCards();
+
+/* ── Sidebar ── */
+function toggleSidebar(){
+  const s = document.getElementById('sidebar');
+  const o = document.getElementById('sidebarOverlay');
+  const b = document.getElementById('hamburgerBtn');
+  const open = s.classList.toggle('open');
+  o.classList.toggle('open', open);
+  b.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.getElementById('hamburgerBtn').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function updateSidebarLang(lang){
+  const sbLabels = {
+    en:{sb_home:'Home',sb_enc:'The Protagonist',sb_works:'Works',sb_writing:'Writing',sb_resume:'Resume'},
+    tr:{sb_home:'Ana Sayfa',sb_enc:'Ana Karakter',sb_works:'Projeler',sb_writing:'Yazılar',sb_resume:'Özgeçmiş'}
+  };
+  document.querySelectorAll('[data-i18n-sb]').forEach(el=>{
+    const key=el.getAttribute('data-i18n-sb');
+    if(sbLabels[lang]&&sbLabels[lang][key]) el.textContent=sbLabels[lang][key];
+  });
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSidebar(); });
+
+/* ── Hash Routing & Scroll Restitution ── */
+let scrollPos = 0;
+window.addEventListener('hashchange', handleRoute);
+
+function handleRoute() {
+  const hash = window.location.hash;
+
+  if(hash && hash !== '#' && hash !== '#hero' && hash !== '#projects' && hash !== '#blog' && hash !== '#cv' && hash !== '#encounter') {
+    if(!document.getElementById('mainContent').classList.contains('hidden')) {
+      scrollPos = window.scrollY;
+    }
+    document.documentElement.style.scrollBehavior = 'auto';
+    document.getElementById('mainContent').classList.add('hidden');
+    document.querySelectorAll('.blog-post-view').forEach(p => p.classList.remove('active'));
+
+    const target = document.getElementById(hash.substring(1));
+    if(target) { target.classList.add('active'); window.scrollTo(0,0); }
+
+    // CSS class ile nav+hamburger gizle
+    document.body.classList.add('in-post');
+    closeSidebar();
+  } else {
+    if(document.getElementById('mainContent').classList.contains('hidden')) {
+      document.querySelectorAll('.blog-post-view').forEach(p => p.classList.remove('active'));
+      document.getElementById('mainContent').classList.remove('hidden');
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, scrollPos);
+      setTimeout(() => { document.documentElement.style.scrollBehavior = 'smooth'; }, 50);
+    }
+    document.body.classList.remove('in-post');
+  }
+}
+if(window.location.hash) handleRoute();
+
+/* ── Magnetic Buttons ── */
+const magnetics = document.querySelectorAll('.magnetic');
+magnetics.forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) scale(1.02)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = 'translate(0px, 0px) scale(1)';
+  });
+});
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// CONTENT LOADER — JSON/MD dosyalarından içerik yükler
+// GitHub Pages'de dosyalar aynı origin'den gelir, fetch çalışır
+// ══════════════════════════════════════════════════════════
+
+// Basit YAML front-matter parser
+function parseFrontMatter(raw) {
+  const match = raw.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return { body: raw };
+  const fm = {};
+  const lines = match[1].split('\n');
+  let currentKey = null, currentSubKey = null, inObject = false, inBody = false;
+  const bodyMatch = raw.match(/^---\n[\s\S]*?\n---\n([\s\S]*)$/);
+  
+  // Use js-yaml-like simple parser for nested objects
+  // We'll do it properly with a recursive approach
+  try {
+    // Simple two-level YAML parser sufficient for our schema
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i];
+      const topMatch = line.match(/^(\w+):\s*(.*)$/);
+      if (topMatch) {
+        const key = topMatch[1];
+        const val = topMatch[2].trim();
+        if (val === '' || val === '|') {
+          // Could be object or block scalar
+          // peek next line indent
+          if (i + 1 < lines.length && lines[i+1].match(/^  \w+:/)) {
+            // object
+            fm[key] = {};
+            i++;
+            while (i < lines.length && lines[i].match(/^  /)) {
+              const subMatch = lines[i].match(/^  (\w+):\s*(.*)$/);
+              if (subMatch) {
+                let subVal = subMatch[2].trim();
+                // handle block scalar |
+                if (subVal === '|') {
+                  let blockLines = [];
+                  i++;
+                  while (i < lines.length && (lines[i].startsWith('    ') || lines[i] === '')) {
+                    blockLines.push(lines[i].replace(/^    /, ''));
+                    i++;
+                  }
+                  fm[key][subMatch[1]] = blockLines.join('\n').trim();
+                  continue;
+                }
+                // remove surrounding quotes
+                subVal = subVal.replace(/^["']|["']$/g, '');
+                fm[key][subMatch[1]] = subVal;
+              }
+              i++;
+            }
+            continue;
+          } else {
+            fm[key] = val;
+          }
+        } else if (val.startsWith('[') && val.endsWith(']')) {
+          // inline array
+          fm[key] = val.slice(1,-1).split(',').map(s => s.trim().replace(/^["']|["']$/g,''));
+        } else {
+          // simple value
+          fm[key] = val.replace(/^["']|["']$/g, '');
+          if (fm[key] === 'true') fm[key] = true;
+          if (fm[key] === 'false') fm[key] = false;
+        }
+      }
+      i++;
+    }
+  } catch(e) { console.warn('FM parse error', e); }
+  
+  fm._body = bodyMatch ? bodyMatch[1].trim() : '';
+  return fm;
+}
+
+// Markdown to HTML (minimal — paragraphs, headings, code, bold, italic, inline code)
+function mdToHtml(md) {
+  if (!md) return '';
+  let html = md
+    // code blocks
+    .replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) =>
+      `<pre><code class="language-${lang}">${code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`)
+    // headings
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    // bold, italic, inline code
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    // paragraphs (double newline)
+    .split(/\n\n+/)
+    .map(block => {
+      block = block.trim();
+      if (!block) return '';
+      if (block.startsWith('<h') || block.startsWith('<pre') || block.startsWith('<ul') || block.startsWith('<ol')) return block;
+      return `<p>${block.replace(/\n/g, ' ')}</p>`;
+    })
+    .join('\n');
+  return html;
+}
+
+// Category label mapping
+const catLabels = {
+  en: { devlog:'DEVLOG', tutorial:'TUTORIAL', postmortem:'POST-MORTEM', essay:'ESSAY' },
+  tr: { devlog:'GÜNLÜK', tutorial:'EĞİTİM', postmortem:'POST-MORTEM', essay:'DENEME' }
+};
+
+// Format date string
+function fmtDate(dateStr, lang) {
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-US', { month: 'long', year: 'numeric' });
+  } catch(e) { return dateStr; }
+}
+
+// Known posts (slug list — matches filenames in content/posts/)
+// When you add a new .md file via admin, add its slug here too
+// OR: in a real build system this would be auto-generated
+const POST_SLUGS = [
+  'building-an-fsm-in-godot',
+  'evo-going-solo',
+  'winning-hujam'
+];
+
+let loadedPosts = [];
+let loadedProjects = [];
+let loadedDialogue = null;
+
+async function loadContent() {
+  // Load posts
+  const postPromises = POST_SLUGS.map(async slug => {
+    try {
+      const res = await fetch(`content/posts/${slug}.md`);
+      if (!res.ok) return null;
+      const text = await res.text();
+      const fm = parseFrontMatter(text);
+      fm.slug = slug;
+      return fm;
+    } catch(e) { return null; }
+  });
+  
+  const rawPosts = await Promise.all(postPromises);
+  loadedPosts = rawPosts.filter(p => p && p.published !== false);
+  loadedPosts.sort((a,b) => new Date(b.date) - new Date(a.date));
+  
+  // Load projects
+  try {
+    const res = await fetch('content/projects.json');
+    if (res.ok) {
+      loadedProjects = await res.json();
+      loadedProjects = loadedProjects.filter(p => p.published !== false);
+      loadedProjects.sort((a,b) => (a.order||99) - (b.order||99));
+    }
+  } catch(e) { console.warn('Projects load failed', e); }
+  
+  // Load dialogue
+  try {
+    const res = await fetch('content/dialogue.json');
+    if (res.ok) {
+      const data = await res.json();
+      if (data.nodes && data.nodes.length > 0) {
+        loadedDialogue = data;
+        buildDialogueTree(data);
+      }
+    }
+  } catch(e) { console.warn('Dialogue load failed', e); }
+  
+  // Apply content to page
+  renderBlogSection();
+  renderAllPostsView();
+  renderPostViews();
+  renderProjects();
+}
+
+// Build dialogueTree from JSON (overrides the hardcoded one)
+function buildDialogueTree(data) {
+  dialogueTree.en = {};
+  dialogueTree.tr = {};
+  data.nodes.forEach(node => {
+    ['en','tr'].forEach(lang => {
+      dialogueTree[lang][node.key] = {
+        speaker: node.speaker[lang] || node.speaker.en,
+        text: node.text[lang] || node.text.en,
+        choices: (node.choices || []).map(c => ({
+          label: c.label[lang] || c.label.en,
+          next: c.next
+        }))
+      };
+    });
+  });
+  // Re-render current node if encounter is active
+  if (typeof navigateDialogue === 'function') {
+    navigateDialogue('root');
+  }
+}
+
+// Render blog cards in main section
+function renderBlogSection() {
+  if (!loadedPosts.length) return;
+  const container = document.querySelector('.b-stack');
+  if (!container) return;
+  container.innerHTML = '';
+  const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
+  
+  loadedPosts.slice(0, 5).forEach((post, idx) => {
+    const title = post.title ? (post.title[lang] || post.title.en) : post.slug;
+    const excerpt = post.excerpt ? (post.excerpt[lang] || post.excerpt.en) : '';
+    const category = catLabels[lang][post.category] || post.category.toUpperCase();
+    const date = fmtDate(post.date, lang);
+    
+    const card = document.createElement('div');
+    card.className = 'b-card' + (idx === 0 ? ' is-active' : '');
+    card.innerHTML = `<div class="b-card-inner">
+      <div class="b-cat">${category}</div>
+      <h3 class="b-title">${title}</h3>
+      <p class="b-excerpt">${excerpt}</p>
+      <div class="b-date">${date}</div>
+    </div>`;
+    card.addEventListener('click', () => { if(idx === currentCard) window.location.hash = 'post-' + post.slug; });
+    container.appendChild(card);
+  });
+  
+  // Re-init card system
+  if (typeof initCards === 'function') initCards();
+  
+  // View All link
+  const viewAll = document.querySelector('.b-view-all');
+  if (viewAll) {
+    const allText = lang === 'tr' ? 'Tüm Yazıları Gör →' : 'View All Entries →';
+    viewAll.textContent = allText;
+  }
+}
+
+// Render all-posts view
+function renderAllPostsView() {
+  if (!loadedPosts.length) return;
+  const list = document.querySelector('.all-posts-list');
+  if (!list) return;
+  const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
+  list.innerHTML = '';
+  
+  loadedPosts.forEach(post => {
+    const title = post.title ? (post.title[lang] || post.title.en) : post.slug;
+    const category = catLabels[lang][post.category] || post.category.toUpperCase();
+    const date = fmtDate(post.date, lang);
+    
+    const row = document.createElement('a');
+    row.href = '#post-' + post.slug;
+    row.className = 'ap-row';
+    row.innerHTML = `<div class="ap-meta"><span style="color:var(--turq);font-weight:600;text-transform:uppercase;">${category}</span> • ${date}</div>
+      <div class="ap-title">${title}</div>`;
+    list.appendChild(row);
+  });
+}
+
+// Render individual post views dynamically
+function renderPostViews() {
+  if (!loadedPosts.length) return;
+  const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
+  
+  // Remove old dynamic post views
+  document.querySelectorAll('.blog-post-view.dynamic').forEach(el => el.remove());
+  
+  loadedPosts.forEach(post => {
+    const slug = post.slug;
+    const id = 'post-' + slug;
+    
+    // Update existing hardcoded views if present
+    let existing = document.getElementById(id);
+    if (!existing) {
+      existing = document.createElement('div');
+      existing.className = 'blog-post-view dynamic';
+      existing.id = id;
+      document.body.appendChild(existing);
+    }
+    
+    const title = post.title ? (post.title[lang] || post.title.en) : slug;
+    const category = catLabels[lang][post.category] || post.category.toUpperCase();
+    const date = fmtDate(post.date, lang);
+    const bodyMd = post.body ? (post.body[lang] || post.body.en || post._body) : post._body;
+    const bodyHtml = mdToHtml(bodyMd);
+    const backLabel = lang === 'tr' ? '← Geri' : '← Back';
+    const enActive = lang === 'en' ? 'active' : '';
+    const trActive = lang === 'tr' ? 'active' : '';
+    
+    existing.innerHTML = `
+      <a href="#" class="post-back" onclick="window.location.hash='';return false;">
+        <span>${backLabel}</span>
+        <div class="post-back-lang">
+          <button class="lang-btn ${enActive}" id="pb-btn-en" onclick="setLang('en')">EN</button>
+          <button class="lang-btn ${trActive}" id="pb-btn-tr" onclick="setLang('tr')">TR</button>
+        </div>
+      </a>
+      <div class="post-content">
+        <div class="post-meta">
+          <span class="pcat">${category}</span>
+          <span class="pdate">${date}</span>
+        </div>
+        <h1 class="post-title">${title}</h1>
+        <div class="post-body">${bodyHtml}</div>
+      </div>`;
+  });
+}
+
+// Render projects section
+function renderProjects() {
+  if (!loadedProjects.length) return;
+  // Projects rendering handled by existing JS — just update data
+  // For now update hover images if provided
+  loadedProjects.forEach(proj => {
+    const el = document.querySelector(`[data-project="${proj.slug}"]`);
+    if (el && proj.image) {
+      el.style.setProperty('--proj-img', `url(${proj.image})`);
+    }
+  });
+}
+
+// Re-render on lang change
+const _origSetLang = typeof setLang === 'function' ? setLang : null;
+
+// Hook into setLang after it's defined (runs after main script)
+window.addEventListener('load', () => {
+  loadContent();
+  
+  // Wrap setLang to also re-render content
+  if (typeof setLang === 'function') {
+    const origSetLang = setLang;
+    window.setLang = function(lang) {
+      origSetLang(lang);
+      renderBlogSection();
+      renderAllPostsView();
+      renderPostViews();
+    };
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+# Hash-based routing — no server-side redirects needed
+# But this ensures 404s go back to index for any direct URL access
+/*    /index.html   200
