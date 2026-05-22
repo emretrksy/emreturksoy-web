@@ -1,18 +1,20 @@
 ---
 slug: evo
 order: 1
-published: true
 title:
-  tr: "Evo"
-  en: "Evo"
+  tr: Evo
+  en: Evo
 description:
-  tr: "Solo geliştirilen 2D Metroidvania. Halka tabanlı tasarım, FSM mimarisi, el yapımı pixel art."
-  en: "Solo-developed 2D Metroidvania. Ring-based design, FSM architecture, hand-crafted pixel art."
-image: ""
-url: "https://rectewodwhey.itch.io/"
+  tr: Solo geliştirilen 2D Metroidvania. Halka tabanlı tasarım, FSM mimarisi, el
+    yapımı pixel art.
+  en: Solo-developed 2D Metroidvania. Ring-based design, FSM architecture,
+    hand-crafted pixel art.
+image: /assets/images/frognflies.png
+url: https://rectewodwhey.itch.io/
 tech:
-  - "Godot 4"
-  - "GDScript"
-  - "Aseprite"
-  - "GLSL"
+  - Godot 4
+  - GDScript
+  - Aseprite
+  - GLSL
+published: true
 ---
