@@ -572,7 +572,7 @@ footer{
 .f-links a{color:var(--ink3);text-decoration:none;font-size:13px;transition:color .2s;}
 .f-links a:hover{color:var(--turq);}
 </style>
-  <!-- Umami Analytics — website-id'yi kendi Umami panelinizden alın -->
+  <!-- Umami Analytics -->
   <script defer src="https://cloud.umami.is/script.js" data-website-id="UMAMI_WEBSITE_ID"></script>
 </head>
 <body>
@@ -721,33 +721,7 @@ footer{
         <div class="blog-stack-wrapper">
           <div class="blog-stack" id="blogStack">
             
-            <div class="b-card">
-              <div class="b-card-inner" onclick="window.location.hash='post-fsm'">
-                <div class="b-cat" data-i18n="bcat_tut">Tutorial</div>
-                <div class="b-title" data-i18n="btitle_fsm">Building an FSM in Godot</div>
-                <div class="b-exc" data-i18n="bexc_fsm">How I architect Finite State Machines to handle player states cleanly — avoiding spaghetti code and nested if-else chains.</div>
-                <div class="b-date">May 2026</div>
-              </div>
-            </div>
-
-            <div class="b-card">
-              <div class="b-card-inner" onclick="window.location.hash='post-evo'">
-                <div class="b-cat" data-i18n="bcat_dev">Devlog</div>
-                <div class="b-title" data-i18n="btitle_evo">Evo #1: Going Solo</div>
-                <div class="b-exc" data-i18n="bexc_evo">Scope, motivation, tech stack decisions, and the very first prototype that almost killed the Metroidvania project.</div>
-                <div class="b-date">April 2026</div>
-              </div>
-            </div>
-
-            <div class="b-card">
-              <div class="b-card-inner" onclick="window.location.hash='post-jam'">
-                <div class="b-cat" data-i18n="bcat_dev">Devlog</div>
-                <div class="b-title" data-i18n="btitle_jam">Winning HUJAM</div>
-                <div class="b-exc" data-i18n="bexc_jam">A post-mortem on our 48-hour sprint. The plan, the inevitable panic, the tech debt, and what I would do differently next time.</div>
-                <div class="b-date">November 2025</div>
-              </div>
-            </div>
-
+            <!-- Blog kartları content/posts/ klasöründen dinamik yüklenir -->
             <div class="b-card">
               <div class="b-card-inner" onclick="window.location.hash='all-posts'" style="align-items:center;justify-content:center;text-align:center;">
                 <div class="b-title" style="margin:0;font-style:italic;" data-i18n="btn_viewall">View All Entries →</div>
@@ -912,98 +886,7 @@ footer{
   <div class="post-content">
     <h1 class="post-title" data-i18n="all_title" style="margin-bottom:48px;">All Writings</h1>
     <div class="all-posts-list">
-      <a href="#post-fsm" class="ap-row">
-        <div class="ap-meta"><span data-i18n="bcat_tut" style="color:var(--turq);font-weight:600;text-transform:uppercase;">Tutorial</span> • May 2026</div>
-        <div class="ap-title" data-i18n="btitle_fsm">Building an FSM in Godot</div>
-      </a>
-      <a href="#post-evo" class="ap-row">
-        <div class="ap-meta"><span data-i18n="bcat_dev" style="color:var(--turq);font-weight:600;text-transform:uppercase;">Devlog</span> • April 2026</div>
-        <div class="ap-title" data-i18n="btitle_evo">Evo #1: Going Solo</div>
-      </a>
-      <a href="#post-jam" class="ap-row">
-        <div class="ap-meta"><span data-i18n="bcat_dev" style="color:var(--turq);font-weight:600;text-transform:uppercase;">Devlog</span> • November 2025</div>
-        <div class="ap-title" data-i18n="btitle_jam">Winning HUJAM</div>
-      </a>
-    </div>
-  </div>
-</div>
-
-<!-- ── SINGLE POST VIEWS ── -->
-<div class="blog-post-view" id="post-fsm">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
-  <div class="post-content">
-    <div class="post-meta"><span class="pcat" data-i18n="bcat_tut">Tutorial</span><span class="pdate">May 2026</span></div>
-    <h1 class="post-title" data-i18n="btitle_fsm">Building an FSM in Godot</h1>
-    <div class="post-body">
-      <p data-i18n="fsm_p1">When I started working on Evo, one of the first architectural decisions I had to make was how to handle character states. Should the player be able to dash while wall-sliding? Can enemies attack while being knocked back? If you don't have a clear system for this, you end up with a massive pile of boolean flags and nested <code>if</code> statements.</p>
-      <p data-i18n="fsm_p2">The answer I landed on: a clean Finite State Machine (FSM). Here's how I built it in Godot.</p>
-      <h2 data-i18n="fsm_h1">What's a Finite State Machine?</h2>
-      <p data-i18n="fsm_p3">An FSM is a model where your character can be in exactly one <em>state</em> at a time — Idle, Running, Jumping, Dashing, etc. — and transitions between states are explicitly defined. It forces you to think about what's actually possible.</p>
-      <h2 data-i18n="fsm_h2">The Base State Class</h2>
-      <pre>class_name State extends Node
-
-var character: CharacterBody2D
-
-func enter() -> void:
-    pass
-
-func exit() -> void:
-    pass
-
-func update(delta: float) -> State:
-    return null  # null = stay in current state</pre>
-      <p data-i18n="fsm_p4">Every state inherits from this. The <code>update()</code> function returns either <code>null</code> (stay in this state) or a reference to the next state to transition into.</p>
-      <h2 data-i18n="fsm_h3">The State Machine</h2>
-      <pre>class_name StateMachine extends Node
-
-@export var initial_state: State
-var current_state: State
-
-func _ready():
-    current_state = initial_state
-    current_state.enter()
-
-func _physics_process(delta):
-    var next = current_state.update(delta)
-    if next != null:
-        transition_to(next)
-
-func transition_to(new_state: State):
-    current_state.exit()
-    current_state = new_state
-    current_state.enter()</pre>
-      <p data-i18n="fsm_p5">That's the entire machine. Each state is its own script — <code>StateIdle.gd</code>, <code>StateRun.gd</code>, etc. — attached as children of the <code>StateMachine</code> node. Godot's scene tree becomes your architecture.</p>
-    </div>
-  </div>
-</div>
-
-<div class="blog-post-view" id="post-evo">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
-  <div class="post-content">
-    <div class="post-meta"><span class="pcat" data-i18n="bcat_dev">Devlog</span><span class="pdate">April 2026</span></div>
-    <h1 class="post-title" data-i18n="btitle_evo">Evo #1: Going Solo</h1>
-    <div class="post-body">
-      <p data-i18n="evo_p1">Everyone will tell you making a Metroidvania solo is a bad idea. They're probably right. I'm doing it anyway.</p>
-      <p data-i18n="evo_p2">Evo started in April 2025 as an experiment — could I build a game that felt as interconnected and responsive as the classics (Hollow Knight, Ori, Symphony of the Night) without a team? A year in, I have a partial answer: yes, but it takes a very specific approach.</p>
-      <h2 data-i18n="evo_h1">The Scope Problem</h2>
-      <p data-i18n="evo_p3">Metroidvanias are defined by their interconnected world, ability gating, and exploration. Every corridor you add implies a reason to return to it. The scope can spiral infinitely. My solution: design in "rings." The first ring is one self-contained zone with 3 abilities and a boss. Get that working perfectly before expanding outward.</p>
-      <h2 data-i18n="evo_h2">Tech Stack</h2>
-      <p data-i18n="evo_p4">I'm building in Godot 4.3. The choice was easy — it's free, open source, the scene system maps beautifully to my FSM architecture, and GDScript is fast enough for iteration. I write shaders in GLSL directly, and I use Aseprite for all art.</p>
-    </div>
-  </div>
-</div>
-
-<div class="blog-post-view" id="post-jam">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
-  <div class="post-content">
-    <div class="post-meta"><span class="pcat" data-i18n="bcat_dev">Devlog</span><span class="pdate">November 2025</span></div>
-    <h1 class="post-title" data-i18n="btitle_jam">Winning HUJAM</h1>
-    <div class="post-body">
-      <p data-i18n="jam_p1">HUJAM '25. 48 hours. One programmer (me), two artists, one composer. We made Myco — an action-platformer about a mushroom soldier — and won 2nd place, taking home 20,000 TRY.</p>
-      <h2 data-i18n="jam_h1">Hour 0–4: Scope, and Scoping Down</h2>
-      <p data-i18n="jam_p2">The theme dropped at midnight. We had 30 minutes to decide on a concept. We went with Myco because it had a clear movement kit: run, jump, dash, shield. Four actions. Everything else would be built around making those four feel great.</p>
-      <h2 data-i18n="jam_h2">Hour 4–24: Just Ship the Mechanics</h2>
-      <p data-i18n="jam_p3">My job for the first 20 hours: make the player feel good to control. The enemy AI could wait. Movement first, everything else second. This is the only way to jam.</p>
+      <!-- Yazılar content/posts/ klasöründen dinamik yüklenir -->
     </div>
   </div>
 </div>
@@ -1568,182 +1451,144 @@ magnetics.forEach(btn => {
 </script>
 
 <script>
-// ══════════════════════════════════════════════════════════
-// CONTENT LOADER — JSON/MD dosyalarından içerik yükler
-// GitHub Pages'de dosyalar aynı origin'den gelir, fetch çalışır
-// ══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// CONTENT LOADER — content/ klasöründen içerik yükler
+// ═══════════════════════════════════════════════════════
 
-// Basit YAML front-matter parser
-function parseFrontMatter(raw) {
-  const match = raw.match(/^---\n([\s\S]*?)\n---/);
-  if (!match) return { body: raw };
-  const fm = {};
-  const lines = match[1].split('\n');
-  let currentKey = null, currentSubKey = null, inObject = false, inBody = false;
-  const bodyMatch = raw.match(/^---\n[\s\S]*?\n---\n([\s\S]*)$/);
-  
-  // Use js-yaml-like simple parser for nested objects
-  // We'll do it properly with a recursive approach
-  try {
-    // Simple two-level YAML parser sufficient for our schema
-    let i = 0;
-    while (i < lines.length) {
-      const line = lines[i];
-      const topMatch = line.match(/^(\w+):\s*(.*)$/);
-      if (topMatch) {
-        const key = topMatch[1];
-        const val = topMatch[2].trim();
-        if (val === '' || val === '|') {
-          // Could be object or block scalar
-          // peek next line indent
-          if (i + 1 < lines.length && lines[i+1].match(/^  \w+:/)) {
-            // object
-            fm[key] = {};
-            i++;
-            while (i < lines.length && lines[i].match(/^  /)) {
-              const subMatch = lines[i].match(/^  (\w+):\s*(.*)$/);
-              if (subMatch) {
-                let subVal = subMatch[2].trim();
-                // handle block scalar |
-                if (subVal === '|') {
-                  let blockLines = [];
-                  i++;
-                  while (i < lines.length && (lines[i].startsWith('    ') || lines[i] === '')) {
-                    blockLines.push(lines[i].replace(/^    /, ''));
-                    i++;
-                  }
-                  fm[key][subMatch[1]] = blockLines.join('\n').trim();
-                  continue;
-                }
-                // remove surrounding quotes
-                subVal = subVal.replace(/^["']|["']$/g, '');
-                fm[key][subMatch[1]] = subVal;
-              }
-              i++;
-            }
-            continue;
-          } else {
-            fm[key] = val;
-          }
-        } else if (val.startsWith('[') && val.endsWith(']')) {
-          // inline array
-          fm[key] = val.slice(1,-1).split(',').map(s => s.trim().replace(/^["']|["']$/g,''));
-        } else {
-          // simple value
-          fm[key] = val.replace(/^["']|["']$/g, '');
-          if (fm[key] === 'true') fm[key] = true;
-          if (fm[key] === 'false') fm[key] = false;
-        }
-      }
-      i++;
-    }
-  } catch(e) { console.warn('FM parse error', e); }
-  
-  fm._body = bodyMatch ? bodyMatch[1].trim() : '';
-  return fm;
-}
-
-// Markdown to HTML (minimal — paragraphs, headings, code, bold, italic, inline code)
-function mdToHtml(md) {
-  if (!md) return '';
-  let html = md
-    // code blocks
-    .replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) =>
-      `<pre><code class="language-${lang}">${code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`)
-    // headings
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-    // bold, italic, inline code
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/`(.+?)`/g, '<code>$1</code>')
-    // paragraphs (double newline)
-    .split(/\n\n+/)
-    .map(block => {
-      block = block.trim();
-      if (!block) return '';
-      if (block.startsWith('<h') || block.startsWith('<pre') || block.startsWith('<ul') || block.startsWith('<ol')) return block;
-      return `<p>${block.replace(/\n/g, ' ')}</p>`;
-    })
-    .join('\n');
-  return html;
-}
-
-// Category label mapping
-const catLabels = {
-  en: { devlog:'DEVLOG', tutorial:'TUTORIAL', postmortem:'POST-MORTEM', essay:'ESSAY' },
-  tr: { devlog:'GÜNLÜK', tutorial:'EĞİTİM', postmortem:'POST-MORTEM', essay:'DENEME' }
-};
-
-// Format date string
-function fmtDate(dateStr, lang) {
-  try {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-US', { month: 'long', year: 'numeric' });
-  } catch(e) { return dateStr; }
-}
-
-// Known posts (slug list — matches filenames in content/posts/)
-// When you add a new .md file via admin, add its slug here too
-// OR: in a real build system this would be auto-generated
+// Admin'den yeni yazı ekleyince slug'ı buraya da ekle
 const POST_SLUGS = [
   'building-an-fsm-in-godot',
   'evo-going-solo',
   'winning-hujam'
 ];
 
+// Admin'den yeni proje ekleyince slug'ı buraya da ekle
+const PROJECT_SLUGS = ['evo', 'myco'];
+
 let loadedPosts = [];
 let loadedProjects = [];
-let loadedDialogue = null;
+
+const catLabels = {
+  en: { devlog:'DEVLOG', tutorial:'TUTORIAL', postmortem:'POST-MORTEM', essay:'ESSAY' },
+  tr: { devlog:'GÜNLÜK', tutorial:'EĞİTİM', postmortem:'POST-MORTEM', essay:'DENEME' }
+};
+
+function fmtDate(dateStr, lang) {
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-US', { month: 'long', year: 'numeric' });
+  } catch(e) { return dateStr || ''; }
+}
+
+// Minimal front-matter parser
+function parseFM(raw) {
+  const match = raw.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return {};
+  const result = {};
+  const lines = match[1].split('\n');
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const top = line.match(/^(\w+):\s*(.*)$/);
+    if (!top) { i++; continue; }
+    const key = top[1], val = top[2].trim();
+    if (val === '' && i+1 < lines.length && lines[i+1].match(/^  \w+:/)) {
+      result[key] = {};
+      i++;
+      while (i < lines.length && lines[i].startsWith('  ')) {
+        const sub = lines[i].match(/^  (\w+):\s*(.*)$/);
+        if (sub) {
+          let sv = sub[2].trim();
+          if (sv === '|') {
+            let bl = []; i++;
+            while (i < lines.length && (lines[i].startsWith('    ') || lines[i] === '')) {
+              bl.push(lines[i].replace(/^    /, '')); i++;
+            }
+            result[key][sub[1]] = bl.join('\n').trim();
+            continue;
+          }
+          result[key][sub[1]] = sv.replace(/^["']|["']$/g, '');
+        }
+        i++;
+      }
+      continue;
+    } else if (val.startsWith('[') && val.endsWith(']')) {
+      result[key] = val.slice(1,-1).split(',').map(s => s.trim().replace(/^["']|["']$/g,''));
+    } else {
+      result[key] = val.replace(/^["']|["']$/g, '');
+      if (result[key] === 'true') result[key] = true;
+      if (result[key] === 'false') result[key] = false;
+    }
+    i++;
+  }
+  // body after second ---
+  const bodyMatch = raw.match(/^---\n[\s\S]*?\n---\n([\s\S]*)$/);
+  result._body = bodyMatch ? bodyMatch[1].trim() : '';
+  return result;
+}
+
+// Minimal markdown → HTML
+function mdToHtml(md) {
+  if (!md) return '';
+  return md
+    .replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) =>
+      '<pre><code>' + code.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</code></pre>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .split(/\n\n+/)
+    .map(b => {
+      b = b.trim();
+      if (!b) return '';
+      if (b.startsWith('<h') || b.startsWith('<pre')) return b;
+      return '<p>' + b.replace(/\n/g,' ') + '</p>';
+    }).join('\n');
+}
 
 async function loadContent() {
-  // Load posts
-  const postPromises = POST_SLUGS.map(async slug => {
+  const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
+
+  // Yazıları yükle
+  const postResults = await Promise.all(POST_SLUGS.map(async slug => {
     try {
-      const res = await fetch(`content/posts/${slug}.md`);
-      if (!res.ok) return null;
-      const text = await res.text();
-      const fm = parseFrontMatter(text);
+      const r = await fetch('content/posts/' + slug + '.md');
+      if (!r.ok) return null;
+      const fm = parseFM(await r.text());
       fm.slug = slug;
       return fm;
     } catch(e) { return null; }
-  });
-  
-  const rawPosts = await Promise.all(postPromises);
-  loadedPosts = rawPosts.filter(p => p && p.published !== false);
-  loadedPosts.sort((a,b) => new Date(b.date) - new Date(a.date));
-  
-  // Load projects
+  }));
+  loadedPosts = postResults.filter(p => p && p.published !== false);
+  loadedPosts.sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
+
+  // Projeleri yükle
+  const projResults = await Promise.all(PROJECT_SLUGS.map(async slug => {
+    try {
+      const r = await fetch('content/projects/' + slug + '.md');
+      if (!r.ok) return null;
+      const fm = parseFM(await r.text());
+      fm.slug = slug;
+      return fm;
+    } catch(e) { return null; }
+  }));
+  loadedProjects = projResults.filter(p => p && p.published !== false);
+  loadedProjects.sort((a,b) => (a.order||99) - (b.order||99));
+
+  // Diyalog ağacını yükle
   try {
-    const res = await fetch('content/projects.json');
-    if (res.ok) {
-      loadedProjects = await res.json();
-      loadedProjects = loadedProjects.filter(p => p.published !== false);
-      loadedProjects.sort((a,b) => (a.order||99) - (b.order||99));
+    const r = await fetch('content/dialogue.json');
+    if (r.ok) {
+      const data = await r.json();
+      if (data.nodes && data.nodes.length) buildDialogueTree(data);
     }
-  } catch(e) { console.warn('Projects load failed', e); }
-  
-  // Load dialogue
-  try {
-    const res = await fetch('content/dialogue.json');
-    if (res.ok) {
-      const data = await res.json();
-      if (data.nodes && data.nodes.length > 0) {
-        loadedDialogue = data;
-        buildDialogueTree(data);
-      }
-    }
-  } catch(e) { console.warn('Dialogue load failed', e); }
-  
-  // Apply content to page
-  renderBlogSection();
-  renderAllPostsView();
-  renderPostViews();
-  renderProjects();
+  } catch(e) {}
+
+  renderAll(lang);
 }
 
-// Build dialogueTree from JSON (overrides the hardcoded one)
 function buildDialogueTree(data) {
   dialogueTree.en = {};
   dialogueTree.tr = {};
@@ -1759,148 +1604,98 @@ function buildDialogueTree(data) {
       };
     });
   });
-  // Re-render current node if encounter is active
-  if (typeof navigateDialogue === 'function') {
-    navigateDialogue('root');
-  }
+  if (typeof navigateDialogue === 'function') navigateDialogue('root');
 }
 
-// Render blog cards in main section
-function renderBlogSection() {
-  if (!loadedPosts.length) return;
-  const container = document.querySelector('.b-stack');
-  if (!container) return;
-  container.innerHTML = '';
-  const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
-  
-  loadedPosts.slice(0, 5).forEach((post, idx) => {
+function renderAll(lang) {
+  lang = lang || (typeof currentLang !== 'undefined' ? currentLang : 'en');
+  renderBlogCards(lang);
+  renderAllPostsList(lang);
+  renderPostViews(lang);
+  renderProjects(lang);
+}
+
+function renderBlogCards(lang) {
+  const stack = document.getElementById('blogStack');
+  if (!stack) return;
+  // View All kartını sakla
+  const viewAllCard = stack.querySelector('.b-card:last-child');
+  // Önceki CMS kartları temizle
+  stack.querySelectorAll('.b-card.from-cms').forEach(el => el.remove());
+  // Yeni kartları ekle (View All'dan önce)
+  loadedPosts.slice(0, 4).forEach(post => {
     const title = post.title ? (post.title[lang] || post.title.en) : post.slug;
     const excerpt = post.excerpt ? (post.excerpt[lang] || post.excerpt.en) : '';
-    const category = catLabels[lang][post.category] || post.category.toUpperCase();
+    const category = catLabels[lang][post.category] || (post.category||'').toUpperCase();
     const date = fmtDate(post.date, lang);
-    
     const card = document.createElement('div');
-    card.className = 'b-card' + (idx === 0 ? ' is-active' : '');
-    card.innerHTML = `<div class="b-card-inner">
-      <div class="b-cat">${category}</div>
-      <h3 class="b-title">${title}</h3>
-      <p class="b-excerpt">${excerpt}</p>
-      <div class="b-date">${date}</div>
-    </div>`;
-    card.addEventListener('click', () => { if(idx === currentCard) window.location.hash = 'post-' + post.slug; });
-    container.appendChild(card);
+    card.className = 'b-card from-cms';
+    card.innerHTML = '<div class="b-card-inner" onclick="window.location.hash=\'post-' + post.slug + '\'"><div class="b-cat">' + category + '</div><div class="b-title">' + title + '</div><div class="b-exc">' + excerpt + '</div><div class="b-date">' + date + '</div></div>';
+    stack.insertBefore(card, viewAllCard);
   });
-  
-  // Re-init card system
   if (typeof initCards === 'function') initCards();
-  
-  // View All link
-  const viewAll = document.querySelector('.b-view-all');
-  if (viewAll) {
-    const allText = lang === 'tr' ? 'Tüm Yazıları Gör →' : 'View All Entries →';
-    viewAll.textContent = allText;
-  }
 }
 
-// Render all-posts view
-function renderAllPostsView() {
-  if (!loadedPosts.length) return;
+function renderAllPostsList(lang) {
   const list = document.querySelector('.all-posts-list');
   if (!list) return;
-  const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
   list.innerHTML = '';
-  
   loadedPosts.forEach(post => {
     const title = post.title ? (post.title[lang] || post.title.en) : post.slug;
-    const category = catLabels[lang][post.category] || post.category.toUpperCase();
+    const category = catLabels[lang][post.category] || (post.category||'').toUpperCase();
     const date = fmtDate(post.date, lang);
-    
-    const row = document.createElement('a');
-    row.href = '#post-' + post.slug;
-    row.className = 'ap-row';
-    row.innerHTML = `<div class="ap-meta"><span style="color:var(--turq);font-weight:600;text-transform:uppercase;">${category}</span> • ${date}</div>
-      <div class="ap-title">${title}</div>`;
-    list.appendChild(row);
+    const a = document.createElement('a');
+    a.href = '#post-' + post.slug;
+    a.className = 'ap-row';
+    a.innerHTML = '<div class="ap-meta"><span style="color:var(--turq);font-weight:600;text-transform:uppercase;">' + category + '</span> • ' + date + '</div><div class="ap-title">' + title + '</div>';
+    list.appendChild(a);
   });
 }
 
-// Render individual post views dynamically
-function renderPostViews() {
-  if (!loadedPosts.length) return;
-  const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
-  
-  // Remove old dynamic post views
-  document.querySelectorAll('.blog-post-view.dynamic').forEach(el => el.remove());
-  
+function renderPostViews(lang) {
+  // Eski dinamik view'ları temizle
+  document.querySelectorAll('.blog-post-view.from-cms').forEach(el => el.remove());
   loadedPosts.forEach(post => {
-    const slug = post.slug;
-    const id = 'post-' + slug;
-    
-    // Update existing hardcoded views if present
-    let existing = document.getElementById(id);
-    if (!existing) {
-      existing = document.createElement('div');
-      existing.className = 'blog-post-view dynamic';
-      existing.id = id;
-      document.body.appendChild(existing);
-    }
-    
-    const title = post.title ? (post.title[lang] || post.title.en) : slug;
-    const category = catLabels[lang][post.category] || post.category.toUpperCase();
+    const id = 'post-' + post.slug;
+    const title = post.title ? (post.title[lang] || post.title.en) : post.slug;
+    const category = catLabels[lang][post.category] || (post.category||'').toUpperCase();
     const date = fmtDate(post.date, lang);
     const bodyMd = post.body ? (post.body[lang] || post.body.en || post._body) : post._body;
     const bodyHtml = mdToHtml(bodyMd);
     const backLabel = lang === 'tr' ? '← Geri' : '← Back';
-    const enActive = lang === 'en' ? 'active' : '';
-    const trActive = lang === 'tr' ? 'active' : '';
-    
-    existing.innerHTML = `
-      <a href="#" class="post-back" onclick="window.location.hash='';return false;">
-        <span>${backLabel}</span>
-        <div class="post-back-lang">
-          <button class="lang-btn ${enActive}" id="pb-btn-en" onclick="setLang('en')">EN</button>
-          <button class="lang-btn ${trActive}" id="pb-btn-tr" onclick="setLang('tr')">TR</button>
-        </div>
-      </a>
-      <div class="post-content">
-        <div class="post-meta">
-          <span class="pcat">${category}</span>
-          <span class="pdate">${date}</span>
-        </div>
-        <h1 class="post-title">${title}</h1>
-        <div class="post-body">${bodyHtml}</div>
-      </div>`;
+    const enAct = lang === 'en' ? 'active' : '';
+    const trAct = lang === 'tr' ? 'active' : '';
+    const div = document.createElement('div');
+    div.className = 'blog-post-view from-cms';
+    div.id = id;
+    div.innerHTML = '<a href="#" class="post-back" onclick="window.location.hash=\'\';return false;"><span>' + backLabel + '</span><div class="post-back-lang"><button class="lang-btn ' + enAct + '" onclick="setLang(\'en\')">EN</button><button class="lang-btn ' + trAct + '" onclick="setLang(\'tr\')">TR</button></div></a><div class="post-content"><div class="post-meta"><span class="pcat">' + category + '</span><span class="pdate">' + date + '</span></div><h1 class="post-title">' + title + '</h1><div class="post-body">' + bodyHtml + '</div></div>';
+    document.body.insertBefore(div, document.body.lastElementChild);
   });
 }
 
-// Render projects section
-function renderProjects() {
+function renderProjects(lang) {
   if (!loadedProjects.length) return;
-  // Projects rendering handled by existing JS — just update data
-  // For now update hover images if provided
   loadedProjects.forEach(proj => {
-    const el = document.querySelector(`[data-project="${proj.slug}"]`);
-    if (el && proj.image) {
-      el.style.setProperty('--proj-img', `url(${proj.image})`);
-    }
+    const el = document.querySelector('[data-project="' + proj.slug + '"]');
+    if (!el) return;
+    const t = proj.title ? (proj.title[lang] || proj.title.en) : proj.slug;
+    const d = proj.description ? (proj.description[lang] || proj.description.en) : '';
+    const h = el.querySelector('h3');
+    const p = el.querySelector('p');
+    if (h) h.textContent = t;
+    if (p) p.textContent = d;
+    if (proj.image) el.style.setProperty('--proj-hover', 'url(' + proj.image + ')');
   });
 }
 
-// Re-render on lang change
-const _origSetLang = typeof setLang === 'function' ? setLang : null;
-
-// Hook into setLang after it's defined (runs after main script)
 window.addEventListener('load', () => {
   loadContent();
-  
-  // Wrap setLang to also re-render content
-  if (typeof setLang === 'function') {
-    const origSetLang = setLang;
+  // setLang'i wrap et — dil değişince içerik de güncellenir
+  const orig = window.setLang;
+  if (orig) {
     window.setLang = function(lang) {
-      origSetLang(lang);
-      renderBlogSection();
-      renderAllPostsView();
-      renderPostViews();
+      orig(lang);
+      renderAll(lang);
     };
   }
 });
