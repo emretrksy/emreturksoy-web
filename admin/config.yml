@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: GITHUB_USERNAME/REPO_NAME   # ← buraya kendi kullanıcı adın/repo adın
+  repo: emretrksy/emreturksoy-web
   branch: main
 
 media_folder: "assets/images"
