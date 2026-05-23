@@ -1411,21 +1411,34 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ── Hover Reveal Right Side ── */
 function initProjects() {
   const projList = document.querySelector('.proj-list');
-  const projRows = document.querySelectorAll('.proj-row');
   const hoverCont = document.getElementById('hover-image-container');
   if (!projList || !hoverCont) return;
-  projRows.forEach(row => {
-    // Duplicate listener önle
-    row.replaceWith(row.cloneNode(true));
-  });
+
+  // cloneNode KULLANMA — CMS row'larının image listener'larını siler!
+  // Bunun yerine her row'un zaten listener'ı var mı diye kontrol et.
   document.querySelectorAll('.proj-row').forEach(row => {
+    if (row.dataset.hoverInit) return; // zaten init edilmiş
+    row.dataset.hoverInit = '1';
     row.addEventListener('mouseenter', () => {
-      const titleEl = row.querySelector('.pr-title, [data-proj-title]');
-      if (titleEl) document.getElementById('hover-content').innerText = titleEl.innerText;
-      hoverCont.classList.add('active');
+      const hImg = document.getElementById('hover-content');
       const listRect = projList.getBoundingClientRect();
       const rowRect = row.getBoundingClientRect();
       hoverCont.style.top = (rowRect.top - listRect.top) + 'px';
+
+      // Eğer row'un kendi image path'i varsa onu kullan
+      const imgPath = row.dataset.hoverImage;
+      if (imgPath) {
+        hImg.style.backgroundImage = 'url("' + imgPath + '")';
+        hImg.style.backgroundSize = 'cover';
+        hImg.style.backgroundPosition = 'center';
+        hImg.innerText = '';
+      } else {
+        // Görsel yok — proje adını göster
+        hImg.style.backgroundImage = 'none';
+        const titleEl = row.querySelector('.pr-title, [data-proj-title]');
+        if (titleEl) hImg.innerText = titleEl.innerText;
+      }
+      hoverCont.classList.add('active');
     });
   });
   projList.addEventListener('mouseleave', () => {
@@ -1525,9 +1538,14 @@ function handleRoute() {
     document.querySelectorAll('.blog-post-view').forEach(p => p.classList.remove('active'));
 
     const target = document.getElementById(hash.substring(1));
-    if(target) { target.classList.add('active'); window.scrollTo(0,0); }
+    if(target) {
+      target.classList.add('active');
+      window.scrollTo(0,0);
+    } else {
+      // CMS içeriği henüz yüklenmemiş olabilir — yüklenince tekrar dene
+      window._pendingHash = hash;
+    }
 
-    // CSS class ile nav+hamburger gizle
     document.body.classList.add('in-post');
     closeSidebar();
   } else {
@@ -1539,6 +1557,7 @@ function handleRoute() {
       setTimeout(() => { document.documentElement.style.scrollBehavior = 'smooth'; }, 50);
     }
     document.body.classList.remove('in-post');
+    window._pendingHash = null;
   }
 }
 if(window.location.hash) handleRoute();
@@ -1937,7 +1956,7 @@ function renderPostViews(lang) {
       '<div class="post-body">' + bodyHtml + '</div>' +
       '</div>';
 
-    if (isNew) document.body.insertBefore(view, document.querySelector('script'));
+    if (isNew) document.body.appendChild(view);
   });
 }
 
@@ -1988,27 +2007,24 @@ function renderProjectRows(lang) {
       if (tagsEl && techText) tagsEl.textContent = techText;
       if (metaEl && desc) metaEl.textContent = desc;
       if (proj.url && proj.url !== '#') row.href = proj.url;
+      // Hover image'ı güncelle
+      if (proj.image) {
+        let imgPath = proj.image.trim();
+        if (imgPath && !imgPath.startsWith('/') && !imgPath.startsWith('http')) imgPath = '/' + imgPath;
+        row.dataset.hoverImage = imgPath;
+        row.dataset.hoverInit = ''; // reinit için sıfırla
+      }
     }
 
-    // Hover görseli — image path'i normalize et
+    // Hover görseli — path'i data attribute'e kaydet, initProjects yönetir
     if (proj.image) {
       let imgPath = proj.image.trim();
       // Decap CMS bazen /assets/images/... veya assets/images/... döndürür
-      // public_folder "/" ile başlar, bu yüzden URL olduğu gibi kullanılabilir
-      row.addEventListener('mouseenter', () => {
-        const hImg = document.getElementById('hover-content');
-        if (hImg) {
-          hImg.style.backgroundImage = 'url("' + imgPath + '")';
-          hImg.style.backgroundSize = 'cover';
-          hImg.style.backgroundPosition = 'center';
-        }
-        const hc = document.getElementById('hover-image-container');
-        if (hc) hc.classList.add('visible');
-      });
-      row.addEventListener('mouseleave', () => {
-        const hc = document.getElementById('hover-image-container');
-        if (hc) hc.classList.remove('visible');
-      });
+      if (imgPath && !imgPath.startsWith('/') && !imgPath.startsWith('http')) {
+        imgPath = '/' + imgPath;
+      }
+      row.dataset.hoverImage = imgPath;
+      row.dataset.hoverInit = ''; // initProjects'in yeniden init etmesi için sıfırla
     }
   });
 
@@ -2021,6 +2037,19 @@ function renderAll(lang) {
   renderAllPostsList(lang);
   renderPostViews(lang);
   renderProjectRows(lang);
+
+  // Sayfa yüklenirken hash bekleyen bir route varsa şimdi çöz
+  if (window._pendingHash) {
+    const target = document.getElementById(window._pendingHash.substring(1));
+    if (target) {
+      document.querySelectorAll('.blog-post-view').forEach(p => p.classList.remove('active'));
+      target.classList.add('active');
+      window.scrollTo(0, 0);
+      document.getElementById('mainContent').classList.add('hidden');
+      document.body.classList.add('in-post');
+    }
+    window._pendingHash = null;
+  }
 }
 
 // ── setLang wrap: dil değişince render yenile ────────────────
