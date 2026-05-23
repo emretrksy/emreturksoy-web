@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — Emre Türksoy</title>
+<style>
+  :root {
+    --bg: #0f0f11;
+    --surface: #18181c;
+    --border: #2a2a32;
+    --ink: #e8e6e1;
+    --ink2: #8b8a96;
+    --turq: #4ecdc4;
+    --turq-soft: rgba(78,205,196,0.08);
+    --red: #ff6b6b;
+    --yellow: #ffd93d;
+    --serif: 'Georgia', serif;
+    --mono: 'Courier New', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--mono); min-height: 100vh; }
+
+  /* LOGIN */
+  #login-screen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; gap: 24px; padding: 24px;
+  }
+  #login-screen h1 { font-family: var(--serif); font-size: 2rem; color: var(--turq); font-style: italic; }
+  #login-screen p { color: var(--ink2); font-size: 0.85rem; text-align: center; max-width: 400px; line-height: 1.6; }
+  #login-screen input {
+    background: var(--surface); border: 1px solid var(--border); color: var(--ink);
+    padding: 12px 16px; border-radius: 8px; font-family: var(--mono); font-size: 0.9rem;
+    width: 100%; max-width: 400px; outline: none;
+  }
+  #login-screen input:focus { border-color: var(--turq); }
+  #login-screen button {
+    background: var(--turq); color: #000; border: none; padding: 12px 32px;
+    border-radius: 8px; font-family: var(--mono); font-size: 0.9rem; font-weight: bold;
+    cursor: pointer; width: 100%; max-width: 400px;
+  }
+  #login-screen button:hover { opacity: 0.85; }
+  .login-hint { color: var(--ink2); font-size: 0.78rem; text-align: center; max-width: 400px; }
+  .login-hint a { color: var(--turq); }
+
+  /* APP */
+  #app { display: none; }
+  .app-layout { display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; background: var(--surface); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 24px 0; flex-shrink: 0;
+    position: sticky; top: 0; height: 100vh;
+  }
+  .sidebar-logo { padding: 0 20px 24px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .sidebar-logo span { font-family: var(--serif); font-style: italic; color: var(--turq); font-size: 1.1rem; }
+  .sidebar-logo small { display: block; color: var(--ink2); font-size: 0.72rem; margin-top: 2px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 20px;
+    color: var(--ink2); cursor: pointer; font-size: 0.85rem; border-left: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .nav-item:hover { color: var(--ink); background: var(--turq-soft); }
+  .nav-item.active { color: var(--turq); border-left-color: var(--turq); background: var(--turq-soft); }
+  .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+  .sidebar-bottom { margin-top: auto; padding: 16px 20px; border-top: 1px solid var(--border); }
+  .token-info { font-size: 0.72rem; color: var(--ink2); }
+  .logout-btn {
+    margin-top: 8px; background: none; border: 1px solid var(--border); color: var(--ink2);
+    padding: 6px 12px; border-radius: 6px; cursor: pointer; font-family: var(--mono);
+    font-size: 0.75rem; width: 100%;
+  }
+  .logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* MAIN */
+  .main { flex: 1; padding: 32px; overflow-y: auto; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .page-header { margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; }
+  .page-title { font-family: var(--serif); font-size: 1.6rem; font-style: italic; color: var(--ink); }
+  .page-title span { color: var(--turq); }
+
+  /* BUTTONS */
+  .btn { 
+    padding: 8px 20px; border-radius: 7px; font-family: var(--mono); font-size: 0.82rem;
+    cursor: pointer; border: 1px solid; transition: all 0.15s; font-weight: bold;
+  }
+  .btn-primary { background: var(--turq); border-color: var(--turq); color: #000; }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-secondary { background: transparent; border-color: var(--border); color: var(--ink2); }
+  .btn-secondary:hover { border-color: var(--turq); color: var(--turq); }
+  .btn-danger { background: transparent; border-color: var(--border); color: var(--ink2); }
+  .btn-danger:hover { border-color: var(--red); color: var(--red); }
+  .btn-sm { padding: 5px 12px; font-size: 0.75rem; }
+
+  /* LIST */
+  .item-list { display: flex; flex-direction: column; gap: 8px; }
+  .item-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; transition: border-color 0.15s;
+  }
+  .item-card:hover { border-color: var(--turq); }
+  .item-card-info { flex: 1; min-width: 0; }
+  .item-card-title { font-size: 0.95rem; color: var(--ink); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item-card-meta { font-size: 0.75rem; color: var(--ink2); }
+  .item-card-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem;
+    font-weight: bold; text-transform: uppercase;
+  }
+  .badge-green { background: rgba(78,205,196,0.15); color: var(--turq); }
+  .badge-gray { background: rgba(139,138,150,0.15); color: var(--ink2); }
+  .badge-cat { background: rgba(255,217,61,0.12); color: var(--yellow); }
+
+  /* EDITOR */
+  .editor-form { display: flex; flex-direction: column; gap: 20px; max-width: 860px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 0.75rem; color: var(--ink2); text-transform: uppercase; letter-spacing: 0.05em; }
+  .form-group input, .form-group select, .form-group textarea {
+    background: var(--surface); border: 1px solid var(--border); color: var(--ink);
+    padding: 10px 14px; border-radius: 8px; font-family: var(--mono); font-size: 0.85rem;
+    outline: none; width: 100%;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--turq); }
+  .form-group textarea { min-height: 280px; resize: vertical; line-height: 1.6; }
+  .form-group textarea.short { min-height: 80px; }
+  .form-section {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px; display: flex; flex-direction: column; gap: 16px;
+  }
+  .form-section-title { font-size: 0.75rem; color: var(--turq); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .toggle-row { display: flex; align-items: center; gap: 12px; }
+  .toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0; background: var(--border); border-radius: 22px; cursor: pointer; transition: 0.2s;
+  }
+  .toggle-slider:before {
+    content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px;
+    background: var(--ink2); border-radius: 50%; transition: 0.2s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--turq); }
+  .toggle input:checked + .toggle-slider:before { transform: translateX(18px); background: #000; }
+  .toggle-label { font-size: 0.85rem; color: var(--ink2); }
+
+  /* EDITOR ACTIONS */
+  .editor-actions { display: flex; gap: 12px; align-items: center; padding-top: 8px; }
+  .save-status { font-size: 0.78rem; color: var(--ink2); }
+  .save-status.success { color: var(--turq); }
+  .save-status.error { color: var(--red); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 100; align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 28px; max-width: 440px; width: 90%; display: flex; flex-direction: column; gap: 16px;
+  }
+  .modal h3 { font-family: var(--serif); font-style: italic; color: var(--ink); }
+  .modal p { font-size: 0.85rem; color: var(--ink2); line-height: 1.6; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* LOADING */
+  .loading { color: var(--ink2); font-size: 0.85rem; padding: 32px; text-align: center; }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--turq); border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* EMPTY */
+  .empty-state { padding: 48px; text-align: center; color: var(--ink2); font-size: 0.85rem; }
+
+  /* TOAST */
+  #toast {
+    position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px;
+    font-size: 0.82rem; z-index: 999; opacity: 0; transition: opacity 0.2s; pointer-events: none;
+  }
+  #toast.show { opacity: 1; }
+  #toast.success { background: var(--turq); color: #000; }
+  #toast.error { background: var(--red); color: #fff; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <h1>Admin Paneli</h1>
+  <p>GitHub Personal Access Token ile giriş yap. Token, tarayıcında saklanır ve sadece bu siteye erişmek için kullanılır.</p>
+  <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
+  <button onclick="doLogin()">Giriş Yap</button>
+  <p class="login-hint">
+    Token oluşturmak için: GitHub → Settings → Developer settings → 
+    <a href="https://github.com/settings/tokens/new?scopes=repo&description=emreturksoy-admin" target="_blank">Personal access tokens → Generate new token</a><br>
+    <strong>repo</strong> scope'unu seç, expiration'ı "No expiration" yap.
+  </p>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="app-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <span>emreturksoy</span>
+        <small>admin panel</small>
+      </div>
+      <div class="nav-item active" onclick="showPage('posts')">
+        <span class="nav-icon">✍️</span> Blog Yazıları
+      </div>
+      <div class="nav-item" onclick="showPage('projects')">
+        <span class="nav-icon">🎮</span> Projeler
+      </div>
+      <div class="sidebar-bottom">
+        <div class="token-info" id="token-info">—</div>
+        <button class="logout-btn" onclick="doLogout()">Çıkış Yap</button>
+      </div>
+    </div>
+
+    <div class="main">
+
+      <!-- POSTS LIST -->
+      <div class="page active" id="page-posts">
+        <div class="page-header">
+          <div class="page-title">Blog <span>Yazıları</span></div>
+          <button class="btn btn-primary" onclick="newPost()">+ Yeni Yazı</button>
+        </div>
+        <div id="posts-list" class="item-list"><div class="loading"><span class="spinner"></span>Yükleniyor...</div></div>
+      </div>
+
+      <!-- POST EDITOR -->
+      <div class="page" id="page-post-editor">
+        <div class="page-header">
+          <div class="page-title" id="post-editor-title">Yazı <span>Düzenle</span></div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-secondary" onclick="showPage('posts')">← Geri</button>
+            <button class="btn btn-danger btn-sm" id="delete-post-btn" onclick="confirmDeletePost()">Sil</button>
+          </div>
+        </div>
+        <div class="editor-form">
+          <div class="form-section">
+            <div class="form-section-title">Temel Bilgiler</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Slug (URL)</label>
+                <input type="text" id="p-slug" placeholder="godotta-fsm-tasarlamak"/>
+              </div>
+              <div class="form-group">
+                <label>Kategori</label>
+                <select id="p-category">
+                  <option value="devlog">Devlog</option>
+                  <option value="tutorial">Eğitim / Tutorial</option>
+                  <option value="postmortem">Post-Mortem</option>
+                  <option value="essay">Deneme / Essay</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tarih</label>
+                <input type="date" id="p-date"/>
+              </div>
+              <div class="form-group">
+                <label>Durum</label>
+                <div class="toggle-row" style="margin-top:10px;">
+                  <label class="toggle"><input type="checkbox" id="p-published" checked/><span class="toggle-slider"></span></label>
+                  <span class="toggle-label">Yayında</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Başlık</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>🇹🇷 Türkçe</label>
+                <input type="text" id="p-title-tr" placeholder="Godot'ta FSM Tasarlamak"/>
+              </div>
+              <div class="form-group">
+                <label>🇬🇧 İngilizce</label>
+                <input type="text" id="p-title-en" placeholder="Building an FSM in Godot"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Özet (Blog kartında görünür)</div>
+            <div class="form-group">
+              <label>🇹🇷 Türkçe</label>
+              <textarea class="short" id="p-excerpt-tr" placeholder="Kısa özet..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>🇬🇧 İngilizce</label>
+              <textarea class="short" id="p-excerpt-en" placeholder="Short excerpt..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">İçerik — Türkçe (Markdown)</div>
+            <div class="form-group">
+              <textarea id="p-body-tr" placeholder="## Başlık&#10;&#10;İçerik buraya..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">İçerik — İngilizce (Markdown)</div>
+            <div class="form-group">
+              <textarea id="p-body-en" placeholder="## Heading&#10;&#10;Content goes here..."></textarea>
+            </div>
+          </div>
+
+          <div class="editor-actions">
+            <button class="btn btn-primary" onclick="savePost()">💾 Kaydet</button>
+            <span class="save-status" id="post-save-status"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECTS LIST -->
+      <div class="page" id="page-projects">
+        <div class="page-header">
+          <div class="page-title">Proje <span>Listesi</span></div>
+          <button class="btn btn-primary" onclick="newProject()">+ Yeni Proje</button>
+        </div>
+        <div id="projects-list" class="item-list"><div class="loading"><span class="spinner"></span>Yükleniyor...</div></div>
+      </div>
+
+      <!-- PROJECT EDITOR -->
+      <div class="page" id="page-project-editor">
+        <div class="page-header">
+          <div class="page-title">Proje <span>Düzenle</span></div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-secondary" onclick="showPage('projects')">← Geri</button>
+            <button class="btn btn-danger btn-sm" id="delete-proj-btn" onclick="confirmDeleteProject()">Sil</button>
+          </div>
+        </div>
+        <div class="editor-form">
+          <div class="form-section">
+            <div class="form-section-title">Temel Bilgiler</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Slug</label>
+                <input type="text" id="pr-slug" placeholder="evo"/>
+              </div>
+              <div class="form-group">
+                <label>Sıra (küçük = önce)</label>
+                <input type="number" id="pr-order" value="99"/>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Link (itch.io / GitHub)</label>
+                <input type="text" id="pr-url" placeholder="https://..."/>
+              </div>
+              <div class="form-group">
+                <label>Durum</label>
+                <div class="toggle-row" style="margin-top:10px;">
+                  <label class="toggle"><input type="checkbox" id="pr-published" checked/><span class="toggle-slider"></span></label>
+                  <span class="toggle-label">Yayında</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Teknolojiler (virgülle ayır)</label>
+              <input type="text" id="pr-tech" placeholder="Godot 4, GDScript, Aseprite"/>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Başlık</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>🇹🇷 Türkçe</label>
+                <input type="text" id="pr-title-tr"/>
+              </div>
+              <div class="form-group">
+                <label>🇬🇧 İngilizce</label>
+                <input type="text" id="pr-title-en"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Kısa Açıklama</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>🇹🇷 Türkçe</label>
+                <input type="text" id="pr-desc-tr"/>
+              </div>
+              <div class="form-group">
+                <label>🇬🇧 İngilizce</label>
+                <input type="text" id="pr-desc-en"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Hover / Önizleme Görseli</div>
+            <div class="form-group">
+              <label>Görsel URL (assets/images/dosya.jpg)</label>
+              <input type="text" id="pr-image" placeholder="assets/images/evo-preview.jpg"/>
+            </div>
+            <div style="font-size:0.75rem;color:var(--ink2);">
+              Görseli önce GitHub'a yükle: reponda <code>assets/images/</code> klasörüne dosyayı ekle, sonra path'i buraya yaz.
+            </div>
+          </div>
+
+          <div class="editor-actions">
+            <button class="btn btn-primary" onclick="saveProject()">💾 Kaydet</button>
+            <span class="save-status" id="proj-save-status"></span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /app-layout -->
+</div><!-- /app -->
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal">
+    <h3>Silmek istediğine emin misin?</h3>
+    <p id="delete-modal-text">Bu işlem geri alınamaz.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">İptal</button>
+      <button class="btn btn-danger" id="delete-confirm-btn">Sil</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════
+const REPO = 'emretrksy/emreturksoy-web';
+const BRANCH = 'main';
+const API = 'https://api.github.com';
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let TOKEN = '';
+let currentPostSlug = null;  // null = new
+let currentProjSlug = null;
+let postSHAs = {};  // slug → sha
+let projSHAs = {};
+
+// ═══════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════
+function doLogin() {
+  const t = document.getElementById('token-input').value.trim();
+  if (!t) { toast('Token gir!', 'error'); return; }
+  TOKEN = t;
+  localStorage.setItem('gh_admin_token', t);
+  startApp();
+}
+function doLogout() {
+  localStorage.removeItem('gh_admin_token');
+  TOKEN = '';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+async function startApp() {
+  // Token'ı doğrula
+  try {
+    const r = await ghFetch('/user');
+    if (!r.ok) { toast('Token geçersiz!', 'error'); TOKEN = ''; return; }
+    const user = await r.json();
+    document.getElementById('token-info').textContent = '@' + user.login;
+  } catch(e) { toast('Bağlantı hatası', 'error'); return; }
+
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  loadPosts();
+}
+
+// ═══════════════════════════════════════════
+// GITHUB API
+// ═══════════════════════════════════════════
+function ghFetch(path, opts = {}) {
+  const url = path.startsWith('http') ? path : API + path;
+  return fetch(url, {
+    ...opts,
+    headers: {
+      'Authorization': 'token ' + TOKEN,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+      ...(opts.headers || {})
+    }
+  });
+}
+
+async function ghGetFile(path) {
+  const r = await ghFetch(`/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
+  if (!r.ok) return null;
+  const d = await r.json();
+  return { content: atob(d.content.replace(/\n/g, '')), sha: d.sha };
+}
+
+async function ghPutFile(path, content, sha, message) {
+  const body = {
+    message,
+    content: btoa(unescape(encodeURIComponent(content))),
+    branch: BRANCH,
+  };
+  if (sha) body.sha = sha;
+  const r = await ghFetch(`/repos/${REPO}/contents/${path}`, {
+    method: 'PUT',
+    body: JSON.stringify(body)
+  });
+  return r;
+}
+
+async function ghDeleteFile(path, sha, message) {
+  const r = await ghFetch(`/repos/${REPO}/contents/${path}`, {
+    method: 'DELETE',
+    body: JSON.stringify({ message, sha, branch: BRANCH })
+  });
+  return r;
+}
+
+async function ghListDir(path) {
+  const r = await ghFetch(`/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
+  if (!r.ok) return [];
+  return r.json();
+}
+
+// ═══════════════════════════════════════════
+// MARKDOWN / FRONTMATTER
+// ═══════════════════════════════════════════
+function parseFM(raw) {
+  const match = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+  if (!match) return { _body: raw };
+  const fm = {};
+  const lines = match[1].split('\n');
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const kv = line.match(/^(\w+):\s*(.*)$/);
+    if (!kv) { i++; continue; }
+    const key = kv[1];
+    const val = kv[2].trim();
+    // Multiline object (title, description, excerpt)
+    if (val === '' && lines[i+1] && lines[i+1].startsWith('  ')) {
+      const obj = {};
+      i++;
+      while (i < lines.length && lines[i].startsWith('  ')) {
+        const sub = lines[i].trim().match(/^(\w+):\s*"?(.*?)"?$/);
+        if (sub) obj[sub[1]] = sub[2];
+        i++;
+      }
+      fm[key] = obj;
+      continue;
+    }
+    // Multiline string (body_tr, body_en) with |
+    if (val === '|') {
+      const bodyLines = [];
+      i++;
+      while (i < lines.length && (lines[i].startsWith('    ') || lines[i] === '')) {
+        bodyLines.push(lines[i].startsWith('    ') ? lines[i].slice(4) : '');
+        i++;
+      }
+      fm[key] = bodyLines.join('\n').trimEnd();
+      continue;
+    }
+    // Boolean
+    if (val === 'true') { fm[key] = true; i++; continue; }
+    if (val === 'false') { fm[key] = false; i++; continue; }
+    // Number
+    if (!isNaN(val) && val !== '') { fm[key] = Number(val); i++; continue; }
+    // String (remove quotes)
+    fm[key] = val.replace(/^"(.*)"$/, '$1');
+    i++;
+  }
+  fm._body = match[2];
+  return fm;
+}
+
+function buildPostFM(data) {
+  const indent = (str) => str.split('\n').map(l => '    ' + l).join('\n');
+  return `---
+slug: ${data.slug}
+category: ${data.category}
+date: ${data.date}
+published: ${data.published}
+title:
+  tr: "${data.titleTr}"
+  en: "${data.titleEn}"
+excerpt:
+  tr: "${data.excerptTr.replace(/"/g, '\\"')}"
+  en: "${data.excerptEn.replace(/"/g, '\\"')}"
+body_en: |
+${indent(data.bodyEn)}
+body_tr: |
+${indent(data.bodyTr)}
+---
+`;
+}
+
+function buildProjFM(data) {
+  return `---
+slug: ${data.slug}
+order: ${data.order}
+published: ${data.published}
+title:
+  tr: "${data.titleTr}"
+  en: "${data.titleEn}"
+description:
+  tr: "${data.descTr}"
+  en: "${data.descEn}"
+image: "${data.image}"
+url: "${data.url}"
+tech: "${data.tech}"
+---
+`;
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  document.getElementById('page-' + name).classList.add('active');
+
+  if (name === 'posts') { document.querySelectorAll('.nav-item')[0].classList.add('active'); loadPosts(); }
+  if (name === 'projects') { document.querySelectorAll('.nav-item')[1].classList.add('active'); loadProjects(); }
+  if (name === 'post-editor') document.querySelectorAll('.nav-item')[0].classList.add('active');
+  if (name === 'project-editor') document.querySelectorAll('.nav-item')[1].classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+// POSTS
+// ═══════════════════════════════════════════
+async function loadPosts() {
+  const el = document.getElementById('posts-list');
+  el.innerHTML = '<div class="loading"><span class="spinner"></span>Yükleniyor...</div>';
+  const files = await ghListDir('content/posts');
+  const mds = files.filter(f => f.name.endsWith('.md'));
+  if (!mds.length) { el.innerHTML = '<div class="empty-state">Henüz yazı yok.</div>'; return; }
+
+  const posts = await Promise.all(mds.map(async f => {
+    const slug = f.name.replace('.md', '');
+    const file = await ghGetFile('content/posts/' + f.name);
+    if (!file) return null;
+    postSHAs[slug] = file.sha;
+    const fm = parseFM(file.content);
+    fm.slug = slug;
+    return fm;
+  }));
+
+  const sorted = posts.filter(Boolean).sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
+
+  el.innerHTML = '';
+  sorted.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    const cat = { devlog:'GÜNLÜK', tutorial:'EĞİTİM', postmortem:'POST-MORTEM', essay:'DENEME' }[p.category] || p.category;
+    div.innerHTML = `
+      <div class="item-card-info">
+        <div class="item-card-title">${(p.title && p.title.tr) || p.slug}</div>
+        <div class="item-card-meta">
+          <span class="badge badge-cat">${cat}</span>
+          ${p.date ? ' · ' + p.date : ''}
+          ${p.published === false ? ' · <span class="badge badge-gray">Gizli</span>' : ' · <span class="badge badge-green">Yayında</span>'}
+        </div>
+      </div>
+      <div class="item-card-actions">
+        <button class="btn btn-secondary btn-sm" onclick="editPost('${p.slug}')">Düzenle</button>
+      </div>`;
+    el.appendChild(div);
+  });
+}
+
+function newPost() {
+  currentPostSlug = null;
+  document.getElementById('post-editor-title').innerHTML = 'Yeni <span>Yazı</span>';
+  document.getElementById('delete-post-btn').style.display = 'none';
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('p-slug').value = '';
+  document.getElementById('p-category').value = 'devlog';
+  document.getElementById('p-date').value = today;
+  document.getElementById('p-published').checked = true;
+  document.getElementById('p-title-tr').value = '';
+  document.getElementById('p-title-en').value = '';
+  document.getElementById('p-excerpt-tr').value = '';
+  document.getElementById('p-excerpt-en').value = '';
+  document.getElementById('p-body-tr').value = '';
+  document.getElementById('p-body-en').value = '';
+  document.getElementById('post-save-status').textContent = '';
+  showPage('post-editor');
+}
+
+async function editPost(slug) {
+  currentPostSlug = slug;
+  document.getElementById('post-editor-title').innerHTML = 'Yazı <span>Düzenle</span>';
+  document.getElementById('delete-post-btn').style.display = 'inline-block';
+  document.getElementById('post-save-status').textContent = 'Yükleniyor...';
+  showPage('post-editor');
+
+  const file = await ghGetFile('content/posts/' + slug + '.md');
+  if (!file) { toast('Dosya yüklenemedi', 'error'); return; }
+  postSHAs[slug] = file.sha;
+  const fm = parseFM(file.content);
+
+  document.getElementById('p-slug').value = slug;
+  document.getElementById('p-category').value = fm.category || 'devlog';
+  document.getElementById('p-date').value = fm.date || '';
+  document.getElementById('p-published').checked = fm.published !== false;
+  document.getElementById('p-title-tr').value = (fm.title && fm.title.tr) || '';
+  document.getElementById('p-title-en').value = (fm.title && fm.title.en) || '';
+  document.getElementById('p-excerpt-tr').value = (fm.excerpt && fm.excerpt.tr) || '';
+  document.getElementById('p-excerpt-en').value = (fm.excerpt && fm.excerpt.en) || '';
+  document.getElementById('p-body-tr').value = fm.body_tr || '';
+  document.getElementById('p-body-en').value = fm.body_en || '';
+  document.getElementById('post-save-status').textContent = '';
+}
+
+async function savePost() {
+  const slug = document.getElementById('p-slug').value.trim();
+  if (!slug) { toast('Slug boş olamaz!', 'error'); return; }
+
+  const data = {
+    slug,
+    category: document.getElementById('p-category').value,
+    date: document.getElementById('p-date').value,
+    published: document.getElementById('p-published').checked,
+    titleTr: document.getElementById('p-title-tr').value,
+    titleEn: document.getElementById('p-title-en').value,
+    excerptTr: document.getElementById('p-excerpt-tr').value,
+    excerptEn: document.getElementById('p-excerpt-en').value,
+    bodyTr: document.getElementById('p-body-tr').value,
+    bodyEn: document.getElementById('p-body-en').value,
+  };
+
+  const status = document.getElementById('post-save-status');
+  status.textContent = 'Kaydediliyor...';
+  status.className = 'save-status';
+
+  const content = buildPostFM(data);
+  const path = 'content/posts/' + slug + '.md';
+  const sha = postSHAs[slug] || (currentPostSlug === slug ? postSHAs[currentPostSlug] : null);
+  const msg = sha ? `Update post: ${slug}` : `Add post: ${slug}`;
+
+  const r = await ghPutFile(path, content, sha || null, msg);
+  if (r.ok) {
+    const d = await r.json();
+    postSHAs[slug] = d.content.sha;
+    currentPostSlug = slug;
+    status.textContent = '✓ Kaydedildi';
+    status.className = 'save-status success';
+    toast('Yazı kaydedildi!', 'success');
+  } else {
+    const err = await r.json();
+    status.textContent = '✗ Hata: ' + (err.message || r.status);
+    status.className = 'save-status error';
+    toast('Kayıt hatası!', 'error');
+  }
+}
+
+async function confirmDeletePost() {
+  if (!currentPostSlug) return;
+  document.getElementById('delete-modal-text').textContent = `"${currentPostSlug}.md" dosyası silinecek. Bu işlem geri alınamaz.`;
+  document.getElementById('delete-confirm-btn').onclick = deletePost;
+  document.getElementById('delete-modal').classList.add('open');
+}
+
+async function deletePost() {
+  closeModal();
+  const slug = currentPostSlug;
+  const sha = postSHAs[slug];
+  if (!sha) { toast('SHA bulunamadı', 'error'); return; }
+  const r = await ghDeleteFile('content/posts/' + slug + '.md', sha, 'Delete post: ' + slug);
+  if (r.ok) {
+    delete postSHAs[slug];
+    toast('Yazı silindi', 'success');
+    showPage('posts');
+  } else {
+    toast('Silme hatası!', 'error');
+  }
+}
+
+// ═══════════════════════════════════════════
+// PROJECTS
+// ═══════════════════════════════════════════
+async function loadProjects() {
+  const el = document.getElementById('projects-list');
+  el.innerHTML = '<div class="loading"><span class="spinner"></span>Yükleniyor...</div>';
+  const files = await ghListDir('content/projects');
+  const mds = files.filter(f => f.name.endsWith('.md'));
+  if (!mds.length) { el.innerHTML = '<div class="empty-state">Henüz proje yok.</div>'; return; }
+
+  const projs = await Promise.all(mds.map(async f => {
+    const slug = f.name.replace('.md', '');
+    const file = await ghGetFile('content/projects/' + f.name);
+    if (!file) return null;
+    projSHAs[slug] = file.sha;
+    const fm = parseFM(file.content);
+    fm.slug = slug;
+    return fm;
+  }));
+
+  const sorted = projs.filter(Boolean).sort((a,b) => (Number(a.order)||99) - (Number(b.order)||99));
+  el.innerHTML = '';
+  sorted.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.innerHTML = `
+      <div class="item-card-info">
+        <div class="item-card-title">${(p.title && p.title.tr) || p.slug}</div>
+        <div class="item-card-meta">
+          Sıra: ${p.order || '—'} · ${p.tech || '—'}
+          ${p.published === false ? ' · <span class="badge badge-gray">Gizli</span>' : ' · <span class="badge badge-green">Yayında</span>'}
+        </div>
+      </div>
+      <div class="item-card-actions">
+        <button class="btn btn-secondary btn-sm" onclick="editProject('${p.slug}')">Düzenle</button>
+      </div>`;
+    el.appendChild(div);
+  });
+}
+
+function newProject() {
+  currentProjSlug = null;
+  document.getElementById('delete-proj-btn').style.display = 'none';
+  ['pr-slug','pr-title-tr','pr-title-en','pr-desc-tr','pr-desc-en','pr-image','pr-url','pr-tech'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pr-order').value = '99';
+  document.getElementById('pr-published').checked = true;
+  document.getElementById('proj-save-status').textContent = '';
+  showPage('project-editor');
+}
+
+async function editProject(slug) {
+  currentProjSlug = slug;
+  document.getElementById('delete-proj-btn').style.display = 'inline-block';
+  document.getElementById('proj-save-status').textContent = 'Yükleniyor...';
+  showPage('project-editor');
+
+  const file = await ghGetFile('content/projects/' + slug + '.md');
+  if (!file) { toast('Dosya yüklenemedi', 'error'); return; }
+  projSHAs[slug] = file.sha;
+  const fm = parseFM(file.content);
+
+  document.getElementById('pr-slug').value = slug;
+  document.getElementById('pr-order').value = fm.order || 99;
+  document.getElementById('pr-published').checked = fm.published !== false;
+  document.getElementById('pr-title-tr').value = (fm.title && fm.title.tr) || '';
+  document.getElementById('pr-title-en').value = (fm.title && fm.title.en) || '';
+  document.getElementById('pr-desc-tr').value = (fm.description && fm.description.tr) || '';
+  document.getElementById('pr-desc-en').value = (fm.description && fm.description.en) || '';
+  document.getElementById('pr-image').value = fm.image || '';
+  document.getElementById('pr-url').value = fm.url || '';
+  document.getElementById('pr-tech').value = fm.tech || '';
+  document.getElementById('proj-save-status').textContent = '';
+}
+
+async function saveProject() {
+  const slug = document.getElementById('pr-slug').value.trim();
+  if (!slug) { toast('Slug boş olamaz!', 'error'); return; }
+
+  const data = {
+    slug,
+    order: parseInt(document.getElementById('pr-order').value) || 99,
+    published: document.getElementById('pr-published').checked,
+    titleTr: document.getElementById('pr-title-tr').value,
+    titleEn: document.getElementById('pr-title-en').value,
+    descTr: document.getElementById('pr-desc-tr').value,
+    descEn: document.getElementById('pr-desc-en').value,
+    image: document.getElementById('pr-image').value,
+    url: document.getElementById('pr-url').value || '#',
+    tech: document.getElementById('pr-tech').value,
+  };
+
+  const status = document.getElementById('proj-save-status');
+  status.textContent = 'Kaydediliyor...';
+  status.className = 'save-status';
+
+  const content = buildProjFM(data);
+  const path = 'content/projects/' + slug + '.md';
+  const sha = projSHAs[slug] || null;
+  const msg = sha ? `Update project: ${slug}` : `Add project: ${slug}`;
+
+  const r = await ghPutFile(path, content, sha, msg);
+  if (r.ok) {
+    const d = await r.json();
+    projSHAs[slug] = d.content.sha;
+    currentProjSlug = slug;
+    status.textContent = '✓ Kaydedildi';
+    status.className = 'save-status success';
+    toast('Proje kaydedildi!', 'success');
+  } else {
+    const err = await r.json();
+    status.textContent = '✗ Hata: ' + (err.message || r.status);
+    status.className = 'save-status error';
+    toast('Kayıt hatası!', 'error');
+  }
+}
+
+async function confirmDeleteProject() {
+  if (!currentProjSlug) return;
+  document.getElementById('delete-modal-text').textContent = `"${currentProjSlug}.md" dosyası silinecek. Bu işlem geri alınamaz.`;
+  document.getElementById('delete-confirm-btn').onclick = deleteProject;
+  document.getElementById('delete-modal').classList.add('open');
+}
+
+async function deleteProject() {
+  closeModal();
+  const slug = currentProjSlug;
+  const sha = projSHAs[slug];
+  if (!sha) { toast('SHA bulunamadı', 'error'); return; }
+  const r = await ghDeleteFile('content/projects/' + slug + '.md', sha, 'Delete project: ' + slug);
+  if (r.ok) {
+    delete projSHAs[slug];
+    toast('Proje silindi', 'success');
+    showPage('projects');
+  } else {
+    toast('Silme hatası!', 'error');
+  }
+}
+
+// ═══════════════════════════════════════════
+// MODAL & TOAST
+// ═══════════════════════════════════════════
+function closeModal() { document.getElementById('delete-modal').classList.remove('open'); }
+document.getElementById('delete-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+let toastTimer;
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, 2800);
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('gh_admin_token');
+  if (saved) { TOKEN = saved; document.getElementById('token-input').value = saved; startApp(); }
+});
+
+document.getElementById('token-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+</script>
+</body>
+</html>
