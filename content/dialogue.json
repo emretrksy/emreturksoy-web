@@ -2,111 +2,252 @@
   "nodes": [
     {
       "key": "root",
-      "speaker": { "tr": "PROTAGONIST", "en": "PROTAGONIST" },
+      "speaker": {
+        "tr": "EEEEEE",
+        "en": "BBBBBB"
+      },
       "text": {
-        "tr": "* Vahşi bir [Oyun Geliştiricisi] belirdi!\n* Ne öğrenmek istersin?",
-        "en": "* A wild [Game Developer] appears!\n* What do you want to know?"
+        "tr": "AAAAAAAAA",
+        "en": "DDDDDDD"
       },
       "choices": [
-        { "label": { "tr": "Envanteri İncele", "en": "Inspect Inventory" }, "next": "inventory" },
-        { "label": { "tr": "Mevcut Görev", "en": "Current Quest" }, "next": "quest" },
-        { "label": { "tr": "Köken Hikayesi", "en": "Origin Story" }, "next": "origin" }
+        {
+          "label": {
+            "tr": "Envanteri Ä°ncele",
+            "en": "Inspect Inventory"
+          },
+          "next": "inventory"
+        },
+        {
+          "label": {
+            "tr": "Mevcut GÃ¶rev",
+            "en": "Current Quest"
+          },
+          "next": "quest"
+        },
+        {
+          "label": {
+            "tr": "KÃ¶ken Hikayesi",
+            "en": "Origin Story"
+          },
+          "next": "origin"
+        }
       ]
     },
     {
       "key": "inventory",
-      "speaker": { "tr": "SİSTEM", "en": "SYSTEM" },
+      "speaker": {
+        "tr": "SÄ°STEM",
+        "en": "SYSTEM"
+      },
       "text": {
-        "tr": "* Envanter açılıyor...\n\n[Godot 4]  ×  Uzman\n[C# / C++]  ×  Deneyimli\n[GameMaker]  ×  Veteran\n[Aseprite]  ×  Donanımlı\n[Kahve]  ×  Yarım içilmiş",
-        "en": "* Opening inventory...\n\n[Godot 4]  ×  Expert\n[C# / C++]  ×  Proficient\n[GameMaker]  ×  Veteran\n[Aseprite]  ×  Equipped\n[Coffee]  ×  Half-empty"
+        "tr": "* Envanter aÃ§Ä±lÄ±yor...\n\n[Godot 4]  Ã  Uzman\n[C# / C++]  Ã  Deneyimli\n[GameMaker]  Ã  Veteran\n[Aseprite]  Ã  DonanÄ±mlÄ±\n[Kahve]  Ã  YarÄ±m iÃ§ilmiÅ",
+        "en": "* Opening inventory...\n\n[Godot 4]  Ã  Expert\n[C# / C++]  Ã  Proficient\n[GameMaker]  Ã  Veteran\n[Aseprite]  Ã  Equipped\n[Coffee]  Ã  Half-empty"
       },
       "choices": [
-        { "label": { "tr": "Godot hakkında bilgi ver", "en": "Tell me more about Godot" }, "next": "inv_godot" },
-        { "label": { "tr": "GameMaker ne olacak?", "en": "What about GameMaker?" }, "next": "inv_gm" },
-        { "label": { "tr": "← Geri", "en": "← Back" }, "next": "root" }
+        {
+          "label": {
+            "tr": "Godot hakkÄ±nda bilgi ver",
+            "en": "Tell me more about Godot"
+          },
+          "next": "inv_godot"
+        },
+        {
+          "label": {
+            "tr": "GameMaker ne olacak?",
+            "en": "What about GameMaker?"
+          },
+          "next": "inv_gm"
+        },
+        {
+          "label": {
+            "tr": "â Geri",
+            "en": "â Back"
+          },
+          "next": "root"
+        }
       ]
     },
     {
       "key": "inv_godot",
-      "speaker": { "tr": "PROTAGONIST", "en": "PROTAGONIST" },
+      "speaker": {
+        "tr": "PROTAGONIST",
+        "en": "PROTAGONIST"
+      },
       "text": {
-        "tr": "* [Godot 4] ana silahım. Ücretsiz, açık kaynak ve sahne sistemi FSM mimarime mükemmel uyuyor.\n* Şu an [Evo] adlı 2D Metroidvania için kullanıyorum.",
+        "tr": "* [Godot 4] ana silahÄ±m. Ãcretsiz, aÃ§Ä±k kaynak ve sahne sistemi FSM mimarime mÃ¼kemmel uyuyor.\n* Åu an [Evo] adlÄ± 2D Metroidvania iÃ§in kullanÄ±yorum.",
         "en": "* [Godot 4] is my main weapon. Free, open-source, and the scene system maps perfectly to FSM architecture.\n* Currently wielding it to build [Evo], a 2D Metroidvania."
       },
       "choices": [
-        { "label": { "tr": "Evo nedir?", "en": "What is Evo?" }, "next": "quest" },
-        { "label": { "tr": "← Geri", "en": "← Back" }, "next": "inventory" }
+        {
+          "label": {
+            "tr": "Evo nedir?",
+            "en": "What is Evo?"
+          },
+          "next": "quest"
+        },
+        {
+          "label": {
+            "tr": "â Geri",
+            "en": "â Back"
+          },
+          "next": "inventory"
+        }
       ]
     },
     {
       "key": "inv_gm",
-      "speaker": { "tr": "PROTAGONIST", "en": "PROTAGONIST" },
+      "speaker": {
+        "tr": "PROTAGONIST",
+        "en": "PROTAGONIST"
+      },
       "text": {
-        "tr": "* [GameMaker Studio 2] — HUJAM '25'te 48 saatte [Myco]'yu bununla yaptım.\n* Sonuç? 2.lik ve 20.000 TL. Mantar asker için fena değil.",
-        "en": "* [GameMaker Studio 2] — used it to build [Myco] at HUJAM '25 in 48 hours.\n* The result? 2nd place and 20,000 TRY. Not bad for a mushroom soldier."
+        "tr": "* [GameMaker Studio 2] â HUJAM '25'te 48 saatte [Myco]'yu bununla yaptÄ±m.\n* SonuÃ§? 2.lik ve 20.000 TL. Mantar asker iÃ§in fena deÄil.",
+        "en": "* [GameMaker Studio 2] â used it to build [Myco] at HUJAM '25 in 48 hours.\n* The result? 2nd place and 20,000 TRY. Not bad for a mushroom soldier."
       },
       "choices": [
-        { "label": { "tr": "Jam'i anlat", "en": "Tell me about the jam" }, "next": "jam" },
-        { "label": { "tr": "← Geri", "en": "← Back" }, "next": "inventory" }
+        {
+          "label": {
+            "tr": "Jam'i anlat",
+            "en": "Tell me about the jam"
+          },
+          "next": "jam"
+        },
+        {
+          "label": {
+            "tr": "â Geri",
+            "en": "â Back"
+          },
+          "next": "inventory"
+        }
       ]
     },
     {
       "key": "quest",
-      "speaker": { "tr": "GÖREV GÜNLÜĞÜ", "en": "QUEST LOG" },
+      "speaker": {
+        "tr": "GÃREV GÃNLÃÄÃ",
+        "en": "QUEST LOG"
+      },
       "text": {
-        "tr": "* [ANA GÖREV] [Evo]'nun solo gelişiminden sağ çık.\n  — 2D Metroidvania. Zorluk: Kabus.\n  — Durum: Devam Ediyor (Halka 1 / ?)\n\n* [YAN GÖREV] Hacettepe'de Bilgisayar Mühendisliği'ni bitir.\n  — Durum: Aktif",
-        "en": "* [MAIN QUEST] Survive the solo development of [Evo].\n  — A 2D Metroidvania. Difficulty: Nightmare.\n  — Status: In Progress (Ring 1 of ?)\n\n* [SIDE QUEST] Pass Computer Engineering at Hacettepe.\n  — Status: Active"
+        "tr": "* [ANA GÃREV] [Evo]'nun solo geliÅiminden saÄ Ã§Ä±k.\n  â 2D Metroidvania. Zorluk: Kabus.\n  â Durum: Devam Ediyor (Halka 1 / ?)\n\n* [YAN GÃREV] Hacettepe'de Bilgisayar MÃ¼hendisliÄi'ni bitir.\n  â Durum: Aktif",
+        "en": "* [MAIN QUEST] Survive the solo development of [Evo].\n  â A 2D Metroidvania. Difficulty: Nightmare.\n  â Status: In Progress (Ring 1 of ?)\n\n* [SIDE QUEST] Pass Computer Engineering at Hacettepe.\n  â Status: Active"
       },
       "choices": [
-        { "label": { "tr": "Halka 1 nedir?", "en": "What is Ring 1?" }, "next": "quest_ring" },
-        { "label": { "tr": "← Geri", "en": "← Back" }, "next": "root" }
+        {
+          "label": {
+            "tr": "Halka 1 nedir?",
+            "en": "What is Ring 1?"
+          },
+          "next": "quest_ring"
+        },
+        {
+          "label": {
+            "tr": "â Geri",
+            "en": "â Back"
+          },
+          "next": "root"
+        }
       ]
     },
     {
       "key": "quest_ring",
-      "speaker": { "tr": "PROTAGONIST", "en": "PROTAGONIST" },
+      "speaker": {
+        "tr": "PROTAGONIST",
+        "en": "PROTAGONIST"
+      },
       "text": {
-        "tr": "* Metroidvania'ların kapsamı kolayca kontrolden çıkabilir.\n* Çözümüm: [halkalar] halinde tasarlamak. Halka 1 — 3 yetenek, 1 patron, kendi içinde tam. Dışarı genişlemeden önce [mükemmelleştir].",
-        "en": "* Metroidvanias can spiral out of scope infinitely.\n* My solution: build in [rings]. Ring 1 is one self-contained zone — 3 abilities, 1 boss. Get it [perfect] before expanding outward."
+        "tr": "* Metroidvania'larÄ±n kapsamÄ± kolayca kontrolden Ã§Ä±kabilir.\n* ÃÃ¶zÃ¼mÃ¼m: [halkalar] halinde tasarlamak. Halka 1 â 3 yetenek, 1 patron, kendi iÃ§inde tam. DÄ±ÅarÄ± geniÅlemeden Ã¶nce [mÃ¼kemmelleÅtir].",
+        "en": "* Metroidvanias can spiral out of scope infinitely.\n* My solution: build in [rings]. Ring 1 is one self-contained zone â 3 abilities, 1 boss. Get it [perfect] before expanding outward."
       },
       "choices": [
-        { "label": { "tr": "Mantıklı. Köken hikayesini anlat.", "en": "Smart. Tell me the origin." }, "next": "origin" },
-        { "label": { "tr": "← Görevlere dön", "en": "← Back to quests" }, "next": "quest" }
+        {
+          "label": {
+            "tr": "MantÄ±klÄ±. KÃ¶ken hikayesini anlat.",
+            "en": "Smart. Tell me the origin."
+          },
+          "next": "origin"
+        },
+        {
+          "label": {
+            "tr": "â GÃ¶revlere dÃ¶n",
+            "en": "â Back to quests"
+          },
+          "next": "quest"
+        }
       ]
     },
     {
       "key": "origin",
-      "speaker": { "tr": "HİKAYE", "en": "LORE" },
+      "speaker": {
+        "tr": "HÄ°KAYE",
+        "en": "LORE"
+      },
       "text": {
-        "tr": "* [Doğdu] Ankara. Zar: [CON +3].\n* [13 yaş] GameMaker'la ilk karşılaşma. 20 attı.\n* [2022] Deneyap Teknoloji Atölyeleri — 11 alanda 36 ay.\n* [2023] Kayıt: Bilgisayar Müh., Hacettepe.\n* [Şimdi] Solo geliştirici. Kafeinli. Dünyalar inşa ediyor.",
-        "en": "* [Born] in Ankara. Rolled [CON +3].\n* [Age 13] First encounter with GameMaker. Nat 20.\n* [2022] Deneyap Tech Workshops — 36 months across 11 fields.\n* [2023] Enrolled: Computer Engineering, Hacettepe.\n* [Now] Solo dev. Coffee-fueled. Building worlds."
+        "tr": "* [DoÄdu] Ankara. Zar: [CON +3].\n* [13 yaÅ] GameMaker'la ilk karÅÄ±laÅma. 20 attÄ±.\n* [2022] Deneyap Teknoloji AtÃ¶lyeleri â 11 alanda 36 ay.\n* [2023] KayÄ±t: Bilgisayar MÃ¼h., Hacettepe.\n* [Åimdi] Solo geliÅtirici. Kafeinli. DÃ¼nyalar inÅa ediyor.",
+        "en": "* [Born] in Ankara. Rolled [CON +3].\n* [Age 13] First encounter with GameMaker. Nat 20.\n* [2022] Deneyap Tech Workshops â 36 months across 11 fields.\n* [2023] Enrolled: Computer Engineering, Hacettepe.\n* [Now] Solo dev. Coffee-fueled. Building worlds."
       },
       "choices": [
-        { "label": { "tr": "Etkileyici. Kazandın mı?", "en": "Impressive. Any wins?" }, "next": "jam" },
-        { "label": { "tr": "← Geri", "en": "← Back" }, "next": "root" }
+        {
+          "label": {
+            "tr": "Etkileyici. KazandÄ±n mÄ±?",
+            "en": "Impressive. Any wins?"
+          },
+          "next": "jam"
+        },
+        {
+          "label": {
+            "tr": "â Geri",
+            "en": "â Back"
+          },
+          "next": "root"
+        }
       ]
     },
     {
       "key": "jam",
-      "speaker": { "tr": "BAŞARI AÇILDI", "en": "ACHIEVEMENT UNLOCKED" },
+      "speaker": {
+        "tr": "BAÅARI AÃILDI",
+        "en": "ACHIEVEMENT UNLOCKED"
+      },
       "text": {
-        "tr": "* [HUJAM '25] — 48 saat, 1 programcı, 2 sanatçı, 1 besteci.\n  Sonuç: [2.lik] · 20.000 TL\n\n* [Karadeniz Jam '26] — Solo katılım.\n  Sonuç: [1.lik] · 80.000 TL\n\n* Güncel galibiyet oranı: [2/2]. Yenilmemiş.",
-        "en": "* [HUJAM '25] — 48 hours, 1 programmer, 2 artists, 1 composer.\n  Result: [2nd Place] · 20,000 TRY\n\n* [Karadeniz Jam '26] — Solo entry.\n  Result: [1st Place] · 80,000 TRY\n\n* Current win rate: [2/2]. Undefeated."
+        "tr": "* [HUJAM '25] â 48 saat, 1 programcÄ±, 2 sanatÃ§Ä±, 1 besteci.\n  SonuÃ§: [2.lik] Â· 20.000 TL\n\n* [Karadeniz Jam '26] â Solo katÄ±lÄ±m.\n  SonuÃ§: [1.lik] Â· 80.000 TL\n\n* GÃ¼ncel galibiyet oranÄ±: [2/2]. YenilmemiÅ.",
+        "en": "* [HUJAM '25] â 48 hours, 1 programmer, 2 artists, 1 composer.\n  Result: [2nd Place] Â· 20,000 TRY\n\n* [Karadeniz Jam '26] â Solo entry.\n  Result: [1st Place] Â· 80,000 TRY\n\n* Current win rate: [2/2]. Undefeated."
       },
       "choices": [
-        { "label": { "tr": "Sonraki hedef?", "en": "What's next?" }, "next": "next" },
-        { "label": { "tr": "← Geri", "en": "← Back" }, "next": "root" }
+        {
+          "label": {
+            "tr": "Sonraki hedef?",
+            "en": "What's next?"
+          },
+          "next": "next"
+        },
+        {
+          "label": {
+            "tr": "â Geri",
+            "en": "â Back"
+          },
+          "next": "root"
+        }
       ]
     },
     {
       "key": "next",
-      "speaker": { "tr": "PROTAGONIST", "en": "PROTAGONIST" },
+      "speaker": {
+        "tr": "PROTAGONIST",
+        "en": "PROTAGONIST"
+      },
       "text": {
-        "tr": "* [Halka 1]'i bitir.\n* Mezun ol, ölmeden.\n* İnsanların gerçekten oynadığı bir şey yayınla.\n\n* Not: Baskı altında iş bitiren bir geliştirici arıyorsan — [nerede bulacağını biliyorsun].",
-        "en": "* Finish [Ring 1] of Evo.\n* Graduate without dying.\n* Ship something people actually play.\n\n* Side note: if you need a developer who ships things under pressure — [you know where to find me]."
+        "tr": "* [Halka 1]'i bitir.\n* Mezun ol, Ã¶lmeden.\n* Ä°nsanlarÄ±n gerÃ§ekten oynadÄ±ÄÄ± bir Åey yayÄ±nla.\n\n* Not: BaskÄ± altÄ±nda iÅ bitiren bir geliÅtirici arÄ±yorsan â [nerede bulacaÄÄ±nÄ± biliyorsun].",
+        "en": "* Finish [Ring 1] of Evo.\n* Graduate without dying.\n* Ship something people actually play.\n\n* Side note: if you need a developer who ships things under pressure â [you know where to find me]."
       },
       "choices": [
-        { "label": { "tr": "Baştan başla", "en": "Start over" }, "next": "root" }
+        {
+          "label": {
+            "tr": "BaÅtan baÅla",
+            "en": "Start over"
+          },
+          "next": "root"
+        }
       ]
     }
   ]
