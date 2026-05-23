@@ -2,7 +2,8 @@ backend:
   name: github
   repo: emretrksy/emreturksoy-web
   branch: main
-  base_url: https://decap-oauth.emrett04.workers.dev
+  auth_type: pkce
+  app_id: Ov231i0dyqrGjhyYgWkv
 
 media_folder: "assets/images"
 public_folder: "/emreturksoy-web/assets/images"
