@@ -908,7 +908,7 @@ footer{
 
 <!-- ── ALL POSTS VIEW ── -->
 <div class="blog-post-view" id="all-posts">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en');return false;">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr');return false;">TR</button></div></a>
   <div class="post-content">
     <h1 class="post-title" data-i18n="all_title" style="margin-bottom:48px;">All Writings</h1>
     <div class="all-posts-list">
@@ -919,7 +919,7 @@ footer{
 
 <!-- ── SINGLE POST VIEWS ── -->
 <div class="blog-post-view" id="post-building-an-fsm-in-godot">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en');return false;">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr');return false;">TR</button></div></a>
   <div class="post-content">
     <div class="post-meta"><span class="pcat" data-i18n="bcat_tut">Tutorial</span><span class="pdate">May 2026</span></div>
     <h1 class="post-title" data-i18n="btitle_fsm">Building an FSM in Godot</h1>
@@ -967,7 +967,7 @@ func transition_to(new_state: State):
 </div>
 
 <div class="blog-post-view" id="post-evo-going-solo">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en');return false;">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr');return false;">TR</button></div></a>
   <div class="post-content">
     <div class="post-meta"><span class="pcat" data-i18n="bcat_dev">Devlog</span><span class="pdate">April 2026</span></div>
     <h1 class="post-title" data-i18n="btitle_evo">Evo #1: Going Solo</h1>
@@ -983,7 +983,7 @@ func transition_to(new_state: State):
 </div>
 
 <div class="blog-post-view" id="post-winning-hujam">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></a>
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en');return false;">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr');return false;">TR</button></div></a>
   <div class="post-content">
     <div class="post-meta"><span class="pcat" data-i18n="bcat_dev">Devlog</span><span class="pdate">November 2025</span></div>
     <h1 class="post-title" data-i18n="btitle_jam">Winning HUJAM</h1>
@@ -1628,17 +1628,19 @@ async function discoverProjectSlugs() {
 }
 
 async function discoverPostSlugs() {
+  // GitHub Contents API — unauthenticated, 60 req/hour yeterli
   try {
     const r = await fetch(
       'https://api.github.com/repos/emretrksy/emreturksoy-web/contents/content/posts',
-      { headers: { 'Accept': 'application/vnd.github.v3+json' } }
+      { headers: { 'Accept': 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache' } }
     );
     if (r.ok) {
       const files = await r.json();
       if (Array.isArray(files)) {
-        return files
+        const slugs = files
           .filter(f => f.name && f.name.endsWith('.md'))
           .map(f => f.name.replace(/\.md$/, ''));
+        if (slugs.length) return slugs;
       }
     }
   } catch(e) {}
@@ -1758,7 +1760,8 @@ function mdToHtml(md) {
 // ── Fetch helpers ────────────────────────────────────────────
 async function fetchMD(path) {
   try {
-    const r = await fetch(path);
+    const bust = '?_=' + Math.floor(Date.now() / 60000);
+    const r = await fetch(path + bust);
     if (!r.ok) return null;
     return parseFM(await r.text());
   } catch(e) { return null; }
@@ -2059,7 +2062,20 @@ window.addEventListener('load', () => {
   if (typeof origSetLang === 'function') {
     window.setLang = function(lang) {
       origSetLang(lang);
+      // Post view açıksa hash'i koru, sadece içeriği yenile
+      const hash = window.location.hash;
+      const inPost = document.body.classList.contains('in-post');
       renderAll(lang);
+      // renderAll hashchange'e sebep olmadan view'ı koru
+      if (inPost && hash) {
+        const target = document.getElementById(hash.substring(1));
+        if (target) {
+          document.querySelectorAll('.blog-post-view').forEach(p => p.classList.remove('active'));
+          target.classList.add('active');
+          document.getElementById('mainContent').classList.add('hidden');
+          document.body.classList.add('in-post');
+        }
+      }
     };
   }
 });

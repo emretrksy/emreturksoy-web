@@ -1,9 +1,0 @@
-# Bu dosya artık kullanılmıyor.
-# Admin paneli admin/index.html üzerinden çalışıyor.
-backend:
-  name: github
-  repo: emretrksy/emreturksoy-web
-  branch: main
-
-media_folder: "assets/images"
-public_folder: "/emreturksoy-web/assets/images"

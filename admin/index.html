@@ -213,6 +213,9 @@
       <div class="nav-item" onclick="showPage('projects')">
         <span class="nav-icon">🎮</span> Projeler
       </div>
+      <div class="nav-item" onclick="showPage('dialogue')">
+        <span class="nav-icon">💬</span> Diyalog Ağacı
+      </div>
       <div class="sidebar-bottom">
         <div class="token-info" id="token-info">—</div>
         <button class="logout-btn" onclick="doLogout()">Çıkış Yap</button>
@@ -326,6 +329,26 @@
           <button class="btn btn-primary" onclick="newProject()">+ Yeni Proje</button>
         </div>
         <div id="projects-list" class="item-list"><div class="loading"><span class="spinner"></span>Yükleniyor...</div></div>
+      </div>
+
+      <!-- DIALOGUE -->
+      <div class="page" id="page-dialogue">
+        <div class="page-header">
+          <div class="page-title">Diyalog <span>Ağacı</span></div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-primary" onclick="addDialogueNode()">+ Yeni Node</button>
+            <button class="btn btn-primary" onclick="saveDialogue()">💾 Tümünü Kaydet</button>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--ink2);margin-bottom:16px;line-height:1.6;">
+          Her node bir diyalog adımı. <code>key</code> benzersiz olmalı. Seçeneklerdeki <code>next</code> başka bir node'un key'ine işaret etmeli.<br>
+          <code>[kelime]</code> formatındaki metinler teal renkte gösterilir. <code>\n</code> satır sonu.
+        </div>
+        <div id="dialogue-nodes" style="display:flex;flex-direction:column;gap:16px;"></div>
+        <div style="margin-top:16px;display:flex;gap:12px;align-items:center;">
+          <button class="btn btn-primary" onclick="saveDialogue()">💾 Tümünü Kaydet</button>
+          <span class="save-status" id="dialogue-save-status"></span>
+        </div>
       </div>
 
       <!-- PROJECT EDITOR -->
@@ -632,6 +655,7 @@ function showPage(name) {
 
   if (name === 'posts') { document.querySelectorAll('.nav-item')[0].classList.add('active'); loadPosts(); }
   if (name === 'projects') { document.querySelectorAll('.nav-item')[1].classList.add('active'); loadProjects(); }
+  if (name === 'dialogue') { document.querySelectorAll('.nav-item')[2].classList.add('active'); loadDialogue(); }
   if (name === 'post-editor') document.querySelectorAll('.nav-item')[0].classList.add('active');
   if (name === 'project-editor') document.querySelectorAll('.nav-item')[1].classList.add('active');
 }
@@ -945,6 +969,183 @@ function toast(msg, type = 'success') {
 // ═══════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════
+
+// ═══════════════════════════════════════════
+// DIALOGUE
+// ═══════════════════════════════════════════
+let dialogueData = { nodes: [] };
+let dialogueSHA = null;
+
+async function loadDialogue() {
+  const container = document.getElementById('dialogue-nodes');
+  container.innerHTML = '<div class="loading"><span class="spinner"></span>Yükleniyor...</div>';
+  
+  const file = await ghGetFile('content/dialogue.json');
+  if (!file) { container.innerHTML = '<div class="empty-state">dialogue.json yüklenemedi.</div>'; return; }
+  dialogueSHA = file.sha;
+  
+  try { dialogueData = JSON.parse(file.content); }
+  catch(e) { container.innerHTML = '<div class="empty-state">JSON parse hatası.</div>'; return; }
+  
+  if (!dialogueData.nodes) dialogueData.nodes = [];
+  renderDialogueNodes();
+}
+
+function renderDialogueNodes() {
+  const container = document.getElementById('dialogue-nodes');
+  container.innerHTML = '';
+  dialogueData.nodes.forEach((node, i) => {
+    container.appendChild(buildNodeCard(node, i));
+  });
+}
+
+function buildNodeCard(node, i) {
+  const div = document.createElement('div');
+  div.className = 'form-section';
+  div.dataset.nodeIndex = i;
+  
+  const choicesHtml = (node.choices || []).map((c, ci) => `
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;" data-choice="${ci}">
+      <input type="text" placeholder="Seçenek TR" value="${escHtml(c.label?.tr||'')}" 
+        onchange="updateChoice(${i},${ci},'label.tr',this.value)" style="background:var(--bg);border:1px solid var(--border);color:var(--ink);padding:7px 10px;border-radius:6px;font-family:var(--mono);font-size:0.8rem;"/>
+      <input type="text" placeholder="Seçenek EN" value="${escHtml(c.label?.en||'')}" 
+        onchange="updateChoice(${i},${ci},'label.en',this.value)" style="background:var(--bg);border:1px solid var(--border);color:var(--ink);padding:7px 10px;border-radius:6px;font-family:var(--mono);font-size:0.8rem;"/>
+      <input type="text" placeholder="next key" value="${escHtml(c.next||'')}" 
+        onchange="updateChoice(${i},${ci},'next',this.value)" style="background:var(--bg);border:1px solid var(--border);color:var(--ink);padding:7px 10px;border-radius:6px;font-family:var(--mono);font-size:0.8rem;"/>
+      <button class="btn btn-danger btn-sm" onclick="removeChoice(${i},${ci})">✕</button>
+    </div>`).join('');
+
+  div.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div class="form-section-title" style="margin:0;">Node #${i+1}</div>
+      <div style="display:flex;gap:8px;">
+        ${i > 0 ? `<button class="btn btn-secondary btn-sm" onclick="moveNode(${i},-1)">↑</button>` : ''}
+        ${i < dialogueData.nodes.length-1 ? `<button class="btn btn-secondary btn-sm" onclick="moveNode(${i},1)">↓</button>` : ''}
+        <button class="btn btn-danger btn-sm" onclick="removeNode(${i})">Sil</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="form-group">
+        <label>Key (benzersiz ID)</label>
+        <input type="text" value="${escHtml(node.key||'')}" placeholder="root, inventory, quest..." 
+          onchange="updateNode(${i},'key',this.value)"
+          style="background:var(--bg);border:1px solid var(--border);color:var(--turq);padding:8px 12px;border-radius:6px;font-family:var(--mono);font-size:0.85rem;font-weight:bold;"/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="form-group">
+          <label>Konuşmacı TR</label>
+          <input type="text" value="${escHtml(node.speaker?.tr||'')}" placeholder="PROTAGONIST"
+            onchange="updateNode(${i},'speaker.tr',this.value)"
+            style="background:var(--bg);border:1px solid var(--border);color:var(--ink);padding:8px 12px;border-radius:6px;font-family:var(--mono);font-size:0.8rem;"/>
+        </div>
+        <div class="form-group">
+          <label>Konuşmacı EN</label>
+          <input type="text" value="${escHtml(node.speaker?.en||'')}" placeholder="PROTAGONIST"
+            onchange="updateNode(${i},'speaker.en',this.value)"
+            style="background:var(--bg);border:1px solid var(--border);color:var(--ink);padding:8px 12px;border-radius:6px;font-family:var(--mono);font-size:0.8rem;"/>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="form-group">
+        <label>Metin TR ([kelime] = teal, \n = satır sonu)</label>
+        <textarea rows="4" onchange="updateNode(${i},'text.tr',this.value)"
+          style="background:var(--bg);border:1px solid var(--border);color:var(--ink);padding:8px 12px;border-radius:6px;font-family:var(--mono);font-size:0.8rem;resize:vertical;width:100%;">${escHtml(node.text?.tr||'')}</textarea>
+      </div>
+      <div class="form-group">
+        <label>Metin EN</label>
+        <textarea rows="4" onchange="updateNode(${i},'text.en',this.value)"
+          style="background:var(--bg);border:1px solid var(--border);color:var(--ink);padding:8px 12px;border-radius:6px;font-family:var(--mono);font-size:0.8rem;resize:vertical;width:100%;">${escHtml(node.text?.en||'')}</textarea>
+      </div>
+    </div>
+    <div class="form-section-title" style="margin-bottom:8px;">Seçenekler</div>
+    <div id="choices-${i}">${choicesHtml}</div>
+    <button class="btn btn-secondary btn-sm" onclick="addChoice(${i})" style="margin-top:4px;">+ Seçenek Ekle</button>
+  `;
+  return div;
+}
+
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function updateNode(i, path, value) {
+  const node = dialogueData.nodes[i];
+  const parts = path.split('.');
+  if (parts.length === 1) { node[parts[0]] = value; }
+  else { if (!node[parts[0]]) node[parts[0]] = {}; node[parts[0]][parts[1]] = value; }
+}
+
+function updateChoice(i, ci, path, value) {
+  const choice = dialogueData.nodes[i].choices[ci];
+  const parts = path.split('.');
+  if (parts.length === 1) { choice[parts[0]] = value; }
+  else { if (!choice[parts[0]]) choice[parts[0]] = {}; choice[parts[0]][parts[1]] = value; }
+}
+
+function addChoice(i) {
+  if (!dialogueData.nodes[i].choices) dialogueData.nodes[i].choices = [];
+  dialogueData.nodes[i].choices.push({ label: { tr: '', en: '' }, next: '' });
+  renderDialogueNodes();
+  // Scroll to node
+  setTimeout(() => {
+    const cards = document.querySelectorAll('#dialogue-nodes .form-section');
+    if (cards[i]) cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 50);
+}
+
+function removeChoice(i, ci) {
+  dialogueData.nodes[i].choices.splice(ci, 1);
+  renderDialogueNodes();
+}
+
+function addDialogueNode() {
+  dialogueData.nodes.push({
+    key: 'node_' + Date.now(),
+    speaker: { tr: 'PROTAGONIST', en: 'PROTAGONIST' },
+    text: { tr: '', en: '' },
+    choices: []
+  });
+  renderDialogueNodes();
+  setTimeout(() => {
+    const cards = document.querySelectorAll('#dialogue-nodes .form-section');
+    if (cards.length) cards[cards.length-1].scrollIntoView({ behavior: 'smooth' });
+  }, 50);
+}
+
+function removeNode(i) {
+  if (!confirm('Bu node silinecek: "' + (dialogueData.nodes[i]?.key||i) + '"')) return;
+  dialogueData.nodes.splice(i, 1);
+  renderDialogueNodes();
+}
+
+function moveNode(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= dialogueData.nodes.length) return;
+  [dialogueData.nodes[i], dialogueData.nodes[j]] = [dialogueData.nodes[j], dialogueData.nodes[i]];
+  renderDialogueNodes();
+}
+
+async function saveDialogue() {
+  const status = document.getElementById('dialogue-save-status');
+  status.textContent = 'Kaydediliyor...';
+  status.className = 'save-status';
+  
+  const json = JSON.stringify(dialogueData, null, 2);
+  const r = await ghPutFile('content/dialogue.json', json, dialogueSHA, 'Update dialogue tree');
+  
+  if (r.ok) {
+    const d = await r.json();
+    dialogueSHA = d.content.sha;
+    status.textContent = '✓ Kaydedildi';
+    status.className = 'save-status success';
+    toast('Diyalog ağacı kaydedildi!', 'success');
+  } else {
+    const err = await r.json();
+    status.textContent = '✗ Hata: ' + (err.message || r.status);
+    status.className = 'save-status error';
+    toast('Kayıt hatası!', 'error');
+  }
+}
+
 window.addEventListener('load', () => {
   const saved = localStorage.getItem('gh_admin_token');
   if (saved) { TOKEN = saved; document.getElementById('token-input').value = saved; startApp(); }
