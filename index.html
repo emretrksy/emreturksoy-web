@@ -1207,9 +1207,9 @@ function setLang(lang){
   currentLang = lang;
   document.getElementById('btn-en').classList.toggle('active', lang==='en');
   document.getElementById('btn-tr').classList.toggle('active', lang==='tr');
-  // post-back lang butonlarını senkronize et
-  document.querySelectorAll('#pb-btn-en').forEach(b => b.classList.toggle('active', lang==='en'));
-  document.querySelectorAll('#pb-btn-tr').forEach(b => b.classList.toggle('active', lang==='tr'));
+  // post-back lang butonlarını senkronize et (class veya id ile)
+  document.querySelectorAll('.pb-btn-en, #pb-btn-en').forEach(b => b.classList.toggle('active', lang==='en'));
+  document.querySelectorAll('.pb-btn-tr, #pb-btn-tr').forEach(b => b.classList.toggle('active', lang==='tr'));
   // update sidebar nav labels
   updateSidebarLang(lang);
   // update status bar
@@ -1569,7 +1569,7 @@ async function discoverPostSlugs() {
   try {
     const r = await fetch(
       'https://api.github.com/repos/emretrksy/emreturksoy-web/contents/content/posts',
-      { headers: { 'Accept': 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache' } }
+      { headers: { 'Accept': 'application/vnd.github.v3+json' } }
     );
     if (r.ok) {
       const files = await r.json();
@@ -1697,8 +1697,10 @@ function mdToHtml(md) {
 // ── Fetch helpers ────────────────────────────────────────────
 async function fetchMD(path) {
   try {
+    // raw.githubusercontent.com üzerinden çek — GitHub Pages cache'ini atla
+    const rawBase = 'https://raw.githubusercontent.com/emretrksy/emreturksoy-web/main/';
     const bust = '?_=' + Math.floor(Date.now() / 60000);
-    const r = await fetch(path + bust);
+    const r = await fetch(rawBase + path + bust);
     if (!r.ok) return null;
     return parseFM(await r.text());
   } catch(e) { return null; }
@@ -1740,7 +1742,7 @@ async function loadContent() {
 
   // Diyalog
   try {
-    const r = await fetch('content/dialogue.json');
+    const r = await fetch('https://raw.githubusercontent.com/emretrksy/emreturksoy-web/main/content/dialogue.json?_=' + Math.floor(Date.now() / 60000));
     if (r.ok) {
       const data = await r.json();
       if (data && data.nodes && data.nodes.length) {
@@ -1847,8 +1849,8 @@ function renderPostViews(lang) {
     '<a href="#" class="post-back" onclick="window.location.hash=\'\';return false;">' +
     '<span>' + backLabel + '</span>' +
     '<div class="post-back-lang">' +
-    '<button class="lang-btn ' + enAct + '" onclick="setLang(\'en\')">EN</button>' +
-    '<button class="lang-btn ' + trAct + '" onclick="setLang(\'tr\')">TR</button>' +
+    '<button class="lang-btn pb-btn-en ' + enAct + '" onclick="setLang(\'en\');return false;">EN</button>' +
+    '<button class="lang-btn pb-btn-tr ' + trAct + '" onclick="setLang(\'tr\');return false;">TR</button>' +
     '</div></a>';
 
   posts.forEach(post => {
