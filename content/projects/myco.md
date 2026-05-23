@@ -6,11 +6,9 @@ title:
   tr: "Myco"
   en: "Myco"
 description:
-  tr: "HUJAM '25 oyun jam oyunu. Mantar askeri konsepti, 48 saatte yapıldı. 2. lik."
-  en: "HUJAM '25 game jam entry. Mushroom soldier concept, built in 48 hours. 2nd place."
+  tr: "HUJAM '25 · 2. lik · 48 saatte yapıldı"
+  en: "HUJAM '25 · 2nd Place · Built in 48h"
 image: ""
 url: "https://rectewodwhey.itch.io/"
-tech:
-  - "GameMaker Studio 2"
-  - "GML"
+tech: "GameMaker Studio 2, GML"
 ---

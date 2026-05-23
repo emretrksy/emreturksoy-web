@@ -671,32 +671,32 @@ footer{
         <div class="proj-list">
           <a href="https://emrett04.itch.io" target="_blank" class="proj-row" data-project="evo">
             <div class="pr-title" data-proj-title>Evo</div>
-            <div class="pr-tags" data-i18n="pt_evo">Godot · Metroidvania · WIP</div>
-            <div class="pr-meta" data-i18n="pm_evo">2025 - Present</div>
+            <div class="pr-tags" data-proj-tags data-i18n="pt_evo">Godot · Metroidvania · WIP</div>
+            <div class="pr-meta" data-proj-meta data-i18n="pm_evo">2025 - Present</div>
           </a>
-          
+
           <a href="https://emrett04.itch.io" target="_blank" class="proj-row" data-project="myco">
             <div class="pr-title" data-proj-title>Myco</div>
-            <div class="pr-tags" data-i18n="pt_myco">GameMaker · Action Platformer</div>
-            <div class="pr-meta" data-i18n="pm_myco">2025 · 2nd Place Jam</div>
+            <div class="pr-tags" data-proj-tags data-i18n="pt_myco">GameMaker · Action Platformer</div>
+            <div class="pr-meta" data-proj-meta data-i18n="pm_myco">2025 · 2nd Place Jam</div>
           </a>
 
-          <a href="#" class="proj-row">
-            <div class="pr-title" data-i18n="ptitle_kjam">Karadeniz Jam</div>
-            <div class="pr-tags" data-i18n="pt_kjam">Solo · Jam Winner</div>
-            <div class="pr-meta" data-i18n="pm_kjam">2026 · 1st Place</div>
+          <a href="#" class="proj-row" data-project="karadeniz-jam">
+            <div class="pr-title" data-proj-title data-i18n="ptitle_kjam">Karadeniz Jam</div>
+            <div class="pr-tags" data-proj-tags data-i18n="pt_kjam">Solo · Jam Winner</div>
+            <div class="pr-meta" data-proj-meta data-i18n="pm_kjam">2026 · 1st Place</div>
           </a>
 
-          <a href="#" class="proj-row">
-            <div class="pr-title">LAMquarium</div>
-            <div class="pr-tags" data-i18n="pt_lam">Godot · Incremental Clicker</div>
-            <div class="pr-meta">2025</div>
+          <a href="#" class="proj-row" data-project="lamquarium">
+            <div class="pr-title" data-proj-title>LAMquarium</div>
+            <div class="pr-tags" data-proj-tags data-i18n="pt_lam">Godot · Incremental Clicker</div>
+            <div class="pr-meta" data-proj-meta>2025</div>
           </a>
-          
-          <a href="https://emrett04.itch.io" target="_blank" class="proj-row">
-            <div class="pr-title">Tank 2025</div>
-            <div class="pr-tags" data-i18n="pt_tank">Java · OOP Engine-free</div>
-            <div class="pr-meta">2025</div>
+
+          <a href="https://github.com/emretrksy/Tank-Game-2025" target="_blank" class="proj-row" data-project="tank-2025">
+            <div class="pr-title" data-proj-title>Tank 2025</div>
+            <div class="pr-tags" data-proj-tags data-i18n="pt_tank">Java · OOP Engine-free</div>
+            <div class="pr-meta" data-proj-meta>2025</div>
           </a>
         </div>
       </div>
@@ -1574,7 +1574,7 @@ const POST_SLUGS = [
   'winning-hujam'
 ];
 
-const PROJECT_SLUGS = ['evo', 'myco'];
+const PROJECT_SLUGS = ['evo', 'myco', 'karadeniz-jam', 'lamquarium', 'tank-2025'];
 
 const CAT_LABELS = {
   en: { devlog:'DEVLOG', tutorial:'TUTORIAL', postmortem:'POST-MORTEM', essay:'ESSAY' },
@@ -1629,9 +1629,19 @@ function parseFM(raw) {
       }
       continue;
     }
-    // Inline array
+    // Inline array [a, b, c]
     if (val.startsWith('[') && val.endsWith(']')) {
       result[key] = val.slice(1, -1).split(',').map(s => s.trim().replace(/^["']|["']$/g, ''));
+    } else if (val === '' && i + 1 < lines.length && /^- /.test(lines[i + 1])) {
+      // YAML block list (Decap CMS list widget)
+      const items = [];
+      i++;
+      while (i < lines.length && /^- /.test(lines[i])) {
+        items.push(lines[i].replace(/^- /, '').trim().replace(/^["']|["']$/g, ''));
+        i++;
+      }
+      result[key] = items;
+      continue;
     } else {
       let v = val.replace(/^["']|["']$/g, '');
       if (v === 'true') v = true;
@@ -1868,20 +1878,41 @@ function renderProjectRows(lang) {
   projects.forEach(proj => {
     const row = document.querySelector('.proj-row[data-project="' + proj.slug + '"]');
     if (!row) return;
-    const titleEl = row.querySelector('[data-proj-title], .pr-title');
-    const tagsEl  = row.querySelector('.pr-tags');
-    const metaEl  = row.querySelector('.pr-meta');
-    if (titleEl && proj.title)       titleEl.textContent = proj.title[lang] || proj.title.en;
-    if (tagsEl  && proj.tech)        tagsEl.textContent  = Array.isArray(proj.tech) ? proj.tech.join(' · ') : proj.tech;
-    if (proj.url) row.href = proj.url;
+    const titleEl = row.querySelector('[data-proj-title]');
+    const tagsEl  = row.querySelector('[data-proj-tags]');
+    const metaEl  = row.querySelector('[data-proj-meta]');
+    // Başlık (TR/EN object veya string)
+    if (titleEl && proj.title) {
+      titleEl.textContent = (typeof proj.title === 'object')
+        ? (proj.title[lang] || proj.title.en)
+        : proj.title;
+    }
+    // Teknolojiler — array veya virgüllü string
+    if (tagsEl && proj.tech) {
+      const techVal = proj.tech;
+      if (Array.isArray(techVal)) {
+        tagsEl.textContent = techVal.join(' · ');
+      } else if (typeof techVal === 'string') {
+        // "Godot 4, GDScript, Aseprite" → "Godot 4 · GDScript · Aseprite"
+        tagsEl.textContent = techVal.split(',').map(s => s.trim()).join(' · ');
+      }
+    }
+    // Açıklama/meta
+    if (metaEl && proj.description) {
+      const desc = (typeof proj.description === 'object')
+        ? (proj.description[lang] || proj.description.en)
+        : proj.description;
+      if (desc) metaEl.textContent = desc;
+    }
+    // Link
+    if (proj.url && proj.url !== '#') row.href = proj.url;
     // Hover görseli
     if (proj.image) {
-      const hoverCont = document.getElementById('hover-image-container');
-      if (hoverCont) {
-        row.addEventListener('mouseenter', () => {
-          hoverCont.style.backgroundImage = 'url(' + proj.image + ')';
-        });
-      }
+      row.addEventListener('mouseenter', () => {
+        const hc = document.getElementById('hover-image-container');
+        const hImg = document.getElementById('hover-content');
+        if (hc && hImg) hImg.style.backgroundImage = 'url(' + proj.image + ')';
+      });
     }
   });
   initProjects();
