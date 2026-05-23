@@ -2,17 +2,18 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Redirecting...</title>
+  <title>Yönlendiriliyor...</title>
   <script>
-    // GitHub Pages SPA hack: 404.html → index.html hash routing
+    // GitHub Pages SPA: tüm path'leri index.html'e yönlendir
     var l = window.location;
-    l.replace(
-      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-      l.pathname.split('/').slice(0, 1).join('/') +
-      '/?/' + l.pathname.slice(1).replace(/&/g, '~and~') +
-      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-      l.hash
-    );
+    var base = '/emreturksoy-web';
+    var path = l.pathname.replace(base, '') || '/';
+    // /admin/ path'i doğrudan admin/index.html'e yönlendir
+    if (path.indexOf('/admin') === 0) {
+      l.replace(l.protocol + '//' + l.host + base + '/admin/');
+    } else {
+      l.replace(l.protocol + '//' + l.host + base + '/#' + path);
+    }
   </script>
 </head>
 <body></body>
