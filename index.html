@@ -669,35 +669,6 @@ footer{
         </div>
         
         <div class="proj-list">
-          <a href="https://emrett04.itch.io" target="_blank" class="proj-row" data-project="evo">
-            <div class="pr-title" data-proj-title>Evo</div>
-            <div class="pr-tags" data-proj-tags data-i18n="pt_evo">Godot · Metroidvania · WIP</div>
-            <div class="pr-meta" data-proj-meta data-i18n="pm_evo">2025 - Present</div>
-          </a>
-
-          <a href="https://emrett04.itch.io" target="_blank" class="proj-row" data-project="myco">
-            <div class="pr-title" data-proj-title>Myco</div>
-            <div class="pr-tags" data-proj-tags data-i18n="pt_myco">GameMaker · Action Platformer</div>
-            <div class="pr-meta" data-proj-meta data-i18n="pm_myco">2025 · 2nd Place Jam</div>
-          </a>
-
-          <a href="#" class="proj-row" data-project="karadeniz-jam">
-            <div class="pr-title" data-proj-title data-i18n="ptitle_kjam">Karadeniz Jam</div>
-            <div class="pr-tags" data-proj-tags data-i18n="pt_kjam">Solo · Jam Winner</div>
-            <div class="pr-meta" data-proj-meta data-i18n="pm_kjam">2026 · 1st Place</div>
-          </a>
-
-          <a href="#" class="proj-row" data-project="lamquarium">
-            <div class="pr-title" data-proj-title>LAMquarium</div>
-            <div class="pr-tags" data-proj-tags data-i18n="pt_lam">Godot · Incremental Clicker</div>
-            <div class="pr-meta" data-proj-meta>2025</div>
-          </a>
-
-          <a href="https://github.com/emretrksy/Tank-Game-2025" target="_blank" class="proj-row" data-project="tank-2025">
-            <div class="pr-title" data-proj-title>Tank 2025</div>
-            <div class="pr-tags" data-proj-tags data-i18n="pt_tank">Java · OOP Engine-free</div>
-            <div class="pr-meta" data-proj-meta>2025</div>
-          </a>
         </div>
       </div>
     </section>
@@ -719,47 +690,13 @@ footer{
         </div>
         
         <div class="blog-stack-wrapper">
+          
           <div class="blog-stack" id="blogStack">
-            
-            <div class="b-card">
-              <div class="b-card-inner" data-post-slug="building-an-fsm-in-godot" onclick="window.location.hash='post-building-an-fsm-in-godot'">
-                <div class="b-cat" data-i18n="bcat_tut">Tutorial</div>
-                <div class="b-title" data-i18n="btitle_fsm">Building an FSM in Godot</div>
-                <div class="b-exc" data-i18n="bexc_fsm">How I architect Finite State Machines to handle player states cleanly — avoiding spaghetti code and nested if-else chains.</div>
-                <div class="b-date">May 2026</div>
-              </div>
-            </div>
-
-            <div class="b-card">
-              <div class="b-card-inner" data-post-slug="evo-going-solo" onclick="window.location.hash='post-evo-going-solo'">
-                <div class="b-cat" data-i18n="bcat_dev">Devlog</div>
-                <div class="b-title" data-i18n="btitle_evo">Evo #1: Going Solo</div>
-                <div class="b-exc" data-i18n="bexc_evo">Scope, motivation, tech stack decisions, and the very first prototype that almost killed the Metroidvania project.</div>
-                <div class="b-date">April 2026</div>
-              </div>
-            </div>
-
-            <div class="b-card">
-              <div class="b-card-inner" data-post-slug="winning-hujam" onclick="window.location.hash='post-winning-hujam'">
-                <div class="b-cat" data-i18n="bcat_dev">Devlog</div>
-                <div class="b-title" data-i18n="btitle_jam">Winning HUJAM</div>
-                <div class="b-exc" data-i18n="bexc_jam">A post-mortem on our 48-hour sprint. The plan, the inevitable panic, the tech debt, and what I would do differently next time.</div>
-                <div class="b-date">November 2025</div>
-              </div>
-            </div>
-
-            <div class="b-card">
-              <div class="b-card-inner" onclick="window.location.hash='all-posts'" style="align-items:center;justify-content:center;text-align:center;">
-                <div class="b-title" style="margin:0;font-style:italic;" data-i18n="btn_viewall">View All Entries →</div>
-              </div>
-            </div>
-
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CV (LATEX STYLE) -->
+          </div>
+          </div>
+          </section>
+          <!-- CV (LATEX STYLE) -->
     <section id="cv" class="ed-section">
       <div class="ed-header">
         <h2 class="ed-title" data-i18n="cv_title">Curriculum <em>Vitae</em></h2>
@@ -1837,53 +1774,39 @@ function applyDialogueTree(data) {
 // ── Render: Blog kartları ────────────────────────────────────
 function renderBlogCards(lang) {
   const posts = window._loadedPosts;
-  if (!posts || !posts.length) return;
   const stack = document.getElementById('blogStack');
   if (!stack) return;
 
-  // Sadece CMS'den gelenleri temizle, hardcode'ları bırak
-  stack.querySelectorAll('.b-card[data-from-cms]').forEach(el => el.remove());
+  // Stack'i tamamen temizle, CMS'den yeniden oluştur
+  stack.innerHTML = '';
 
-  // Her hardcode kartın data-post-slug'una göre CMS verisini yaz
-  stack.querySelectorAll('.b-card-inner[data-post-slug]').forEach(inner => {
-    const slug = inner.getAttribute('data-post-slug');
-    const post = posts.find(p => p.slug === slug);
-    if (!post) return;
-    const titleEl = inner.querySelector('.b-title, [data-i18n]');
-    const excEl   = inner.querySelector('.b-exc, .b-excerpt');
-    const catEl   = inner.querySelector('.b-cat');
-    const dateEl  = inner.querySelector('.b-date');
-    if (catEl)   catEl.textContent  = (CAT_LABELS[lang] || {})[post.category] || (post.category || '').toUpperCase();
-    if (titleEl) titleEl.textContent = post.title ? (post.title[lang] || post.title.en) : slug;
-    if (excEl)   excEl.textContent  = post.excerpt ? (post.excerpt[lang] || post.excerpt.en) : '';
-    if (dateEl)  dateEl.textContent = fmtDate(post.date, lang);
-    // Tıklama hedefini güncelle
-    inner.onclick = () => { window.location.hash = 'post-' + slug; };
-  });
+  if (posts && posts.length) {
+    posts.forEach(post => {
+      const title    = post.title   ? (post.title[lang]   || post.title.en)   : post.slug;
+      const excerpt  = post.excerpt ? (post.excerpt[lang] || post.excerpt.en) : '';
+      const category = (CAT_LABELS[lang] || {})[post.category] || (post.category || '').toUpperCase();
+      const date     = fmtDate(post.date, lang);
+      const card = document.createElement('div');
+      card.className = 'b-card';
+      card.innerHTML =
+        '<div class="b-card-inner" data-post-slug="' + post.slug + '">' +
+        '<div class="b-cat">' + category + '</div>' +
+        '<div class="b-title">' + title + '</div>' +
+        '<div class="b-exc">' + excerpt + '</div>' +
+        '<div class="b-date">' + date + '</div></div>';
+      card.querySelector('.b-card-inner').onclick = () => {
+        window.location.hash = 'post-' + post.slug;
+      };
+      stack.appendChild(card);
+    });
+  }
 
-  // CMS'de olan ama hardcode'da olmayan yazılar için yeni kart ekle
-  const viewAllCard = stack.querySelector('.b-card:last-child');
-  posts.forEach(post => {
-    const existing = stack.querySelector('[data-post-slug="' + post.slug + '"]');
-    if (existing) return; // zaten hardcode'da var
-    const card = document.createElement('div');
-    card.className = 'b-card';
-    card.setAttribute('data-from-cms', '1');
-    const title    = post.title   ? (post.title[lang]   || post.title.en)   : post.slug;
-    const excerpt  = post.excerpt ? (post.excerpt[lang] || post.excerpt.en) : '';
-    const category = (CAT_LABELS[lang] || {})[post.category] || (post.category || '').toUpperCase();
-    const date     = fmtDate(post.date, lang);
-    card.innerHTML =
-      '<div class="b-card-inner" data-post-slug="' + post.slug + '">' +
-      '<div class="b-cat">' + category + '</div>' +
-      '<div class="b-title">' + title + '</div>' +
-      '<div class="b-exc">' + excerpt + '</div>' +
-      '<div class="b-date">' + date + '</div></div>';
-    card.querySelector('.b-card-inner').onclick = () => {
-      window.location.hash = 'post-' + post.slug;
-    };
-    stack.insertBefore(card, viewAllCard);
-  });
+  // "View All" kartı
+  const viewAll = document.createElement('div');
+  viewAll.className = 'b-card';
+  const viewAllLabel = lang === 'tr' ? 'Tüm Yazılar →' : 'View All Entries →';
+  viewAll.innerHTML = '<div class="b-card-inner" onclick="window.location.hash=\'all-posts\'"><div class="b-title" style="margin:0;font-style:italic;">' + viewAllLabel + '</div></div>';
+  stack.appendChild(viewAll);
 
   initCards();
 }
@@ -1966,70 +1889,46 @@ function renderPostViews(lang) {
 // ── Render: Projeler ─────────────────────────────────────────
 function renderProjectRows(lang) {
   const projects = window._loadedProjects;
-  if (!projects || !projects.length) return;
-
   const list = document.querySelector('.proj-list');
   if (!list) return;
 
-  // CMS'den oluşturulmuş eski satırları temizle
-  list.querySelectorAll('.proj-row[data-from-cms]').forEach(el => el.remove());
+  // Listeyi tamamen temizle, CMS'den yeniden oluştur
+  list.innerHTML = '';
 
-  projects.forEach(proj => {
-    const title = proj.title
-      ? (typeof proj.title === 'object' ? (proj.title[lang] || proj.title.en) : proj.title)
-      : proj.slug;
-    const desc = proj.description
-      ? (typeof proj.description === 'object' ? (proj.description[lang] || proj.description.en) : proj.description)
-      : '';
-    const techText = Array.isArray(proj.tech)
-      ? proj.tech.join(' · ')
-      : (proj.tech || '').split(',').map(s => s.trim()).join(' · ');
+  if (projects && projects.length) {
+    projects.forEach(proj => {
+      const title = proj.title
+        ? (typeof proj.title === 'object' ? (proj.title[lang] || proj.title.en) : proj.title)
+        : proj.slug;
+      const desc = proj.description
+        ? (typeof proj.description === 'object' ? (proj.description[lang] || proj.description.en) : proj.description)
+        : '';
+      const techText = Array.isArray(proj.tech)
+        ? proj.tech.join(' · ')
+        : (proj.tech || '').split(',').map(s => s.trim()).join(' · ');
 
-    // Hardcoded satır var mı?
-    let row = list.querySelector('.proj-row[data-project="' + proj.slug + '"]');
-
-    if (!row) {
-      // Yeni satır oluştur
-      row = document.createElement('a');
+      const row = document.createElement('a');
       row.className = 'proj-row';
       row.setAttribute('data-project', proj.slug);
-      row.setAttribute('data-from-cms', '1');
       row.href = (proj.url && proj.url !== '#') ? proj.url : '#';
       if (proj.url && proj.url !== '#') row.target = '_blank';
       row.innerHTML =
         '<div class="pr-title" data-proj-title>' + title + '</div>' +
         '<div class="pr-tags" data-proj-tags>' + techText + '</div>' +
         '<div class="pr-meta" data-proj-meta>' + desc + '</div>';
-      list.appendChild(row);
-    } else {
-      // Mevcut hardcoded satırı güncelle
-      const titleEl = row.querySelector('[data-proj-title]');
-      const tagsEl  = row.querySelector('[data-proj-tags]');
-      const metaEl  = row.querySelector('[data-proj-meta]');
-      if (titleEl) titleEl.textContent = title;
-      if (tagsEl && techText) tagsEl.textContent = techText;
-      if (metaEl && desc) metaEl.textContent = desc;
-      if (proj.url && proj.url !== '#') row.href = proj.url;
-      // Hover image'ı güncelle
+
+      // Hover görseli
       if (proj.image) {
         let imgPath = proj.image.trim();
-        if (imgPath && !imgPath.startsWith('/') && !imgPath.startsWith('http')) imgPath = '/' + imgPath;
+        if (imgPath && !imgPath.startsWith('/') && !imgPath.startsWith('http')) {
+          imgPath = '/' + imgPath;
+        }
         row.dataset.hoverImage = imgPath;
-        row.dataset.hoverInit = ''; // reinit için sıfırla
       }
-    }
 
-    // Hover görseli — path'i data attribute'e kaydet, initProjects yönetir
-    if (proj.image) {
-      let imgPath = proj.image.trim();
-      // Decap CMS bazen /assets/images/... veya assets/images/... döndürür
-      if (imgPath && !imgPath.startsWith('/') && !imgPath.startsWith('http')) {
-        imgPath = '/' + imgPath;
-      }
-      row.dataset.hoverImage = imgPath;
-      row.dataset.hoverInit = ''; // initProjects'in yeniden init etmesi için sıfırla
-    }
-  });
+      list.appendChild(row);
+    });
+  }
 
   initProjects();
 }
@@ -2061,12 +1960,11 @@ window.addEventListener('load', () => {
   const origSetLang = window.setLang;
   if (typeof origSetLang === 'function') {
     window.setLang = function(lang) {
-      origSetLang(lang);
-      // Post view açıksa hash'i koru, sadece içeriği yenile
       const hash = window.location.hash;
       const inPost = document.body.classList.contains('in-post');
+      origSetLang(lang);
       renderAll(lang);
-      // renderAll hashchange'e sebep olmadan view'ı koru
+      // Post view açıksa hash'i koru
       if (inPost && hash) {
         const target = document.getElementById(hash.substring(1));
         if (target) {
