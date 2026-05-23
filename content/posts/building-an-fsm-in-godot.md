@@ -9,8 +9,7 @@ title:
 excerpt:
   tr: "Karakter durumlarını temiz bir şekilde yönetmek için Sonlu Durum Makinesi nasıl kurulur — spagetti koddan ve iç içe if-else zincirlerinden kaçınarak."
   en: "How I architect Finite State Machines to handle player states cleanly — avoiding spaghetti code and nested if-else chains."
-body:
-  en: |
+body_en: |
     When I started working on Evo, one of the first architectural decisions I had to make was how to handle character states. Should the player be able to dash while wall-sliding? Can enemies attack while being knocked back? If you don't have a clear system for this, you end up with a massive pile of boolean flags and nested `if` statements.
 
     The answer I landed on: a clean Finite State Machine (FSM). Here's how I built it in Godot.
@@ -67,7 +66,7 @@ body:
     The key insight: each state is completely isolated. The `Dash` state doesn't need to know anything about `WallSlide`. If `Dash` ends and the player is touching a wall, `get_transition()` returns `"WallSlide"`. That's it.
 
     No more `if is_dashing and is_on_wall and not is_attacking`. Just clean, readable state logic.
-  tr: |
+body_tr: |
     Evo üzerinde çalışmaya başladığımda ilk mimari kararlardan biri karakter durumlarını nasıl yöneteceğimdi. Oyuncu duvar kayarken dash yapabilmeli mi? Düşmanlar geri itilirken saldırabilmeli mi? Net bir sistem yoksa sonunda devasa bir boolean yığını ve iç içe `if` ifadeleri ortaya çıkıyor.
 
     Vardığım cevap: temiz bir Sonlu Durum Makinesi (FSM). Godot'ta nasıl oluşturduğumu anlatıyorum.

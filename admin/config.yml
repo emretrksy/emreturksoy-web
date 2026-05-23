@@ -39,12 +39,12 @@ collections:
         fields:
           - { label: "Türkçe", name: "tr", widget: "text" }
           - { label: "İngilizce", name: "en", widget: "text" }
-      - label: "İçerik"
-        name: "body"
-        widget: "object"
-        fields:
-          - { label: "Türkçe", name: "tr", widget: "markdown" }
-          - { label: "İngilizce", name: "en", widget: "markdown" }
+      - label: "İçerik (Türkçe)"
+        name: "body_tr"
+        widget: "markdown"
+      - label: "İçerik (İngilizce)"
+        name: "body_en"
+        widget: "markdown"
       - { label: "Yayında mı?", name: "published", widget: "boolean", default: true }
 
   # ── PROJELER ───────────────────────────────────────

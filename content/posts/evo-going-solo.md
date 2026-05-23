@@ -9,8 +9,7 @@ title:
 excerpt:
   tr: "Herkes solo Metroidvania yapmanın kötü bir fikir olduğunu söyler. Muhtemelen haklılar. Yine de yapıyorum."
   en: "Everyone will tell you making a Metroidvania solo is a bad idea. They're probably right. I'm doing it anyway."
-body:
-  en: |
+body_en: |
     Everyone will tell you making a Metroidvania solo is a bad idea. They're probably right. I'm doing it anyway.
 
     Evo started in April 2025 as an experiment — could I build a game that felt as interconnected and responsive as the classics (Hollow Knight, Ori, Symphony of the Night) without a team? A year in, I have a partial answer: yes, but it takes a very specific approach.
@@ -32,7 +31,7 @@ body:
     Enemy AI is placeholder. The first boss exists as a hitbox with a health bar. The first ability (wall jump) works but needs more coyote time tuning. Ring 1 is about 40% playable.
 
     Next update when Ring 1 is beatable start to finish.
-  tr: |
+body_tr: |
     Herkes solo Metroidvania yapmanın kötü bir fikir olduğunu söyler. Muhtemelen haklılar. Yine de yapıyorum.
 
     Evo, Nisan 2025'te bir deney olarak başladı — takım olmadan klasikler (Hollow Knight, Ori, Symphony of the Night) kadar bağlantılı ve duyarlı bir oyun yapabilir miyim? Bir yıl sonra kısmi bir cevabım var: evet, ama çok özgül bir yaklaşım gerektiriyor.

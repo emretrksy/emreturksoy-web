@@ -9,8 +9,7 @@ title:
 excerpt:
   tr: "48 saatlik sprintimizin post-mortem'i. Plan, kaçınılmaz panik, teknik borç ve bir dahaki sefere farklı yapacaklarım."
   en: "A post-mortem on our 48-hour sprint. The plan, the inevitable panic, the tech debt, and what I would do differently next time."
-body:
-  en: |
+body_en: |
     HUJAM '25. 48 hours. One programmer (me), two artists, one composer. We made Myco — an action-platformer about a mushroom soldier — and won 2nd place, taking home 20,000 TRY.
 
     ## Hour 0–4: Scope, and Scoping Down
@@ -24,7 +23,7 @@ body:
     ## What I'd Do Differently
 
     Scope even smaller on the enemy types. One enemy done perfectly beats three done poorly.
-  tr: |
+body_tr: |
     HUJAM '25. 48 saat. Bir programcı (ben), iki sanatçı, bir besteci. 2. olduk, 20.000 TL kazandık.
 
     ## Saat 0–4: Kapsam ve Küçültme
@@ -38,3 +37,4 @@ body:
     ## Farklı Yapacaklarım
 
     Mükemmel yapılmış bir düşman, kötü yapılmış üçten iyidir.
+---
