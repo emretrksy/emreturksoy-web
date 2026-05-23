@@ -2,7 +2,7 @@ backend:
   name: github
   repo: emretrksy/emreturksoy-web
   branch: main
-  base_url: https://emreturksoy.netlify.app
+  base_url: https://decap-oauth.emrett04.workers.dev/
 
 media_folder: "assets/images"
 public_folder: "/emreturksoy-web/assets/images"
