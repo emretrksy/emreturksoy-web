@@ -7,8 +7,8 @@ title:
   tr: "Godot'ta FSM Tasarlamak"
   en: "Building an FSM in Godot"
 excerpt:
-  tr: "ğğşçöişfdşlföeğplf deneme"
-  en: "How I architect Finite State Machines to handle player states cleanly Ã¢ÂÂ avoiding spaghetti code and nested if-else chains."
+  tr: "ÄÄÅÃ§Ã¶iÅfdÅlfÃ¶eÄplf deneme"
+  en: "How I architect Finite State Machines to handle player states cleanly ÃÂ¢ÃÂÃÂ avoiding spaghetti code and nested if-else chains."
 body_en: |
     When I started working on Evo, one of the first architectural decisions I had to make was how to handle character states. Should the player be able to dash while wall-sliding? Can enemies attack while being knocked back? If you don't have a clear system for this, you end up with a massive pile of boolean flags and nested `if` statements.
     
@@ -16,7 +16,7 @@ body_en: |
     
     ## What's a Finite State Machine?
     
-    An FSM is a model where your character can be in exactly one *state* at a time Ã¢ÂÂ Idle, Running, Jumping, Dashing, etc. Ã¢ÂÂ and transitions between states are explicitly defined. It forces you to think about what's actually possible.
+    An FSM is a model where your character can be in exactly one *state* at a time ÃÂ¢ÃÂÃÂ Idle, Running, Jumping, Dashing, etc. ÃÂ¢ÃÂÃÂ and transitions between states are explicitly defined. It forces you to think about what's actually possible.
     
     ## The Base State Class
     
@@ -66,6 +66,12 @@ body_en: |
     The key insight: each state is completely isolated. The `Dash` state doesn't need to know anything about `WallSlide`. If `Dash` ends and the player is touching a wall, `get_transition()` returns `"WallSlide"`. That's it.
     
     No more `if is_dashing and is_on_wall and not is_attacking`. Just clean, readable state logic.
+    
+    
+    
+    
+    ![eeeeeeeeeeeeeeekkkk](assets/images/frognflies.png)
+    
 body_tr: |
-    ğğşçöişfdşlföeğplf denemedeneme
+    ÄÄÅÃ§Ã¶iÅfdÅlfÃ¶eÄplf denemedeneme
 ---
