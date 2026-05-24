@@ -1,4 +1,4 @@
 {
-  "blog_limit": 5,
-  "viewall_position": "bottom"
+  "blog_limit": 3,
+  "viewall_position": "top"
 }
