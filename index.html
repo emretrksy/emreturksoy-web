@@ -1612,8 +1612,9 @@ function parseFM(raw) {
 }
 
 // ── Minimal Markdown → HTML ──────────────────────────────────
-function mdToHtml(md) {
+function mdToHtml(md, imgBase) {
   if (!md) return '';
+  const rawBase = imgBase || 'https://raw.githubusercontent.com/emretrksy/emreturksoy-web/main/';
   let html = md
     .replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) =>
       '<pre><code>' + code.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code></pre>')
@@ -1622,11 +1623,23 @@ function mdToHtml(md) {
     .replace(/^# (.+)$/gm, '<h1>$1</h1>')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/`(.+?)`/g, '<code>$1</code>');
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, src) => {
+      const fullSrc = (src.startsWith('http') || src.startsWith('/')) ? src : rawBase + src;
+      return '<img src="' + fullSrc + '" alt="' + alt + '" style="max-width:100%;border-radius:6px;display:block;margin:12px 0;"/>';
+    })
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
   return html.split(/\n\n+/).map(b => {
     b = b.trim();
     if (!b) return '';
-    if (/^<(h[1-3]|pre|ul|ol)/.test(b)) return b;
+    if (/^<(h[1-3]|pre|ul|ol|hr|blockquote|img|li)/.test(b)) {
+      if (b.includes('<li>')) return '<ul>' + b + '</ul>';
+      return b;
+    }
     return '<p>' + b.replace(/\n/g, ' ') + '</p>';
   }).join('\n');
 }
@@ -1649,7 +1662,7 @@ async function loadContent() {
 
   // Site ayarlarını yükle
   try {
-    const r = await fetch('https://raw.githubusercontent.com/emretrksy/emreturksoy-web/main/content/settings.json?_=' + Math.floor(Date.now() / 60000));
+    const r = await fetch('https://raw.githubusercontent.com/emretrksy/emreturksoy-web/main/content/settings.json?_=' + Date.now());
     if (r.ok) window._siteSettings = await r.json();
   } catch(e) {}
   if (!window._siteSettings) window._siteSettings = {};
@@ -1825,7 +1838,7 @@ function renderPostViews(lang) {
       : (post.body_en || post.body_tr ||
          (post.body ? (post.body[lang] || post.body.en || post.body.tr) : null) ||
          post._body || '');
-    const bodyHtml = mdToHtml(bodyMd);
+    const bodyHtml = mdToHtml(bodyMd, 'https://raw.githubusercontent.com/emretrksy/emreturksoy-web/main/');
 
     view.innerHTML =
       postBackHTML +
