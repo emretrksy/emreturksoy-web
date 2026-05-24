@@ -845,7 +845,7 @@ footer{
 
 <!-- ── ALL POSTS VIEW ── -->
 <div class="blog-post-view" id="all-posts">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn pb-btn-en" id="pb-btn-en" onclick="setLang('en');return false;">EN</button><button class="lang-btn pb-btn-tr" id="pb-btn-tr" onclick="setLang('tr');return false;">TR</button></div></a>
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn pb-btn-en" id="pb-btn-en" onclick="event.stopPropagation();setLang('en');return false;">EN</button><button class="lang-btn pb-btn-tr" id="pb-btn-tr" onclick="event.stopPropagation();setLang('tr');return false;">TR</button></div></a>
   <div class="post-content">
     <h1 class="post-title" data-i18n="all_title" style="margin-bottom:48px;">All Writings</h1>
     <div class="all-posts-list">
@@ -1540,6 +1540,19 @@ function parseFM(raw) {
     const key = top[1];
     const val = top[2].trim();
 
+    // Top-level block scalar (body_en: | / body_tr: |)
+    if (val === '|') {
+      const bl = [];
+      i++;
+      while (i < lines.length && (lines[i].startsWith('    ') || lines[i].trim() === '')) {
+        bl.push(lines[i].replace(/^    /, ''));
+        i++;
+      }
+      while (bl.length && bl[bl.length - 1].trim() === '') bl.pop();
+      result[key] = bl.join('\n');
+      continue;
+    }
+
     // Nested object (next line indented with 2 spaces)
     if (val === '' && i + 1 < lines.length && /^  \S/.test(lines[i + 1])) {
       result[key] = {};
@@ -1773,8 +1786,8 @@ function renderPostViews(lang) {
     '<a href="#" class="post-back" onclick="window.location.hash=\'\';return false;">' +
     '<span>' + backLabel + '</span>' +
     '<div class="post-back-lang">' +
-    '<button class="lang-btn pb-btn-en ' + enAct + '" onclick="setLang(\'en\');return false;">EN</button>' +
-    '<button class="lang-btn pb-btn-tr ' + trAct + '" onclick="setLang(\'tr\');return false;">TR</button>' +
+    '<button class="lang-btn pb-btn-en ' + enAct + '" onclick="event.stopPropagation();setLang(\'en\');return false;">EN</button>' +
+    '<button class="lang-btn pb-btn-tr ' + trAct + '" onclick="event.stopPropagation();setLang(\'tr\');return false;">TR</button>' +
     '</div></a>';
 
   posts.forEach(post => {
