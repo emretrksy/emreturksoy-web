@@ -1647,7 +1647,14 @@ async function fetchMD(path) {
 async function loadContent() {
   const lang = getLang();
 
-  // Slug'ları keşfet
+  // Site ayarlarını yükle
+  try {
+    const r = await fetch('https://raw.githubusercontent.com/emretrksy/emreturksoy-web/main/content/settings.json?_=' + Math.floor(Date.now() / 60000));
+    if (r.ok) window._siteSettings = await r.json();
+  } catch(e) {}
+  if (!window._siteSettings) window._siteSettings = {};
+
+  // Slug'lari kesfet
   const [postSlugs, projectSlugs] = await Promise.all([
     discoverPostSlugs(),
     discoverProjectSlugs()
@@ -1716,11 +1723,23 @@ function renderBlogCards(lang) {
   const stack = document.getElementById('blogStack');
   if (!stack) return;
 
+  const settings = window._siteSettings || {};
+  const limit = (settings.blog_limit != null && settings.blog_limit > 0) ? settings.blog_limit : 5;
+  const viewallPos = settings.viewall_position || 'bottom'; // 'top' veya 'bottom'
+
   // Stack'i tamamen temizle, CMS'den yeniden oluştur
   stack.innerHTML = '';
 
+  const viewAllLabel = lang === 'tr' ? 'Tüm Yazılar →' : 'View All Entries →';
+  const viewAllCard = document.createElement('div');
+  viewAllCard.className = 'b-card';
+  viewAllCard.innerHTML = '<div class="b-card-inner" onclick="window.location.hash=\'all-posts\'"><div class="b-title" style="margin:0;font-style:italic;">' + viewAllLabel + '</div></div>';
+
+  if (viewallPos === 'top') stack.appendChild(viewAllCard);
+
   if (posts && posts.length) {
-    posts.forEach(post => {
+    const visible = posts.slice(0, limit);
+    visible.forEach(post => {
       const title    = post.title   ? (post.title[lang]   || post.title.en)   : post.slug;
       const excerpt  = post.excerpt ? (post.excerpt[lang] || post.excerpt.en) : '';
       const category = (CAT_LABELS[lang] || {})[post.category] || (post.category || '').toUpperCase();
@@ -1740,12 +1759,7 @@ function renderBlogCards(lang) {
     });
   }
 
-  // "View All" kartı
-  const viewAll = document.createElement('div');
-  viewAll.className = 'b-card';
-  const viewAllLabel = lang === 'tr' ? 'Tüm Yazılar →' : 'View All Entries →';
-  viewAll.innerHTML = '<div class="b-card-inner" onclick="window.location.hash=\'all-posts\'"><div class="b-title" style="margin:0;font-style:italic;">' + viewAllLabel + '</div></div>';
-  stack.appendChild(viewAll);
+  if (viewallPos !== 'top') stack.appendChild(viewAllCard);
 
   initCards();
 }
@@ -1858,11 +1872,7 @@ function renderProjectRows(lang) {
 
       // Hover görseli
       if (proj.image) {
-        let imgPath = proj.image.trim();
-        if (imgPath && !imgPath.startsWith('/') && !imgPath.startsWith('http')) {
-          imgPath = '/' + imgPath;
-        }
-        row.dataset.hoverImage = imgPath;
+        row.dataset.hoverImage = proj.image.trim();
       }
 
       list.appendChild(row);

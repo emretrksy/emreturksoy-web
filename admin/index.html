@@ -182,6 +182,53 @@
   #toast.show { opacity: 1; }
   #toast.success { background: var(--turq); color: #000; }
   #toast.error { background: var(--red); color: #fff; }
+
+  /* SPLIT EDITOR */
+  .split-editor { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .split-pane { display: flex; flex-direction: column; }
+  .split-pane-label { font-size: 0.7rem; color: var(--ink2); text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 12px; background: var(--bg); border-bottom: 1px solid var(--border); }
+  .split-pane:first-child { border-right: 1px solid var(--border); }
+  .split-pane textarea { border: none; border-radius: 0; min-height: 320px; background: var(--surface); resize: vertical; }
+  .split-pane textarea:focus { border-color: transparent; box-shadow: none; }
+  .md-preview { min-height: 320px; padding: 14px 16px; font-family: var(--serif); font-size: 0.88rem; line-height: 1.8; color: var(--ink); overflow-y: auto; background: var(--surface); word-break: break-word; }
+  .md-preview h1,.md-preview h2,.md-preview h3 { font-family: var(--serif); color: var(--turq); margin: 16px 0 8px; }
+  .md-preview h1 { font-size: 1.3rem; } .md-preview h2 { font-size: 1.1rem; } .md-preview h3 { font-size: 0.95rem; }
+  .md-preview p { margin-bottom: 10px; }
+  .md-preview img { max-width: 100%; border-radius: 6px; margin: 8px 0; display: block; }
+  .md-preview code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-family: var(--mono); font-size: 0.82rem; color: var(--turq); }
+  .md-preview pre { background: var(--bg); padding: 12px; border-radius: 6px; overflow-x: auto; margin-bottom: 10px; }
+  .md-preview pre code { background: none; padding: 0; }
+  .md-preview ul,.md-preview ol { margin: 0 0 10px 20px; }
+  .md-preview blockquote { border-left: 3px solid var(--turq); padding-left: 12px; color: var(--ink2); margin-bottom: 10px; }
+  .md-preview a { color: var(--turq); }
+  .md-preview hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* TOOLBAR */
+  .md-toolbar { display: flex; gap: 2px; padding: 6px 8px; background: var(--bg); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .tb-btn { background: none; border: 1px solid transparent; color: var(--ink2); padding: 3px 8px; border-radius: 4px; font-family: var(--mono); font-size: 0.75rem; cursor: pointer; transition: all 0.1s; }
+  .tb-btn:hover { border-color: var(--border); color: var(--ink); background: var(--surface); }
+  .tb-sep { width: 1px; background: var(--border); margin: 2px 4px; }
+  .tb-label { font-size: 0.65rem; color: var(--ink2); text-transform: uppercase; letter-spacing: 0.06em; align-self: center; padding: 0 4px; }
+
+  /* IMAGE UPLOAD */
+  .img-upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: border-color 0.15s; }
+  .img-upload-area:hover, .img-upload-area.drag { border-color: var(--turq); }
+  .img-upload-area p { font-size: 0.82rem; color: var(--ink2); margin-top: 6px; }
+  .img-upload-area .upload-icon { font-size: 1.8rem; }
+  .img-preview-thumb { max-width: 200px; max-height: 120px; border-radius: 6px; display: block; margin: 10px auto 0; object-fit: cover; }
+  .img-upload-progress { height: 3px; background: var(--border); border-radius: 3px; margin-top: 8px; overflow: hidden; display: none; }
+  .img-upload-progress-bar { height: 100%; background: var(--turq); border-radius: 3px; transition: width 0.3s; }
+
+  /* SETTINGS PAGE */
+  .settings-grid { display: flex; flex-direction: column; gap: 20px; max-width: 600px; }
+  .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .settings-label { font-size: 0.85rem; color: var(--ink); }
+  .settings-hint { font-size: 0.72rem; color: var(--ink2); margin-top: 3px; }
+  .settings-control { flex-shrink: 0; }
+  .settings-control input[type=number] { width: 80px; text-align: center; }
+  .radio-group { display: flex; gap: 8px; }
+  .radio-btn { padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border); font-family: var(--mono); font-size: 0.78rem; color: var(--ink2); cursor: pointer; background: none; transition: all 0.15s; }
+  .radio-btn.active { border-color: var(--turq); color: var(--turq); background: var(--turq-soft); }
 </style>
 </head>
 <body>
@@ -215,6 +262,9 @@
       </div>
       <div class="nav-item" onclick="showPage('dialogue')">
         <span class="nav-icon">💬</span> Diyalog Ağacı
+      </div>
+      <div class="nav-item" onclick="showPage('settings')">
+        <span class="nav-icon">⚙️</span> Site Ayarları
       </div>
       <div class="sidebar-bottom">
         <div class="token-info" id="token-info">—</div>
@@ -302,16 +352,64 @@
           </div>
 
           <div class="form-section">
-            <div class="form-section-title">İçerik — Türkçe (Markdown)</div>
-            <div class="form-group">
-              <textarea id="p-body-tr" placeholder="## Başlık&#10;&#10;İçerik buraya..."></textarea>
+            <div class="form-section-title">İçerik — Türkçe</div>
+            <div class="md-toolbar" id="toolbar-tr">
+              <span class="tb-label">Biçim</span>
+              <button class="tb-btn" onclick="tbCmd('tr','h2')" title="Başlık 2">H2</button>
+              <button class="tb-btn" onclick="tbCmd('tr','h3')" title="Başlık 3">H3</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="tbCmd('tr','bold')" title="Kalın"><b>B</b></button>
+              <button class="tb-btn" onclick="tbCmd('tr','italic')" title="İtalik"><i>I</i></button>
+              <button class="tb-btn" onclick="tbCmd('tr','code')" title="Kod">&lt;/&gt;</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="tbCmd('tr','ul')" title="Liste">• Liste</button>
+              <button class="tb-btn" onclick="tbCmd('tr','ol')" title="Sıralı Liste">1. Liste</button>
+              <button class="tb-btn" onclick="tbCmd('tr','blockquote')" title="Alıntı">❝</button>
+              <button class="tb-btn" onclick="tbCmd('tr','hr')" title="Yatay Çizgi">—</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="tbCmd('tr','link')" title="Link">🔗</button>
+              <button class="tb-btn" onclick="openImgModal('tr')" title="Görsel Ekle">🖼 Görsel</button>
+            </div>
+            <div class="split-editor">
+              <div class="split-pane">
+                <div class="split-pane-label">Markdown</div>
+                <textarea id="p-body-tr" placeholder="## Başlık&#10;&#10;İçerik buraya..." oninput="updatePreview('tr')"></textarea>
+              </div>
+              <div class="split-pane">
+                <div class="split-pane-label">Önizleme</div>
+                <div class="md-preview" id="preview-tr"></div>
+              </div>
             </div>
           </div>
 
           <div class="form-section">
-            <div class="form-section-title">İçerik — İngilizce (Markdown)</div>
-            <div class="form-group">
-              <textarea id="p-body-en" placeholder="## Heading&#10;&#10;Content goes here..."></textarea>
+            <div class="form-section-title">İçerik — İngilizce</div>
+            <div class="md-toolbar" id="toolbar-en">
+              <span class="tb-label">Format</span>
+              <button class="tb-btn" onclick="tbCmd('en','h2')" title="Heading 2">H2</button>
+              <button class="tb-btn" onclick="tbCmd('en','h3')" title="Heading 3">H3</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="tbCmd('en','bold')" title="Bold"><b>B</b></button>
+              <button class="tb-btn" onclick="tbCmd('en','italic')" title="Italic"><i>I</i></button>
+              <button class="tb-btn" onclick="tbCmd('en','code')" title="Code">&lt;/&gt;</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="tbCmd('en','ul')" title="List">• List</button>
+              <button class="tb-btn" onclick="tbCmd('en','ol')" title="Ordered List">1. List</button>
+              <button class="tb-btn" onclick="tbCmd('en','blockquote')" title="Blockquote">❝</button>
+              <button class="tb-btn" onclick="tbCmd('en','hr')" title="Horizontal Rule">—</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="tbCmd('en','link')" title="Link">🔗</button>
+              <button class="tb-btn" onclick="openImgModal('en')" title="Insert Image">🖼 Image</button>
+            </div>
+            <div class="split-editor">
+              <div class="split-pane">
+                <div class="split-pane-label">Markdown</div>
+                <textarea id="p-body-en" placeholder="## Heading&#10;&#10;Content goes here..." oninput="updatePreview('en')"></textarea>
+              </div>
+              <div class="split-pane">
+                <div class="split-pane-label">Preview</div>
+                <div class="md-preview" id="preview-en"></div>
+              </div>
             </div>
           </div>
 
@@ -423,11 +521,19 @@
           <div class="form-section">
             <div class="form-section-title">Hover / Önizleme Görseli</div>
             <div class="form-group">
-              <label>Görsel URL (assets/images/dosya.jpg)</label>
-              <input type="text" id="pr-image" placeholder="assets/images/evo-preview.jpg"/>
+              <label>Görsel Yükle</label>
+              <div class="img-upload-area" id="proj-drop-area" onclick="document.getElementById('proj-file-input').click()" ondragover="handleDrag(event,true,'proj-drop-area')" ondragleave="handleDrag(event,false,'proj-drop-area')" ondrop="handleDrop(event,'proj')">
+                <div class="upload-icon">🖼</div>
+                <p>Tıkla veya dosyayı sürükle</p>
+                <p style="font-size:0.7rem;">PNG, JPG, GIF, WebP</p>
+                <img id="proj-img-thumb" class="img-preview-thumb" style="display:none"/>
+              </div>
+              <input type="file" id="proj-file-input" accept="image/*" style="display:none" onchange="handleFileSelect(event,'proj')"/>
+              <div class="img-upload-progress" id="proj-upload-progress"><div class="img-upload-progress-bar" id="proj-upload-bar" style="width:0%"></div></div>
             </div>
-            <div style="font-size:0.75rem;color:var(--ink2);">
-              Görseli önce GitHub'a yükle: reponda <code>assets/images/</code> klasörüne dosyayı ekle, sonra path'i buraya yaz.
+            <div class="form-group" style="margin-top:8px;">
+              <label>Ya da Path Gir (assets/images/dosya.png)</label>
+              <input type="text" id="pr-image" placeholder="assets/images/evo-preview.jpg" oninput="updateProjThumb()"/>
             </div>
           </div>
 
@@ -438,9 +544,77 @@
         </div>
       </div>
 
+      <!-- SETTINGS PAGE -->
+      <div class="page" id="page-settings">
+        <div class="page-header">
+          <div class="page-title">Site <span>Ayarları</span></div>
+          <button class="btn btn-primary" onclick="saveSettings()">💾 Kaydet</button>
+        </div>
+        <div class="settings-grid">
+          <div class="form-section">
+            <div class="form-section-title">Blog Kartları</div>
+            <div class="settings-row">
+              <div>
+                <div class="settings-label">Ana sayfada gösterilecek yazı sayısı</div>
+                <div class="settings-hint">Geri kalanlar "Tüm Yazılar" sayfasında görünür.</div>
+              </div>
+              <div class="settings-control">
+                <input type="number" class="form-group input" id="s-blog-limit" value="5" min="1" max="20" style="background:var(--surface);border:1px solid var(--border);color:var(--ink);padding:8px;border-radius:6px;font-family:var(--mono);font-size:0.9rem;text-align:center;width:80px;"/>
+              </div>
+            </div>
+            <div class="settings-row" style="margin-top:8px;">
+              <div>
+                <div class="settings-label">"Tüm Yazılar" kartının pozisyonu</div>
+                <div class="settings-hint">Kart yığınında en üstte mi, en altta mı?</div>
+              </div>
+              <div class="settings-control">
+                <div class="radio-group">
+                  <button class="radio-btn" id="vpos-top" onclick="setViewallPos('top')">En Üstte</button>
+                  <button class="radio-btn active" id="vpos-bottom" onclick="setViewallPos('bottom')">En Altta</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="editor-actions">
+            <button class="btn btn-primary" onclick="saveSettings()">💾 Kaydet</button>
+            <span class="save-status" id="settings-save-status"></span>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /main -->
   </div><!-- /app-layout -->
 </div><!-- /app -->
+
+<!-- IMAGE UPLOAD MODAL -->
+<div class="modal-overlay" id="img-modal">
+  <div class="modal" style="max-width:520px;">
+    <h3 id="img-modal-title">Görsel Ekle</h3>
+    <div class="form-group">
+      <label>Görsel Yükle (GitHub'a kaydedilir)</label>
+      <div class="img-upload-area" id="modal-drop-area" onclick="document.getElementById('modal-file-input').click()" ondragover="handleDrag(event,true,'modal-drop-area')" ondragleave="handleDrag(event,false,'modal-drop-area')" ondrop="handleDrop(event,'modal')">
+        <div class="upload-icon">📎</div>
+        <p>Tıkla veya dosyayı sürükle</p>
+        <img id="modal-img-thumb" class="img-preview-thumb" style="display:none"/>
+      </div>
+      <input type="file" id="modal-file-input" accept="image/*" style="display:none" onchange="handleFileSelect(event,'modal')"/>
+      <div class="img-upload-progress" id="modal-upload-progress"><div class="img-upload-progress-bar" id="modal-upload-bar" style="width:0%"></div></div>
+    </div>
+    <div class="form-group">
+      <label>Ya da URL / Path Gir</label>
+      <input type="text" id="modal-img-url" placeholder="https://... veya assets/images/..."/>
+    </div>
+    <div style="font-size:0.75rem;color:var(--ink2);">Yüklenen görsel <code>assets/images/</code> klasörüne kaydedilir. Alt yazı isteğe bağlıdır.</div>
+    <div class="form-group" style="margin-top:4px;">
+      <label>Alt Yazı (isteğe bağlı)</label>
+      <input type="text" id="modal-img-alt" placeholder="Ekran görüntüsü..."/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeImgModal()">İptal</button>
+      <button class="btn btn-primary" onclick="insertImg()">Ekle</button>
+    </div>
+  </div>
+</div>
 
 <!-- DELETE MODAL -->
 <div class="modal-overlay" id="delete-modal">
@@ -653,11 +827,264 @@ function showPage(name) {
 
   document.getElementById('page-' + name).classList.add('active');
 
-  if (name === 'posts') { document.querySelectorAll('.nav-item')[0].classList.add('active'); loadPosts(); }
-  if (name === 'projects') { document.querySelectorAll('.nav-item')[1].classList.add('active'); loadProjects(); }
-  if (name === 'dialogue') { document.querySelectorAll('.nav-item')[2].classList.add('active'); loadDialogue(); }
-  if (name === 'post-editor') document.querySelectorAll('.nav-item')[0].classList.add('active');
-  if (name === 'project-editor') document.querySelectorAll('.nav-item')[1].classList.add('active');
+  const navItems = document.querySelectorAll('.nav-item');
+  if (name === 'posts')          { navItems[0].classList.add('active'); loadPosts(); }
+  if (name === 'projects')       { navItems[1].classList.add('active'); loadProjects(); }
+  if (name === 'dialogue')       { navItems[2].classList.add('active'); loadDialogue(); }
+  if (name === 'settings')       { navItems[3].classList.add('active'); loadSettings(); }
+  if (name === 'post-editor')    { navItems[0].classList.add('active'); }
+  if (name === 'project-editor') { navItems[1].classList.add('active'); }
+}
+
+// ═══════════════════════════════════════════
+// MARKDOWN TOOLBAR
+// ═══════════════════════════════════════════
+function tbCmd(lang, cmd) {
+  const ta = document.getElementById('p-body-' + lang);
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  const sel = ta.value.substring(start, end);
+  const before = ta.value.substring(0, start);
+  const after = ta.value.substring(end);
+
+  let insert = '';
+  const lineStart = before.lastIndexOf('\n') + 1;
+  const linePrefix = before.substring(lineStart);
+  const atLineStart = linePrefix.trim() === '';
+
+  switch(cmd) {
+    case 'h2': insert = '\n## ' + (sel || 'Başlık') + '\n'; ta.value = before + insert + after; break;
+    case 'h3': insert = '\n### ' + (sel || 'Başlık') + '\n'; ta.value = before + insert + after; break;
+    case 'bold': insert = '**' + (sel || 'kalın') + '**'; ta.value = before + insert + after; ta.setSelectionRange(start+2, start+2+(sel||'kalın').length); break;
+    case 'italic': insert = '*' + (sel || 'italik') + '*'; ta.value = before + insert + after; ta.setSelectionRange(start+1, start+1+(sel||'italik').length); break;
+    case 'code':
+      if (sel.includes('\n')) { insert = '\n```\n' + sel + '\n```\n'; }
+      else { insert = '`' + (sel || 'kod') + '`'; }
+      ta.value = before + insert + after; break;
+    case 'ul': insert = '\n- ' + (sel || 'madde') + '\n'; ta.value = before + insert + after; break;
+    case 'ol': insert = '\n1. ' + (sel || 'madde') + '\n'; ta.value = before + insert + after; break;
+    case 'blockquote': insert = '\n> ' + (sel || 'alıntı') + '\n'; ta.value = before + insert + after; break;
+    case 'hr': insert = '\n\n---\n\n'; ta.value = before + insert + after; break;
+    case 'link':
+      const url = prompt('URL gir:', 'https://');
+      if (url) { insert = '[' + (sel || 'link metni') + '](' + url + ')'; ta.value = before + insert + after; }
+      break;
+  }
+  ta.focus();
+  updatePreview(lang);
+}
+
+// ═══════════════════════════════════════════
+// MARKDOWN PREVIEW
+// ═══════════════════════════════════════════
+function mdToHtmlAdmin(md) {
+  if (!md) return '';
+  let h = md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/^---$/gm,'<hr>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, s => '<ul>' + s + '</ul>')
+    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1"/>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>');
+  // paragraphs
+  h = h.split('\n\n').map(p => {
+    p = p.trim();
+    if (!p || p.startsWith('<h') || p.startsWith('<ul') || p.startsWith('<ol') || p.startsWith('<hr') || p.startsWith('<blockquote')) return p;
+    return '<p>' + p.replace(/\n/g,' ') + '</p>';
+  }).join('\n');
+  return h;
+}
+
+function updatePreview(lang) {
+  const ta = document.getElementById('p-body-' + lang);
+  const prev = document.getElementById('preview-' + lang);
+  if (ta && prev) prev.innerHTML = mdToHtmlAdmin(ta.value);
+}
+
+// ═══════════════════════════════════════════
+// IMAGE UPLOAD (to GitHub)
+// ═══════════════════════════════════════════
+let _imgModalLang = null;
+
+function openImgModal(lang) {
+  _imgModalLang = lang;
+  document.getElementById('img-modal-title').textContent = lang === 'tr' ? 'Görsel Ekle (TR)' : 'Insert Image (EN)';
+  document.getElementById('modal-img-url').value = '';
+  document.getElementById('modal-img-alt').value = '';
+  document.getElementById('modal-img-thumb').style.display = 'none';
+  document.getElementById('modal-upload-progress').style.display = 'none';
+  document.getElementById('img-modal').classList.add('open');
+}
+function closeImgModal() { document.getElementById('img-modal').classList.remove('open'); }
+
+function handleDrag(e, over, areaId) {
+  e.preventDefault();
+  document.getElementById(areaId).classList.toggle('drag', over);
+}
+
+function handleDrop(e, ctx) {
+  e.preventDefault();
+  document.getElementById(ctx === 'proj' ? 'proj-drop-area' : 'modal-drop-area').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) processImageFile(file, ctx);
+}
+
+function handleFileSelect(e, ctx) {
+  const file = e.target.files[0];
+  if (file) processImageFile(file, ctx);
+}
+
+async function processImageFile(file, ctx) {
+  const thumbId = ctx === 'proj' ? 'proj-img-thumb' : 'modal-img-thumb';
+  const progressId = ctx === 'proj' ? 'proj-upload-progress' : 'modal-upload-progress';
+  const barId = ctx === 'proj' ? 'proj-upload-bar' : 'modal-upload-bar';
+
+  // Thumb göster
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById(thumbId);
+    img.src = e.target.result;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+
+  // GitHub'a yükle
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').toLowerCase();
+  const path = 'assets/images/' + safeName;
+
+  document.getElementById(progressId).style.display = 'block';
+  document.getElementById(barId).style.width = '30%';
+
+  const base64 = await new Promise(res => {
+    const r2 = new FileReader();
+    r2.onload = e => res(e.target.result.split(',')[1]);
+    r2.readAsDataURL(file);
+  });
+
+  document.getElementById(barId).style.width = '60%';
+
+  // Check if file exists (get SHA)
+  const existing = await ghGetFile(path);
+  const sha = existing ? existing.sha : null;
+
+  document.getElementById(barId).style.width = '80%';
+
+  const r = await ghPutFileRaw(path, base64, sha, 'Upload image: ' + safeName);
+  document.getElementById(barId).style.width = '100%';
+
+  if (r.ok) {
+    toast('Görsel yüklendi!', 'success');
+    if (ctx === 'proj') {
+      document.getElementById('pr-image').value = path;
+      updateProjThumb();
+    } else {
+      document.getElementById('modal-img-url').value = path;
+    }
+    setTimeout(() => { document.getElementById(progressId).style.display = 'none'; }, 500);
+  } else {
+    toast('Yükleme hatası!', 'error');
+    document.getElementById(progressId).style.display = 'none';
+  }
+}
+
+// base64 string'i binary olmadan gönder (görsel dosyalar için)
+function base64raw(b64) {
+  // GitHub API base64 bekliyor, biz zaten readAsDataURL'den aldık
+  return b64;
+}
+
+// ghPutFile'ı override et: görsel için btoa kullanma, direkt base64 gönder
+async function ghPutFileRaw(path, b64content, sha, message) {
+  const body = { message, content: b64content, branch: BRANCH };
+  if (sha) body.sha = sha;
+  return ghFetch(`/repos/${REPO}/contents/${path}`, { method: 'PUT', body: JSON.stringify(body) });
+}
+
+function insertImg() {
+  const url = document.getElementById('modal-img-url').value.trim();
+  const alt = document.getElementById('modal-img-alt').value.trim() || 'görsel';
+  if (!url) { toast('URL veya path gir!', 'error'); return; }
+  const md = '![' + alt + '](' + url + ')';
+  if (_imgModalLang) {
+    const ta = document.getElementById('p-body-' + _imgModalLang);
+    const pos = ta.selectionStart;
+    ta.value = ta.value.substring(0, pos) + '\n' + md + '\n' + ta.value.substring(pos);
+    updatePreview(_imgModalLang);
+  }
+  closeImgModal();
+}
+
+function updateProjThumb() {
+  const path = document.getElementById('pr-image').value.trim();
+  const thumb = document.getElementById('proj-img-thumb');
+  if (path) {
+    thumb.src = 'https://raw.githubusercontent.com/' + REPO + '/' + BRANCH + '/' + path;
+    thumb.style.display = 'block';
+    thumb.onerror = () => { thumb.style.display = 'none'; };
+  } else {
+    thumb.style.display = 'none';
+  }
+}
+
+// ═══════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════
+let settingsSHA = null;
+let _viewallPos = 'bottom';
+
+async function loadSettings() {
+  const status = document.getElementById('settings-save-status');
+  status.textContent = 'Yükleniyor...';
+  const file = await ghGetFile('content/settings.json');
+  if (file) {
+    settingsSHA = file.sha;
+    try {
+      const s = JSON.parse(file.content);
+      document.getElementById('s-blog-limit').value = s.blog_limit != null ? s.blog_limit : 5;
+      _viewallPos = s.viewall_position || 'bottom';
+    } catch(e) {}
+  } else {
+    settingsSHA = null;
+  }
+  setViewallPos(_viewallPos);
+  status.textContent = '';
+}
+
+function setViewallPos(pos) {
+  _viewallPos = pos;
+  document.getElementById('vpos-top').classList.toggle('active', pos === 'top');
+  document.getElementById('vpos-bottom').classList.toggle('active', pos === 'bottom');
+}
+
+async function saveSettings() {
+  const status = document.getElementById('settings-save-status');
+  status.textContent = 'Kaydediliyor...';
+  status.className = 'save-status';
+  const data = {
+    blog_limit: parseInt(document.getElementById('s-blog-limit').value) || 5,
+    viewall_position: _viewallPos
+  };
+  const json = JSON.stringify(data, null, 2);
+  const r = await ghPutFile('content/settings.json', json, settingsSHA, 'Update site settings');
+  if (r.ok) {
+    const d = await r.json();
+    settingsSHA = d.content.sha;
+    status.textContent = '✓ Kaydedildi';
+    status.className = 'save-status success';
+    toast('Ayarlar kaydedildi!', 'success');
+  } else {
+    const err = await r.json();
+    status.textContent = '✗ Hata: ' + (err.message || r.status);
+    status.className = 'save-status error';
+    toast('Kayıt hatası!', 'error');
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -718,6 +1145,8 @@ function newPost() {
   document.getElementById('p-excerpt-en').value = '';
   document.getElementById('p-body-tr').value = '';
   document.getElementById('p-body-en').value = '';
+  document.getElementById('preview-tr').innerHTML = '';
+  document.getElementById('preview-en').innerHTML = '';
   document.getElementById('post-save-status').textContent = '';
   showPage('post-editor');
 }
@@ -744,6 +1173,8 @@ async function editPost(slug) {
   document.getElementById('p-excerpt-en').value = (fm.excerpt && fm.excerpt.en) || '';
   document.getElementById('p-body-tr').value = fm.body_tr || '';
   document.getElementById('p-body-en').value = fm.body_en || '';
+  updatePreview('tr');
+  updatePreview('en');
   document.getElementById('post-save-status').textContent = '';
 }
 
@@ -883,6 +1314,7 @@ async function editProject(slug) {
   document.getElementById('pr-url').value = fm.url || '';
   document.getElementById('pr-tech').value = fm.tech || '';
   document.getElementById('proj-save-status').textContent = '';
+  updateProjThumb();
 }
 
 async function saveProject() {
