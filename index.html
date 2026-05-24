@@ -845,7 +845,7 @@ footer{
 
 <!-- ── ALL POSTS VIEW ── -->
 <div class="blog-post-view" id="all-posts">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn pb-btn-en" id="pb-btn-en" onclick="event.stopPropagation();setLang('en');return false;">EN</button><button class="lang-btn pb-btn-tr" id="pb-btn-tr" onclick="event.stopPropagation();setLang('tr');return false;">TR</button></div></a>
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn pb-btn-en" id="pb-btn-en" onclick="event.stopPropagation();event.preventDefault();setLang('en');return false;">EN</button><button class="lang-btn pb-btn-tr" id="pb-btn-tr" onclick="event.stopPropagation();event.preventDefault();setLang('tr');return false;">TR</button></div></a>
   <div class="post-content">
     <h1 class="post-title" data-i18n="all_title" style="margin-bottom:48px;">All Writings</h1>
     <div class="all-posts-list">
@@ -1786,8 +1786,8 @@ function renderPostViews(lang) {
     '<a href="#" class="post-back" onclick="window.location.hash=\'\';return false;">' +
     '<span>' + backLabel + '</span>' +
     '<div class="post-back-lang">' +
-    '<button class="lang-btn pb-btn-en ' + enAct + '" onclick="event.stopPropagation();setLang(\'en\');return false;">EN</button>' +
-    '<button class="lang-btn pb-btn-tr ' + trAct + '" onclick="event.stopPropagation();setLang(\'tr\');return false;">TR</button>' +
+    '<button class="lang-btn pb-btn-en ' + enAct + '" onclick="event.stopPropagation();event.preventDefault();setLang(\'en\');return false;">EN</button>' +
+    '<button class="lang-btn pb-btn-tr ' + trAct + '" onclick="event.stopPropagation();event.preventDefault();setLang(\'tr\');return false;">TR</button>' +
     '</div></a>';
 
   posts.forEach(post => {
