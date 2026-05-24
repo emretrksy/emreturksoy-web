@@ -845,7 +845,7 @@ footer{
 
 <!-- ── ALL POSTS VIEW ── -->
 <div class="blog-post-view" id="all-posts">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en');return false;">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr');return false;">TR</button></div></a>
+  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn pb-btn-en" id="pb-btn-en" onclick="setLang('en');return false;">EN</button><button class="lang-btn pb-btn-tr" id="pb-btn-tr" onclick="setLang('tr');return false;">TR</button></div></a>
   <div class="post-content">
     <h1 class="post-title" data-i18n="all_title" style="margin-bottom:48px;">All Writings</h1>
     <div class="all-posts-list">
@@ -855,84 +855,8 @@ footer{
 </div>
 
 <!-- ── SINGLE POST VIEWS ── -->
-<div class="blog-post-view" id="post-building-an-fsm-in-godot">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en');return false;">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr');return false;">TR</button></div></a>
-  <div class="post-content">
-    <div class="post-meta"><span class="pcat" data-i18n="bcat_tut">Tutorial</span><span class="pdate">May 2026</span></div>
-    <h1 class="post-title" data-i18n="btitle_fsm">Building an FSM in Godot</h1>
-    <div class="post-body">
-      <p data-i18n="fsm_p1">When I started working on Evo, one of the first architectural decisions I had to make was how to handle character states. Should the player be able to dash while wall-sliding? Can enemies attack while being knocked back? If you don't have a clear system for this, you end up with a massive pile of boolean flags and nested <code>if</code> statements.</p>
-      <p data-i18n="fsm_p2">The answer I landed on: a clean Finite State Machine (FSM). Here's how I built it in Godot.</p>
-      <h2 data-i18n="fsm_h1">What's a Finite State Machine?</h2>
-      <p data-i18n="fsm_p3">An FSM is a model where your character can be in exactly one <em>state</em> at a time — Idle, Running, Jumping, Dashing, etc. — and transitions between states are explicitly defined. It forces you to think about what's actually possible.</p>
-      <h2 data-i18n="fsm_h2">The Base State Class</h2>
-      <pre>class_name State extends Node
 
-var character: CharacterBody2D
 
-func enter() -> void:
-    pass
-
-func exit() -> void:
-    pass
-
-func update(delta: float) -> State:
-    return null  # null = stay in current state</pre>
-      <p data-i18n="fsm_p4">Every state inherits from this. The <code>update()</code> function returns either <code>null</code> (stay in this state) or a reference to the next state to transition into.</p>
-      <h2 data-i18n="fsm_h3">The State Machine</h2>
-      <pre>class_name StateMachine extends Node
-
-@export var initial_state: State
-var current_state: State
-
-func _ready():
-    current_state = initial_state
-    current_state.enter()
-
-func _physics_process(delta):
-    var next = current_state.update(delta)
-    if next != null:
-        transition_to(next)
-
-func transition_to(new_state: State):
-    current_state.exit()
-    current_state = new_state
-    current_state.enter()</pre>
-      <p data-i18n="fsm_p5">That's the entire machine. Each state is its own script — <code>StateIdle.gd</code>, <code>StateRun.gd</code>, etc. — attached as children of the <code>StateMachine</code> node. Godot's scene tree becomes your architecture.</p>
-    </div>
-  </div>
-</div>
-
-<div class="blog-post-view" id="post-evo-going-solo">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en');return false;">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr');return false;">TR</button></div></a>
-  <div class="post-content">
-    <div class="post-meta"><span class="pcat" data-i18n="bcat_dev">Devlog</span><span class="pdate">April 2026</span></div>
-    <h1 class="post-title" data-i18n="btitle_evo">Evo #1: Going Solo</h1>
-    <div class="post-body">
-      <p data-i18n="evo_p1">Everyone will tell you making a Metroidvania solo is a bad idea. They're probably right. I'm doing it anyway.</p>
-      <p data-i18n="evo_p2">Evo started in April 2025 as an experiment — could I build a game that felt as interconnected and responsive as the classics (Hollow Knight, Ori, Symphony of the Night) without a team? A year in, I have a partial answer: yes, but it takes a very specific approach.</p>
-      <h2 data-i18n="evo_h1">The Scope Problem</h2>
-      <p data-i18n="evo_p3">Metroidvanias are defined by their interconnected world, ability gating, and exploration. Every corridor you add implies a reason to return to it. The scope can spiral infinitely. My solution: design in "rings." The first ring is one self-contained zone with 3 abilities and a boss. Get that working perfectly before expanding outward.</p>
-      <h2 data-i18n="evo_h2">Tech Stack</h2>
-      <p data-i18n="evo_p4">I'm building in Godot 4.3. The choice was easy — it's free, open source, the scene system maps beautifully to my FSM architecture, and GDScript is fast enough for iteration. I write shaders in GLSL directly, and I use Aseprite for all art.</p>
-    </div>
-  </div>
-</div>
-
-<div class="blog-post-view" id="post-winning-hujam">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn" id="pb-btn-en" onclick="setLang('en');return false;">EN</button><button class="lang-btn" id="pb-btn-tr" onclick="setLang('tr');return false;">TR</button></div></a>
-  <div class="post-content">
-    <div class="post-meta"><span class="pcat" data-i18n="bcat_dev">Devlog</span><span class="pdate">November 2025</span></div>
-    <h1 class="post-title" data-i18n="btitle_jam">Winning HUJAM</h1>
-    <div class="post-body">
-      <p data-i18n="jam_p1">HUJAM '25. 48 hours. One programmer (me), two artists, one composer. We made Myco — an action-platformer about a mushroom soldier — and won 2nd place, taking home 20,000 TRY.</p>
-      <h2 data-i18n="jam_h1">Hour 0–4: Scope, and Scoping Down</h2>
-      <p data-i18n="jam_p2">The theme dropped at midnight. We had 30 minutes to decide on a concept. We went with Myco because it had a clear movement kit: run, jump, dash, shield. Four actions. Everything else would be built around making those four feel great.</p>
-      <h2 data-i18n="jam_h2">Hour 4–24: Just Ship the Mechanics</h2>
-      <p data-i18n="jam_p3">My job for the first 20 hours: make the player feel good to control. The enemy AI could wait. Movement first, everything else second. This is the only way to jam.</p>
-    </div>
-  </div>
-</div>
 
 <script>
 let currentLang = 'en';
@@ -1328,7 +1252,7 @@ function playDialogue(key) { navigateDialogue(key); }
 document.addEventListener('DOMContentLoaded', () => {
    setTimeout(() => navigateDialogue('root'), 500);
   // post-back lang butonlarını başlat
-  document.querySelectorAll('#pb-btn-en').forEach(b => b.classList.add('active'));
+  document.querySelectorAll('.pb-btn-en, #pb-btn-en').forEach(b => b.classList.add('active'));
 
    const encBox = document.querySelector('.encounter-box');
    const orb = document.querySelector('.enc-orb');
@@ -1839,8 +1763,8 @@ function renderPostViews(lang) {
   const posts = window._loadedPosts;
   if (!posts) return;
 
-  // Önceki CMS view'larını temizle
-  document.querySelectorAll('.blog-post-view[data-from-cms]').forEach(el => el.remove());
+  // CMS view'larını temizleme — sadece içeriği güncelle
+  // (silip yeniden oluşturmak active class'ı kaybettiriyor)
 
   const backLabel = lang === 'tr' ? '← Geri' : '← Back';
   const enAct = lang === 'en' ? 'active' : '';
@@ -1976,6 +1900,13 @@ window.addEventListener('load', () => {
           document.body.classList.add('in-post');
         }
       }
+      // Buton active class'larını zorla güncelle (renderAll sonrası)
+      document.querySelectorAll('.pb-btn-en, #pb-btn-en').forEach(b => {
+        b.classList.toggle('active', lang === 'en');
+      });
+      document.querySelectorAll('.pb-btn-tr, #pb-btn-tr').forEach(b => {
+        b.classList.toggle('active', lang === 'tr');
+      });
     };
   }
 });
