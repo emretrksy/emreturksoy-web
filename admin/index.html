@@ -692,7 +692,8 @@ async function ghGetFile(path) {
   const r = await ghFetch(`/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
   if (!r.ok) return null;
   const d = await r.json();
-  return { content: atob(d.content.replace(/\n/g, '')), sha: d.sha };
+  const bytes = Uint8Array.from(atob(d.content.replace(/\n/g, '')), c => c.charCodeAt(0));
+  return { content: new TextDecoder('utf-8').decode(bytes), sha: d.sha };
 }
 
 async function ghPutFile(path, content, sha, message) {
