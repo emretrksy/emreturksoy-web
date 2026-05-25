@@ -6,9 +6,9 @@ title:
   tr: "LAMquarium"
   en: "LAMquarium"
 description:
-  tr: "Godot · Artan Tıklama Oyunu"
-  en: "Godot · Incremental Clicker"
+  tr: "Unity Â· Artan TÄ±klama Oyunu"
+  en: "Unity Â· Incremental Clicker"
 image: ""
 url: "#"
-tech: "Godot 4, GDScript"
+tech: "Unity"
 ---
