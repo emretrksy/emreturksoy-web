@@ -10,5 +10,5 @@ description:
   en: "Karadeniz GameJam · First Place · Built in 48h"
 image: "assets/images/kgj_menu_seam_carved.png"
 url: "#https://www.youtube.com/watch?v=06FviQLDLHk"
-tech: "Solo, GameMaker Studio 2"
+tech: "GameMaker Studio 2"
 ---
