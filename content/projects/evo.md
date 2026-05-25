@@ -3,8 +3,8 @@ slug: evo
 order: 1
 published: true
 title:
-  tr: "Evo"
-  en: "Evo"
+  tr: "Evo "
+  en: "Evo "
 description:
   tr: "Solo geliştirmekte olduğum 2D Metroidvania"
   en: "Solo-developing 2D Metroidvania"
