@@ -12,32 +12,28 @@ excerpt:
 body_en: |
     a
 body_tr: |
-    # Başlık
+    # BaÅlÄ±k
     
     ## Başlık
     
-    ### Başlık
+    ### BaÅlÄ±k
     
-    `zıbab`
+    `zÄ±bab`
     ds
-    - madde
     
-    1. madde
-    2. madde
+    madde
     
-    - madde
+    madde
+    madde
     
+    madde
     
-    > alıntı
-    
+    > alÄ±ntÄ±
     
     ---
-    
-    
     
     ---
     
     [link metni](https://)
-    ![görsel](assets/images/frognflies.png)
-    
+    ![gÃ¶rsel](assets/images/frognflies.png)
 ---
