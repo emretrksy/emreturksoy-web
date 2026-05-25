@@ -523,7 +523,8 @@ body.in-post .hamburger { display:none !important; }
   z-index:200;
   letter-spacing:.02em;
 }
-.post-back:hover{color:var(--turq);}
+.post-back-link{color:inherit;text-decoration:none;cursor:pointer;}
+.post-back-link:hover{color:var(--turq);}
 .blog-post-view.active .post-back{display:flex;}
 .post-back-lang{
   display:flex;align-items:center;gap:4px;
@@ -845,7 +846,7 @@ footer{
 
 <!-- ── ALL POSTS VIEW ── -->
 <div class="blog-post-view" id="all-posts">
-  <a href="#" class="post-back" onclick="window.location.hash=\'\';return false;" data-i18n="back_blog"><span>← Back</span><div class="post-back-lang"><button class="lang-btn pb-btn-en" id="pb-btn-en" onclick="event.stopPropagation();event.preventDefault();setLang('en');return false;">EN</button><button class="lang-btn pb-btn-tr" id="pb-btn-tr" onclick="event.stopPropagation();event.preventDefault();setLang('tr');return false;">TR</button></div></a>
+  <div class="post-back"><a href="#" class="post-back-link" onclick="window.location.hash='';return false;" data-i18n="back_blog">← Back</a><div class="post-back-lang"><button class="lang-btn pb-btn-en" id="pb-btn-en" onclick="setLang('en')">EN</button><button class="lang-btn pb-btn-tr" id="pb-btn-tr" onclick="setLang('tr')">TR</button></div></div>
   <div class="post-content">
     <h1 class="post-title" data-i18n="all_title" style="margin-bottom:48px;">All Writings</h1>
     <div class="all-posts-list">
@@ -1810,12 +1811,12 @@ function renderPostViews(lang) {
   const enAct = lang === 'en' ? 'active' : '';
   const trAct = lang === 'tr' ? 'active' : '';
   const postBackHTML =
-    '<a href="#" class="post-back" onclick="window.location.hash=\'\';return false;">' +
-    '<span>' + backLabel + '</span>' +
+    '<div class="post-back">' +
+    '<a href="#" class="post-back-link" onclick="window.location.hash=\'\';return false;">' + backLabel + '</a>' +
     '<div class="post-back-lang">' +
-    '<button class="lang-btn pb-btn-en ' + enAct + '" onclick="event.stopPropagation();event.preventDefault();setLang(\'en\');return false;">EN</button>' +
-    '<button class="lang-btn pb-btn-tr ' + trAct + '" onclick="event.stopPropagation();event.preventDefault();setLang(\'tr\');return false;">TR</button>' +
-    '</div></a>';
+    '<button class="lang-btn pb-btn-en ' + enAct + '" onclick="setLang(\'en\')">EN</button>' +
+    '<button class="lang-btn pb-btn-tr ' + trAct + '" onclick="setLang(\'tr\')">TR</button>' +
+    '</div></div>';
 
   posts.forEach(post => {
     const id = 'post-' + post.slug;

@@ -183,32 +183,37 @@
   #toast.success { background: var(--turq); color: #000; }
   #toast.error { background: var(--red); color: #fff; }
 
-  /* SPLIT EDITOR */
-  .split-editor { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .split-pane { display: flex; flex-direction: column; }
-  .split-pane-label { font-size: 0.7rem; color: var(--ink2); text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 12px; background: var(--bg); border-bottom: 1px solid var(--border); }
-  .split-pane:first-child { border-right: 1px solid var(--border); }
-  .split-pane textarea { border: none; border-radius: 0; min-height: 320px; background: var(--surface); resize: vertical; }
-  .split-pane textarea:focus { border-color: transparent; box-shadow: none; }
-  .md-preview { min-height: 320px; padding: 14px 16px; font-family: var(--serif); font-size: 0.88rem; line-height: 1.8; color: var(--ink); overflow-y: auto; background: var(--surface); word-break: break-word; }
-  .md-preview h1,.md-preview h2,.md-preview h3 { font-family: var(--serif); color: var(--turq); margin: 16px 0 8px; }
-  .md-preview h1 { font-size: 1.3rem; } .md-preview h2 { font-size: 1.1rem; } .md-preview h3 { font-size: 0.95rem; }
-  .md-preview p { margin-bottom: 10px; }
-  .md-preview img { max-width: 100%; border-radius: 6px; margin: 8px 0; display: block; }
-  .md-preview code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-family: var(--mono); font-size: 0.82rem; color: var(--turq); }
-  .md-preview pre { background: var(--bg); padding: 12px; border-radius: 6px; overflow-x: auto; margin-bottom: 10px; }
-  .md-preview pre code { background: none; padding: 0; }
-  .md-preview ul,.md-preview ol { margin: 0 0 10px 20px; }
-  .md-preview blockquote { border-left: 3px solid var(--turq); padding-left: 12px; color: var(--ink2); margin-bottom: 10px; }
-  .md-preview a { color: var(--turq); }
-  .md-preview hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-
-  /* TOOLBAR */
-  .md-toolbar { display: flex; gap: 2px; padding: 6px 8px; background: var(--bg); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-  .tb-btn { background: none; border: 1px solid transparent; color: var(--ink2); padding: 3px 8px; border-radius: 4px; font-family: var(--mono); font-size: 0.75rem; cursor: pointer; transition: all 0.1s; }
+  /* WYSIWYG EDITOR */
+  .wysiwyg-wrap { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .wysiwyg-toolbar { display: flex; gap: 2px; padding: 6px 8px; background: var(--bg); border-bottom: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
+  .tb-btn { background: none; border: 1px solid transparent; color: var(--ink2); padding: 4px 9px; border-radius: 4px; font-family: var(--mono); font-size: 0.75rem; cursor: pointer; transition: all 0.1s; line-height: 1; }
   .tb-btn:hover { border-color: var(--border); color: var(--ink); background: var(--surface); }
-  .tb-sep { width: 1px; background: var(--border); margin: 2px 4px; }
-  .tb-label { font-size: 0.65rem; color: var(--ink2); text-transform: uppercase; letter-spacing: 0.06em; align-self: center; padding: 0 4px; }
+  .tb-btn.active { border-color: var(--turq); color: var(--turq); background: var(--turq-soft); }
+  .tb-sep { width: 1px; background: var(--border); margin: 2px 5px; align-self: stretch; }
+  .wysiwyg-body {
+    min-height: 400px; padding: 28px 32px; outline: none;
+    font-family: var(--serif); font-size: 1rem; line-height: 1.85; color: var(--ink);
+    background: var(--surface); overflow-y: auto;
+    caret-color: var(--turq);
+  }
+  .wysiwyg-body:empty::before { content: attr(data-placeholder); color: var(--ink4); pointer-events: none; display: block; }
+  .wysiwyg-body h1 { font-family: var(--serif); font-size: 1.9rem; font-weight: 700; color: var(--ink); margin: 24px 0 8px; letter-spacing: -0.02em; }
+  .wysiwyg-body h2 { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; color: var(--ink); margin: 20px 0 6px; }
+  .wysiwyg-body h3 { font-family: var(--serif); font-size: 1.05rem; font-weight: 600; color: var(--ink); margin: 16px 0 4px; }
+  .wysiwyg-body p { margin: 0 0 12px; }
+  .wysiwyg-body strong { font-weight: 700; }
+  .wysiwyg-body em { font-style: italic; }
+  .wysiwyg-body code { font-family: var(--mono); font-size: 0.82em; background: var(--bg); color: var(--turq); padding: 2px 6px; border-radius: 3px; }
+  .wysiwyg-body pre { background: var(--bg); border-radius: 6px; padding: 14px 18px; margin: 12px 0; overflow-x: auto; }
+  .wysiwyg-body pre code { background: none; padding: 0; color: var(--ink); font-size: 0.85rem; }
+  .wysiwyg-body blockquote { border-left: 3px solid var(--turq); padding: 4px 0 4px 16px; color: var(--ink2); margin: 12px 0; font-style: italic; }
+  .wysiwyg-body ul { list-style: disc; padding-left: 24px; margin: 8px 0 12px; }
+  .wysiwyg-body ol { list-style: decimal; padding-left: 24px; margin: 8px 0 12px; }
+  .wysiwyg-body li { margin-bottom: 4px; }
+  .wysiwyg-body hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+  .wysiwyg-body a { color: var(--turq); text-decoration: underline; }
+  .wysiwyg-body img { max-width: 100%; border-radius: 6px; display: block; margin: 12px 0; }
+  .wysiwyg-body img.selected { outline: 2px solid var(--turq); }
 
   /* IMAGE UPLOAD */
   .img-upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: border-color 0.15s; }
@@ -353,63 +358,53 @@
 
           <div class="form-section">
             <div class="form-section-title">İçerik — Türkçe</div>
-            <div class="md-toolbar" id="toolbar-tr">
-              <span class="tb-label">Biçim</span>
-              <button class="tb-btn" onclick="tbCmd('tr','h2')" title="Başlık 2">H2</button>
-              <button class="tb-btn" onclick="tbCmd('tr','h3')" title="Başlık 3">H3</button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="tbCmd('tr','bold')" title="Kalın"><b>B</b></button>
-              <button class="tb-btn" onclick="tbCmd('tr','italic')" title="İtalik"><i>I</i></button>
-              <button class="tb-btn" onclick="tbCmd('tr','code')" title="Kod">&lt;/&gt;</button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="tbCmd('tr','ul')" title="Liste">• Liste</button>
-              <button class="tb-btn" onclick="tbCmd('tr','ol')" title="Sıralı Liste">1. Liste</button>
-              <button class="tb-btn" onclick="tbCmd('tr','blockquote')" title="Alıntı">❝</button>
-              <button class="tb-btn" onclick="tbCmd('tr','hr')" title="Yatay Çizgi">—</button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="tbCmd('tr','link')" title="Link">🔗</button>
-              <button class="tb-btn" onclick="openImgModal('tr')" title="Görsel Ekle">🖼 Görsel</button>
-            </div>
-            <div class="split-editor">
-              <div class="split-pane">
-                <div class="split-pane-label">Markdown</div>
-                <textarea id="p-body-tr" placeholder="## Başlık&#10;&#10;İçerik buraya..." oninput="updatePreview('tr')"></textarea>
+            <div class="wysiwyg-wrap">
+              <div class="wysiwyg-toolbar" id="toolbar-tr">
+                <button class="tb-btn" onclick="wExec('tr','h2')" title="Başlık 2"><b>H2</b></button>
+                <button class="tb-btn" onclick="wExec('tr','h3')" title="Başlık 3">H3</button>
+                <div class="tb-sep"></div>
+                <button class="tb-btn" id="tb-tr-bold" onclick="wCmd('bold')" title="Kalın"><b>B</b></button>
+                <button class="tb-btn" id="tb-tr-italic" onclick="wCmd('italic')" title="İtalik"><i>I</i></button>
+                <div class="tb-sep"></div>
+                <button class="tb-btn" onclick="wExec('tr','ul')" title="Liste">• Liste</button>
+                <button class="tb-btn" onclick="wExec('tr','ol')" title="Sıralı">1. Liste</button>
+                <button class="tb-btn" onclick="wExec('tr','blockquote')" title="Alıntı">❝</button>
+                <button class="tb-btn" onclick="wExec('tr','hr')" title="Çizgi">—</button>
+                <button class="tb-btn" onclick="wExec('tr','code')" title="Kod">&lt;/&gt;</button>
+                <div class="tb-sep"></div>
+                <button class="tb-btn" onclick="wExec('tr','link')" title="Link">🔗</button>
+                <button class="tb-btn" onclick="openImgModal('tr')" title="Görsel">🖼</button>
               </div>
-              <div class="split-pane">
-                <div class="split-pane-label">Önizleme</div>
-                <div class="md-preview" id="preview-tr"></div>
-              </div>
+              <div class="wysiwyg-body" id="editor-tr" contenteditable="true"
+                   data-placeholder="İçeriği buraya yaz..." data-lang="tr"
+                   onkeydown="handleEditorKey(event,'tr')"
+                   onmouseup="syncToolbarState('tr')" onkeyup="syncToolbarState('tr')"></div>
             </div>
           </div>
 
           <div class="form-section">
             <div class="form-section-title">İçerik — İngilizce</div>
-            <div class="md-toolbar" id="toolbar-en">
-              <span class="tb-label">Format</span>
-              <button class="tb-btn" onclick="tbCmd('en','h2')" title="Heading 2">H2</button>
-              <button class="tb-btn" onclick="tbCmd('en','h3')" title="Heading 3">H3</button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="tbCmd('en','bold')" title="Bold"><b>B</b></button>
-              <button class="tb-btn" onclick="tbCmd('en','italic')" title="Italic"><i>I</i></button>
-              <button class="tb-btn" onclick="tbCmd('en','code')" title="Code">&lt;/&gt;</button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="tbCmd('en','ul')" title="List">• List</button>
-              <button class="tb-btn" onclick="tbCmd('en','ol')" title="Ordered List">1. List</button>
-              <button class="tb-btn" onclick="tbCmd('en','blockquote')" title="Blockquote">❝</button>
-              <button class="tb-btn" onclick="tbCmd('en','hr')" title="Horizontal Rule">—</button>
-              <div class="tb-sep"></div>
-              <button class="tb-btn" onclick="tbCmd('en','link')" title="Link">🔗</button>
-              <button class="tb-btn" onclick="openImgModal('en')" title="Insert Image">🖼 Image</button>
-            </div>
-            <div class="split-editor">
-              <div class="split-pane">
-                <div class="split-pane-label">Markdown</div>
-                <textarea id="p-body-en" placeholder="## Heading&#10;&#10;Content goes here..." oninput="updatePreview('en')"></textarea>
+            <div class="wysiwyg-wrap">
+              <div class="wysiwyg-toolbar" id="toolbar-en">
+                <button class="tb-btn" onclick="wExec('en','h2')" title="Heading 2"><b>H2</b></button>
+                <button class="tb-btn" onclick="wExec('en','h3')" title="Heading 3">H3</button>
+                <div class="tb-sep"></div>
+                <button class="tb-btn" id="tb-en-bold" onclick="wCmd('bold')" title="Bold"><b>B</b></button>
+                <button class="tb-btn" id="tb-en-italic" onclick="wCmd('italic')" title="Italic"><i>I</i></button>
+                <div class="tb-sep"></div>
+                <button class="tb-btn" onclick="wExec('en','ul')" title="List">• List</button>
+                <button class="tb-btn" onclick="wExec('en','ol')" title="Ordered">1. List</button>
+                <button class="tb-btn" onclick="wExec('en','blockquote')" title="Blockquote">❝</button>
+                <button class="tb-btn" onclick="wExec('en','hr')" title="Rule">—</button>
+                <button class="tb-btn" onclick="wExec('en','code')" title="Code">&lt;/&gt;</button>
+                <div class="tb-sep"></div>
+                <button class="tb-btn" onclick="wExec('en','link')" title="Link">🔗</button>
+                <button class="tb-btn" onclick="openImgModal('en')" title="Image">🖼</button>
               </div>
-              <div class="split-pane">
-                <div class="split-pane-label">Preview</div>
-                <div class="md-preview" id="preview-en"></div>
-              </div>
+              <div class="wysiwyg-body" id="editor-en" contenteditable="true"
+                   data-placeholder="Write content here..." data-lang="en"
+                   onkeydown="handleEditorKey(event,'en')"
+                   onmouseup="syncToolbarState('en')" onkeyup="syncToolbarState('en')"></div>
             </div>
           </div>
 
@@ -837,81 +832,198 @@ function showPage(name) {
 }
 
 // ═══════════════════════════════════════════
-// MARKDOWN TOOLBAR
+// WYSIWYG EDITOR
 // ═══════════════════════════════════════════
-function tbCmd(lang, cmd) {
-  const ta = document.getElementById('p-body-' + lang);
-  const start = ta.selectionStart, end = ta.selectionEnd;
-  const sel = ta.value.substring(start, end);
-  const before = ta.value.substring(0, start);
-  const after = ta.value.substring(end);
+let _activeEditorLang = null;
 
-  let insert = '';
-  const lineStart = before.lastIndexOf('\n') + 1;
-  const linePrefix = before.substring(lineStart);
-  const atLineStart = linePrefix.trim() === '';
+function getEditor(lang) { return document.getElementById('editor-' + lang); }
 
+function wCmd(cmd) { document.execCommand(cmd, false, null); }
+
+function wExec(lang, cmd) {
+  const ed = getEditor(lang);
+  ed.focus();
   switch(cmd) {
-    case 'h2': insert = '\n## ' + (sel || 'Başlık') + '\n'; ta.value = before + insert + after; break;
-    case 'h3': insert = '\n### ' + (sel || 'Başlık') + '\n'; ta.value = before + insert + after; break;
-    case 'bold': insert = '**' + (sel || 'kalın') + '**'; ta.value = before + insert + after; ta.setSelectionRange(start+2, start+2+(sel||'kalın').length); break;
-    case 'italic': insert = '*' + (sel || 'italik') + '*'; ta.value = before + insert + after; ta.setSelectionRange(start+1, start+1+(sel||'italik').length); break;
-    case 'code':
-      if (sel.includes('\n')) { insert = '\n```\n' + sel + '\n```\n'; }
-      else { insert = '`' + (sel || 'kod') + '`'; }
-      ta.value = before + insert + after; break;
-    case 'ul': insert = '\n- ' + (sel || 'madde') + '\n'; ta.value = before + insert + after; break;
-    case 'ol': insert = '\n1. ' + (sel || 'madde') + '\n'; ta.value = before + insert + after; break;
-    case 'blockquote': insert = '\n> ' + (sel || 'alıntı') + '\n'; ta.value = before + insert + after; break;
-    case 'hr': insert = '\n\n---\n\n'; ta.value = before + insert + after; break;
-    case 'link':
-      const url = prompt('URL gir:', 'https://');
-      if (url) { insert = '[' + (sel || 'link metni') + '](' + url + ')'; ta.value = before + insert + after; }
+    case 'h2': document.execCommand('formatBlock', false, 'H2'); break;
+    case 'h3': document.execCommand('formatBlock', false, 'H3'); break;
+    case 'ul': document.execCommand('insertUnorderedList', false, null); break;
+    case 'ol': document.execCommand('insertOrderedList', false, null); break;
+    case 'blockquote': document.execCommand('formatBlock', false, 'BLOCKQUOTE'); break;
+    case 'hr': document.execCommand('insertHorizontalRule', false, null); break;
+    case 'code': {
+      const sel = window.getSelection();
+      if (sel && !sel.isCollapsed) {
+        const range = sel.getRangeAt(0);
+        const text = range.toString();
+        const code = document.createElement('code');
+        code.textContent = text;
+        range.deleteContents();
+        range.insertNode(code);
+        sel.removeAllRanges();
+        const r2 = document.createRange();
+        r2.setStartAfter(code);
+        r2.collapse(true);
+        sel.addRange(r2);
+      }
       break;
+    }
+    case 'link': {
+      const url = prompt('URL:', 'https://');
+      if (url && url !== 'https://') document.execCommand('createLink', false, url);
+      break;
+    }
   }
-  ta.focus();
-  updatePreview(lang);
+  syncToolbarState(lang);
 }
 
-// ═══════════════════════════════════════════
-// MARKDOWN PREVIEW
-// ═══════════════════════════════════════════
+function syncToolbarState(lang) {
+  _activeEditorLang = lang;
+  const boldBtn = document.getElementById('tb-' + lang + '-bold');
+  const italicBtn = document.getElementById('tb-' + lang + '-italic');
+  if (boldBtn) boldBtn.classList.toggle('active', document.queryCommandState('bold'));
+  if (italicBtn) italicBtn.classList.toggle('active', document.queryCommandState('italic'));
+}
+
+function handleEditorKey(e, lang) {
+  if (e.key === 'Enter') {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount) {
+      const node = sel.getRangeAt(0).startContainer;
+      const el = node.nodeType === 3 ? node.parentElement : node;
+      const bq = el ? el.closest('blockquote') : null;
+      if (bq && bq.textContent.trim() === '') {
+        e.preventDefault();
+        document.execCommand('outdent', false, null);
+        return;
+      }
+    }
+  }
+  setTimeout(() => syncToolbarState(lang), 0);
+}
+
+function handleEditorPaste(e) {
+  e.preventDefault();
+  const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+  document.execCommand('insertText', false, text);
+}
+
+// HTML → Markdown
+function htmlToMd(html) {
+  if (!html) return '';
+  const div = document.createElement('div');
+  div.innerHTML = html;
+
+  function nodeToMd(node) {
+    if (node.nodeType === 3) return node.textContent;
+    if (node.nodeType !== 1) return '';
+    const tag = node.tagName.toLowerCase();
+    const inner = Array.from(node.childNodes).map(nodeToMd).join('');
+    switch(tag) {
+      case 'h1': return '# ' + inner.trim() + '\n\n';
+      case 'h2': return '## ' + inner.trim() + '\n\n';
+      case 'h3': return '### ' + inner.trim() + '\n\n';
+      case 'p':  return inner.trim() + '\n\n';
+      case 'div': return inner + (inner.endsWith('\n') ? '' : '\n');
+      case 'br': return '\n';
+      case 'strong': case 'b': return '**' + inner + '**';
+      case 'em': case 'i': return '*' + inner + '*';
+      case 'code':
+        if (node.closest('pre')) return inner;
+        return '`' + inner + '`';
+      case 'pre': return '```\n' + (node.textContent || inner) + '\n```\n\n';
+      case 'blockquote':
+        return inner.trim().split('\n').map(l => '> ' + l).join('\n') + '\n\n';
+      case 'ul':
+        return Array.from(node.querySelectorAll(':scope > li'))
+          .map(li => '- ' + Array.from(li.childNodes).map(nodeToMd).join('').trim())
+          .join('\n') + '\n\n';
+      case 'ol':
+        return Array.from(node.querySelectorAll(':scope > li'))
+          .map((li,i) => (i+1) + '. ' + Array.from(li.childNodes).map(nodeToMd).join('').trim())
+          .join('\n') + '\n\n';
+      case 'li': return inner;
+      case 'hr': return '---\n\n';
+      case 'a': return '[' + inner + '](' + (node.getAttribute('href') || '') + ')';
+      case 'img': {
+        const src = node.getAttribute('src') || '';
+        const alt = node.getAttribute('alt') || '';
+        const shortSrc = src.replace('https://raw.githubusercontent.com/emretrksy/emreturksoy-web/main/', '');
+        return '![' + alt + '](' + shortSrc + ')\n\n';
+      }
+      default: return inner;
+    }
+  }
+  let md = Array.from(div.childNodes).map(nodeToMd).join('');
+  return md.replace(/\n{3,}/g, '\n\n').trim();
+}
+
+// Markdown → HTML (admin editör için)
 function mdToHtmlAdmin(md) {
   if (!md) return '';
-  let h = md
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  const rawBase = 'https://raw.githubusercontent.com/emretrksy/emreturksoy-web/main/';
+  const codeBlocks = [];
+  let h = md.replace(/```[\s\S]*?```/g, m => { codeBlocks.push(m); return '\x00CB' + (codeBlocks.length-1) + '\x00'; });
+  const inlineCodes = [];
+  h = h.replace(/`[^`\n]+`/g, m => { inlineCodes.push(m); return '\x00IC' + (inlineCodes.length-1) + '\x00'; });
+  h = h.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  h = h
     .replace(/^### (.+)$/gm,'<h3>$1</h3>')
     .replace(/^## (.+)$/gm,'<h2>$1</h2>')
     .replace(/^# (.+)$/gm,'<h1>$1</h1>')
     .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
     .replace(/\*(.+?)\*/g,'<em>$1</em>')
-    .replace(/`([^`]+)`/g,'<code>$1</code>')
     .replace(/^---$/gm,'<hr>')
-    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^> (.+)$/gm,'<blockquote><p>$1</p></blockquote>')
     .replace(/^- (.+)$/gm,'<li>$1</li>')
-    .replace(/(<li>.*<\/li>\n?)+/g, s => '<ul>' + s + '</ul>')
-    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1"/>')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>');
-  // paragraphs
+    .replace(/^\d+\. (.+)$/gm,'<li data-ol>$1</li>')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_,alt,src) => {
+      const full = (src.startsWith('http') || src.startsWith('/')) ? src : rawBase + src;
+      return '<img src="' + full + '" alt="' + alt + '"/>';
+    })
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>');
+  h = h.replace(/\x00CB(\d+)\x00/g, (_,i) => {
+    const code = codeBlocks[+i].replace(/^```\w*\n?/,'').replace(/\n?```$/,'');
+    return '<pre><code>' + code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</code></pre>';
+  });
+  h = h.replace(/\x00IC(\d+)\x00/g, (_,i) => {
+    const code = inlineCodes[+i].replace(/^`|`$/g,'');
+    return '<code>' + code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</code>';
+  });
   h = h.split('\n\n').map(p => {
-    p = p.trim();
-    if (!p || p.startsWith('<h') || p.startsWith('<ul') || p.startsWith('<ol') || p.startsWith('<hr') || p.startsWith('<blockquote')) return p;
-    return '<p>' + p.replace(/\n/g,' ') + '</p>';
-  }).join('\n');
+    p = p.trim(); if (!p) return '';
+    if (/^<(h[1-3]|pre|hr|blockquote|img|ul|ol)/.test(p)) {
+      if (/<li data-ol/.test(p)) return '<ol>' + p.replace(/ data-ol/g,'') + '</ol>';
+      if (/<li>/.test(p)) return '<ul>' + p + '</ul>';
+      return p;
+    }
+    return '<p>' + p.replace(/\n/g,'<br>') + '</p>';
+  }).join('');
   return h;
 }
 
-function updatePreview(lang) {
-  const ta = document.getElementById('p-body-' + lang);
-  const prev = document.getElementById('preview-' + lang);
-  if (ta && prev) prev.innerHTML = mdToHtmlAdmin(ta.value);
+function setEditorContent(lang, md) {
+  const ed = getEditor(lang);
+  if (!ed) return;
+  ed.innerHTML = md ? mdToHtmlAdmin(md) : '';
+  ed.removeEventListener('paste', handleEditorPaste);
+  ed.addEventListener('paste', handleEditorPaste);
+}
+
+function getEditorContent(lang) {
+  const ed = getEditor(lang);
+  return ed ? htmlToMd(ed.innerHTML) : '';
+}
+
+function clearEditor(lang) {
+  const ed = getEditor(lang);
+  if (ed) ed.innerHTML = '';
 }
 
 // ═══════════════════════════════════════════
 // IMAGE UPLOAD (to GitHub)
 // ═══════════════════════════════════════════
 let _imgModalLang = null;
+
 
 function openImgModal(lang) {
   _imgModalLang = lang;
@@ -1012,12 +1124,13 @@ function insertImg() {
   const alt = document.getElementById('modal-img-alt').value.trim() || 'görsel';
   if (!url) { toast('URL veya path gir!', 'error'); return; }
   const md = '![' + alt + '](' + url + ')';
-  if (_imgModalLang) {
-    const ta = document.getElementById('p-body-' + _imgModalLang);
-    const pos = ta.selectionStart;
-    ta.value = ta.value.substring(0, pos) + '\n' + md + '\n' + ta.value.substring(pos);
-    updatePreview(_imgModalLang);
-  }
+    if (_imgModalLang) {
+      const ed = getEditor(_imgModalLang);
+      if (ed) {
+        ed.focus();
+        document.execCommand('insertHTML', false, '<img src="' + url + '" alt="' + alt + '"/>');
+      }
+    }
   closeImgModal();
 }
 
@@ -1143,8 +1256,8 @@ function newPost() {
   document.getElementById('p-title-en').value = '';
   document.getElementById('p-excerpt-tr').value = '';
   document.getElementById('p-excerpt-en').value = '';
-  document.getElementById('p-body-tr').value = '';
-  document.getElementById('p-body-en').value = '';
+  clearEditor('tr');
+  clearEditor('en');
   document.getElementById('preview-tr').innerHTML = '';
   document.getElementById('preview-en').innerHTML = '';
   document.getElementById('post-save-status').textContent = '';
@@ -1171,10 +1284,8 @@ async function editPost(slug) {
   document.getElementById('p-title-en').value = (fm.title && fm.title.en) || '';
   document.getElementById('p-excerpt-tr').value = (fm.excerpt && fm.excerpt.tr) || '';
   document.getElementById('p-excerpt-en').value = (fm.excerpt && fm.excerpt.en) || '';
-  document.getElementById('p-body-tr').value = fm.body_tr || '';
-  document.getElementById('p-body-en').value = fm.body_en || '';
-  updatePreview('tr');
-  updatePreview('en');
+  setEditorContent('tr', fm.body_tr || '');
+  setEditorContent('en', fm.body_en || '');
   document.getElementById('post-save-status').textContent = '';
 }
 
@@ -1191,8 +1302,8 @@ async function savePost() {
     titleEn: document.getElementById('p-title-en').value,
     excerptTr: document.getElementById('p-excerpt-tr').value,
     excerptEn: document.getElementById('p-excerpt-en').value,
-    bodyTr: document.getElementById('p-body-tr').value,
-    bodyEn: document.getElementById('p-body-en').value,
+    bodyTr: getEditorContent('tr'),
+    bodyEn: getEditorContent('en'),
   };
 
   const status = document.getElementById('post-save-status');
