@@ -2,7 +2,7 @@
 slug: building-an-fsm-in-godot
 category: tutorial
 date: 2026-05-01
-published: true
+published: false
 title:
   tr: "Godot'ta FSM Tasarlamak"
   en: "Building an FSM in Godot"
