@@ -138,7 +138,15 @@
         "tr": "Tek tekerlekli bir palyaçoyu dengede tutmaya ve sirkte  hayatta kalmaya çalıştığımız, aldığımız itemlerle sinerjler kurarak oynanış biçimimizi değiştirdiğimiz oyunumuz. şu anda 3 kişilik bir ekibiz.",
         "en": "Our game involves balancing a unicycle clown and trying to survive in a circus, changing our gameplay by creating synergies with the items we acquire. We are currently a team of 3."
       },
-      "choices": []
+      "choices": [
+        {
+          "label": {
+            "tr": "Görevlere dön",
+            "en": "Back to quests"
+          },
+          "next": "quest"
+        }
+      ]
     }
   ]
 }
