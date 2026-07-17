@@ -47,78 +47,10 @@
       "choices": [
         {
           "label": {
-            "tr": "Oyun Geliştirme hakkında bilgi ver",
-            "en": "Tell me more about GameDev"
-          },
-          "next": "inv_gamedev"
-        },
-        {
-          "label": {
-            "tr": "Ya da Sanat?",
-            "en": "What about Art?"
-          },
-          "next": "inv_art"
-        },
-        {
-          "label": {
             "tr": "Geri",
             "en": "Back"
           },
           "next": "root"
-        }
-      ]
-    },
-    {
-      "key": "inv_gamedev",
-      "speaker": {
-        "tr": "Emre Türksoy",
-        "en": "Emre Turksoy"
-      },
-      "text": {
-        "tr": "* [Godot 4] ana silahÄ±m. Ãcretsiz, aÃ§Ä±k kaynak ve sahne sistemi FSM mimarime mÃ¼kemmel uyuyor.\n* Åu an [Evo] adlÄ± 2D Metroidvania iÃ§in kullanÄ±yorum.",
-        "en": "* [Godot 4] is my main weapon. Free, open-source, and the scene system maps perfectly to FSM architecture.\n* Currently wielding it to build [Evo], a 2D Metroidvania."
-      },
-      "choices": [
-        {
-          "label": {
-            "tr": "Evo nedir?",
-            "en": "What is Evo?"
-          },
-          "next": "quest"
-        },
-        {
-          "label": {
-            "tr": "â Geri",
-            "en": "â Back"
-          },
-          "next": "inventory"
-        }
-      ]
-    },
-    {
-      "key": "inv_art",
-      "speaker": {
-        "tr": "Emre Türksoy",
-        "en": "Emre Turksoy"
-      },
-      "text": {
-        "tr": "* [GameMaker Studio 2] â HUJAM '25'te 48 saatte [Myco]'yu bununla yaptÄ±m.\n* SonuÃ§? 2.lik ve 20.000 TL. Mantar asker iÃ§in fena deÄil.",
-        "en": "* [GameMaker Studio 2] â used it to build [Myco] at HUJAM '25 in 48 hours.\n* The result? 2nd place and 20,000 TRY. Not bad for a mushroom soldier."
-      },
-      "choices": [
-        {
-          "label": {
-            "tr": "Jam'i anlat",
-            "en": "Tell me about the jam"
-          },
-          "next": "jam"
-        },
-        {
-          "label": {
-            "tr": "â Geri",
-            "en": "â Back"
-          },
-          "next": "inventory"
         }
       ]
     },
@@ -189,39 +121,24 @@
       "choices": [
         {
           "label": {
-            "tr": "Etkileyici. KazandÄ±n mÄ±?",
-            "en": "Impressive. Any wins?"
-          },
-          "next": "jam"
-        },
-        {
-          "label": {
-            "tr": "â Geri",
-            "en": "â Back"
+            "tr": "Geri",
+            "en": "Back"
           },
           "next": "root"
         }
       ]
     },
     {
-      "key": "next",
+      "key": "quest_circusar",
       "speaker": {
         "tr": "Emre Türksoy",
         "en": "Emre Turksoy"
       },
       "text": {
-        "tr": "* [Halka 1]'i bitir.\n* Mezun ol, Ã¶lmeden.\n* Ä°nsanlarÄ±n gerÃ§ekten oynadÄ±ÄÄ± bir Åey yayÄ±nla.\n\n* Not: BaskÄ± altÄ±nda iÅ bitiren bir geliÅtirici arÄ±yorsan â [nerede bulacaÄÄ±nÄ± biliyorsun].",
-        "en": "* Finish [Ring 1] of Evo.\n* Graduate without dying.\n* Ship something people actually play.\n\n* Side note: if you need a developer who ships things under pressure â [you know where to find me]."
+        "tr": "Tek tekerlekli bir palyaçoyu dengede tutmaya ve sirkte  hayatta kalmaya çalıştığımız, aldığımız itemlerle sinerjler kurarak oynanış biçimimizi değiştirdiğimiz oyunumuz. şu anda 3 kişilik bir ekibiz.",
+        "en": "Our game involves balancing a unicycle clown and trying to survive in a circus, changing our gameplay by creating synergies with the items we acquire. We are currently a team of 3."
       },
-      "choices": [
-        {
-          "label": {
-            "tr": "BaÅtan baÅla",
-            "en": "Start over"
-          },
-          "next": "root"
-        }
-      ]
+      "choices": []
     }
   ]
 }
