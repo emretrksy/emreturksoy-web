@@ -3,31 +3,31 @@
     {
       "key": "root",
       "speaker": {
-        "tr": "EEEEEE",
-        "en": "BBBBBB"
+        "tr": "Emre Türksoy",
+        "en": "Emre Turksoy"
       },
       "text": {
-        "tr": "AAAAAAAAA",
-        "en": "DDDDDDD"
+        "tr": "Merahaba!",
+        "en": "Hello!"
       },
       "choices": [
         {
           "label": {
-            "tr": "Envanteri Ä°ncele",
+            "tr": "Envanteri İncele",
             "en": "Inspect Inventory"
           },
           "next": "inventory"
         },
         {
           "label": {
-            "tr": "Mevcut GÃ¶rev",
+            "tr": "Mevcut Görevler",
             "en": "Current Quest"
           },
           "next": "quest"
         },
         {
           "label": {
-            "tr": "KÃ¶ken Hikayesi",
+            "tr": "Köken Hikayesi",
             "en": "Origin Story"
           },
           "next": "origin"
@@ -37,42 +37,42 @@
     {
       "key": "inventory",
       "speaker": {
-        "tr": "SÄ°STEM",
-        "en": "SYSTEM"
+        "tr": "Emre Türksoy",
+        "en": "Emre Turksoy"
       },
       "text": {
-        "tr": "* Envanter aÃ§Ä±lÄ±yor...\n\n[Godot 4]  Ã  Uzman\n[C# / C++]  Ã  Deneyimli\n[GameMaker]  Ã  Veteran\n[Aseprite]  Ã  DonanÄ±mlÄ±\n[Kahve]  Ã  YarÄ±m iÃ§ilmiÅ",
-        "en": "* Opening inventory...\n\n[Godot 4]  Ã  Expert\n[C# / C++]  Ã  Proficient\n[GameMaker]  Ã  Veteran\n[Aseprite]  Ã  Equipped\n[Coffee]  Ã  Half-empty"
+        "tr": "* Envanter açılıyor...\n\n[GameMaker]\n[Godot]\n[C# / C++]\n[Aseprite]\n[FL Studio]\n[Kahve]",
+        "en": "* Opening inventory...\n\n[GameMaker]\n[Godot]\n[C# / C++]\n[Aseprite]\n[FL Studio]\n[Coffee]"
       },
       "choices": [
         {
           "label": {
-            "tr": "Godot hakkÄ±nda bilgi ver",
-            "en": "Tell me more about Godot"
+            "tr": "Oyun Geliştirme hakkında bilgi ver",
+            "en": "Tell me more about GameDev"
           },
-          "next": "inv_godot"
+          "next": "inv_gamedev"
         },
         {
           "label": {
-            "tr": "GameMaker ne olacak?",
-            "en": "What about GameMaker?"
+            "tr": "Ya da Sanat?",
+            "en": "What about Art?"
           },
-          "next": "inv_gm"
+          "next": "inv_art"
         },
         {
           "label": {
-            "tr": "â Geri",
-            "en": "â Back"
+            "tr": "Geri",
+            "en": "Back"
           },
           "next": "root"
         }
       ]
     },
     {
-      "key": "inv_godot",
+      "key": "inv_gamedev",
       "speaker": {
-        "tr": "PROTAGONIST",
-        "en": "PROTAGONIST"
+        "tr": "Emre Türksoy",
+        "en": "Emre Turksoy"
       },
       "text": {
         "tr": "* [Godot 4] ana silahÄ±m. Ãcretsiz, aÃ§Ä±k kaynak ve sahne sistemi FSM mimarime mÃ¼kemmel uyuyor.\n* Åu an [Evo] adlÄ± 2D Metroidvania iÃ§in kullanÄ±yorum.",
@@ -96,10 +96,10 @@
       ]
     },
     {
-      "key": "inv_gm",
+      "key": "inv_art",
       "speaker": {
-        "tr": "PROTAGONIST",
-        "en": "PROTAGONIST"
+        "tr": "Emre Türksoy",
+        "en": "Emre Turksoy"
       },
       "text": {
         "tr": "* [GameMaker Studio 2] â HUJAM '25'te 48 saatte [Myco]'yu bununla yaptÄ±m.\n* SonuÃ§? 2.lik ve 20.000 TL. Mantar asker iÃ§in fena deÄil.",
@@ -125,52 +125,52 @@
     {
       "key": "quest",
       "speaker": {
-        "tr": "GÃREV GÃNLÃÄÃ",
-        "en": "QUEST LOG"
+        "tr": "Emre Türksoy",
+        "en": "Emre Turksoy"
       },
       "text": {
-        "tr": "* [ANA GÃREV] [Evo]'nun solo geliÅiminden saÄ Ã§Ä±k.\n  â 2D Metroidvania. Zorluk: Kabus.\n  â Durum: Devam Ediyor (Halka 1 / ?)\n\n* [YAN GÃREV] Hacettepe'de Bilgisayar MÃ¼hendisliÄi'ni bitir.\n  â Durum: Aktif",
-        "en": "* [MAIN QUEST] Survive the solo development of [Evo].\n  â A 2D Metroidvania. Difficulty: Nightmare.\n  â Status: In Progress (Ring 1 of ?)\n\n* [SIDE QUEST] Pass Computer Engineering at Hacettepe.\n  â Status: Active"
+        "tr": "👇 Şu anda üzerinde çalıştığım oyunlar:\n🟦 2D metroidvania : EVO \n🟥 Top-Down Roguelike: Circusar ",
+        "en": "👇 Currently working on \n🟦 2D metroidvania : EVO \n🟥 Top-Down Roguelike: Circusar "
       },
       "choices": [
         {
           "label": {
-            "tr": "Halka 1 nedir?",
-            "en": "What is Ring 1?"
+            "tr": "EVO",
+            "en": "EVO"
           },
-          "next": "quest_ring"
+          "next": "quest_evo"
         },
         {
           "label": {
-            "tr": "â Geri",
-            "en": "â Back"
+            "tr": "Circusar",
+            "en": "Circusar"
+          },
+          "next": "quest_circusar"
+        },
+        {
+          "label": {
+            "tr": "Geri",
+            "en": "Back"
           },
           "next": "root"
         }
       ]
     },
     {
-      "key": "quest_ring",
+      "key": "quest_evo",
       "speaker": {
-        "tr": "PROTAGONIST",
-        "en": "PROTAGONIST"
+        "tr": "Emre Türksoy",
+        "en": "Emre Turksoy"
       },
       "text": {
-        "tr": "* Metroidvania'larÄ±n kapsamÄ± kolayca kontrolden Ã§Ä±kabilir.\n* ÃÃ¶zÃ¼mÃ¼m: [halkalar] halinde tasarlamak. Halka 1 â 3 yetenek, 1 patron, kendi iÃ§inde tam. DÄ±ÅarÄ± geniÅlemeden Ã¶nce [mÃ¼kemmelleÅtir].",
-        "en": "* Metroidvanias can spiral out of scope infinitely.\n* My solution: build in [rings]. Ring 1 is one self-contained zone â 3 abilities, 1 boss. Get it [perfect] before expanding outward."
+        "tr": "Pixel art tasarımı ve eşsiz mekanikleri ile geliştirmekte olduğum Metroidvania oyun. Keşfedilecek 10'a yakın biyom, 100'e yakın düşman ve 20'ye yakın boss. Geliştirilmiş kanca fiziği ile eğlenceli ve yenilikçi bir oynanış sunmayı hedefliyorum.",
+        "en": "I'm developing a Metroidvania game with pixel art design and unique mechanics. It features around 10 biomes to explore, nearly 100 enemies, and approximately 20 bosses. With improved grappling hook physics, I aim to offer a fun and innovative gameplay experience."
       },
       "choices": [
         {
           "label": {
-            "tr": "MantÄ±klÄ±. KÃ¶ken hikayesini anlat.",
-            "en": "Smart. Tell me the origin."
-          },
-          "next": "origin"
-        },
-        {
-          "label": {
-            "tr": "â GÃ¶revlere dÃ¶n",
-            "en": "â Back to quests"
+            "tr": "Görevlere dön",
+            "en": "Back to quests"
           },
           "next": "quest"
         }
@@ -179,12 +179,12 @@
     {
       "key": "origin",
       "speaker": {
-        "tr": "HÄ°KAYE",
-        "en": "LORE"
+        "tr": "Emre Türksoy",
+        "en": "Emre Turksoy"
       },
       "text": {
-        "tr": "* [DoÄdu] Ankara. Zar: [CON +3].\n* [13 yaÅ] GameMaker'la ilk karÅÄ±laÅma. 20 attÄ±.\n* [2022] Deneyap Teknoloji AtÃ¶lyeleri â 11 alanda 36 ay.\n* [2023] KayÄ±t: Bilgisayar MÃ¼h., Hacettepe.\n* [Åimdi] Solo geliÅtirici. Kafeinli. DÃ¼nyalar inÅa ediyor.",
-        "en": "* [Born] in Ankara. Rolled [CON +3].\n* [Age 13] First encounter with GameMaker. Nat 20.\n* [2022] Deneyap Tech Workshops â 36 months across 11 fields.\n* [2023] Enrolled: Computer Engineering, Hacettepe.\n* [Now] Solo dev. Coffee-fueled. Building worlds."
+        "tr": "2004'te Ankara'da doğdum, lise eğitimimi AAAL'de okuyarak tamamladım, Oyun geliştirmeye de lisedeyken başladım. Şu anda Hacettepe Bilgisayar Mühendisliği 3. sınıf öğrencisiyim.",
+        "en": "I was born in Ankara in 2004, completed my high school education at AAAL, and started game development while in high school. I am currently a third-year Computer Engineering student at Hacettepe University."
       },
       "choices": [
         {
@@ -204,37 +204,10 @@
       ]
     },
     {
-      "key": "jam",
-      "speaker": {
-        "tr": "BAÅARI AÃILDI",
-        "en": "ACHIEVEMENT UNLOCKED"
-      },
-      "text": {
-        "tr": "* [HUJAM '25] â 48 saat, 1 programcÄ±, 2 sanatÃ§Ä±, 1 besteci.\n  SonuÃ§: [2.lik] Â· 20.000 TL\n\n* [Karadeniz Jam '26] â Solo katÄ±lÄ±m.\n  SonuÃ§: [1.lik] Â· 80.000 TL\n\n* GÃ¼ncel galibiyet oranÄ±: [2/2]. YenilmemiÅ.",
-        "en": "* [HUJAM '25] â 48 hours, 1 programmer, 2 artists, 1 composer.\n  Result: [2nd Place] Â· 20,000 TRY\n\n* [Karadeniz Jam '26] â Solo entry.\n  Result: [1st Place] Â· 80,000 TRY\n\n* Current win rate: [2/2]. Undefeated."
-      },
-      "choices": [
-        {
-          "label": {
-            "tr": "Sonraki hedef?",
-            "en": "What's next?"
-          },
-          "next": "next"
-        },
-        {
-          "label": {
-            "tr": "â Geri",
-            "en": "â Back"
-          },
-          "next": "root"
-        }
-      ]
-    },
-    {
       "key": "next",
       "speaker": {
-        "tr": "PROTAGONIST",
-        "en": "PROTAGONIST"
+        "tr": "Emre Türksoy",
+        "en": "Emre Turksoy"
       },
       "text": {
         "tr": "* [Halka 1]'i bitir.\n* Mezun ol, Ã¶lmeden.\n* Ä°nsanlarÄ±n gerÃ§ekten oynadÄ±ÄÄ± bir Åey yayÄ±nla.\n\n* Not: BaskÄ± altÄ±nda iÅ bitiren bir geliÅtirici arÄ±yorsan â [nerede bulacaÄÄ±nÄ± biliyorsun].",
